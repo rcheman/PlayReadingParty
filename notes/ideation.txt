@@ -35,9 +35,13 @@ MVP
 - react front end
 - express back end
 - db for data storage
+- display script with actor's lines bolded or different colors
+- user input for number of actors and actor's names
 
 have a play script in a file
-populate a db with information about the script
+populate a db with information about characters
+stretch: have several plays that can be chosen from. In the actor's info in the database
+	keep track of who is in what play and what characters they have.
 
 
 
@@ -50,6 +54,13 @@ input how many actors
 	- new page for each actor's script
 		-can access with actor name endpoints triggered by buttons with 
 		actor's names
+
+-actors can select their characters
+-actors can select the colors for their characters or go with a default
+- have script page that has character names with colors depending on who the actor is 
+- style the script to have nicer looking font and have it be centered
+- stretch: have other actor's names or initals by their characters
+- save actor name in cookies to be able to return to script location
 
 
 back-end

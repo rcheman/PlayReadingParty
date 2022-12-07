@@ -3,14 +3,17 @@ import Script from './components/script';
 import Home from './components/home';
 
 const App = () => {
-  const [showScript, setShowScript] = useState(true);
+  const [showScript, setShowScript] = useState(false);
+
+  const switchScript = () => {
+    setShowScript(!showScript);
+  };
 
   return (
     <div>
-      <Home />
+      {showScript ? <Script /> : <Home />}
 
-      <Script />
-      <button>Open Play Script</button>
+      <button onClick={switchScript}>Open/Close Script</button>
     </div>
   );
 };

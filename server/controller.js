@@ -2,10 +2,6 @@ const playData = require('../playData.js');
 const db = require('./models/actorModels');
 
 const scriptController = {
-  getCharacterData: (req, res, next) => {
-    return next();
-  },
-
   newActor: (req, res, next) => {
     // req.body.fullname should be an array with first and last name
     const { firstName, lastName } = req.body;
@@ -31,7 +27,8 @@ const scriptController = {
   },
 
   getPlay: (req, res, next) => {
-    console.log(playData.fullPlay);
+    res.locals.fullPlay = playData.fullPlay;
+    return next();
   },
 };
 

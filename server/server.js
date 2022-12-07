@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 // currently returning nothing
-app.get('/script', scriptController.getCharacterData, (req, res) => {
-  return res.sendStatus(200);
+app.get('/script', scriptController.getPlay, (req, res) => {
+  return res.status(200).json(res.locals.fullPlay);
 });
 
 // add a new actor to the db

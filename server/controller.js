@@ -30,6 +30,11 @@ const scriptController = {
     res.locals.fullPlay = playData.fullPlay;
     return next();
   },
+
+  getCharacterData: (req, res, next) => {
+    res.locals.getCharacterData = playData.characterObjs;
+    return next();
+  },
 };
 
 module.exports = scriptController;

@@ -1,4 +1,4 @@
-import React, { Component, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
 const Home = () => {
   const [actors, setActors] = useState([]);
@@ -37,6 +37,7 @@ const Home = () => {
     event.preventDefault();
   };
 
+  // get the actors names
   return (
     <div>
       <h1>Here is the react app!!!!!!!!!!!!</h1>

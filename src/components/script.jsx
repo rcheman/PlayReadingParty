@@ -13,14 +13,12 @@ const Script = () => {
       }
       fullScript = fullScript.flat();
       setScript(fullScript);
+    })
+    .catch((error) => {
+      console.error(`error: ${error} when fetching script`);
     });
 
-  // console.log(script);
-
-  // create html elements looping through the script
-  // to make each name a h2 tag and each full line after it a p tag
-  // return the jsx html elements
-  //
+  //  create p elements for each line in the script
   return (
     <div>
       <h2>script</h2>

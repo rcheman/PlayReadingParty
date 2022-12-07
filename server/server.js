@@ -12,9 +12,14 @@ app.use(express.json());
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));
 
-// currently returning nothing
+// returns the script as a nested array
 app.get('/script', scriptController.getPlay, (req, res) => {
   return res.status(200).json(res.locals.fullPlay);
+});
+
+// return the character objects
+app.get('/characterData', scriptController.getCharacterData, (req, res) => {
+  return res.status(200).json(res.locals.characterData);
 });
 
 // add a new actor to the db

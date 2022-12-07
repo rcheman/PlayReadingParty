@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const twelfthNightPath = './playScript/twelfth_night.txt';
+const testScriptPath = './playScript/testPlay.txt';
+
 const script = fs.readFileSync(
-  path.resolve(__dirname, './playScript/twelfth_night.txt'),
+  path.resolve(__dirname, twelfthNightPath),
   'utf8'
 );
 
@@ -30,10 +33,11 @@ for (let i = 0; i < splitLines.length; i++) {
     // check if the character already has an object and add to that object
     if (characterObjs[name]) {
       characterObjs[name].speaksNum++;
-      characterObjs[name].lineCount += count;
+      // minus one to account for the first line that is just the name
+      characterObjs[name].lineCount += count - 1;
     } else {
       // create character object
-      characterObjs[name] = new Character(name, count, 1);
+      characterObjs[name] = new Character(name, count - 1, 1);
     }
   }
 }

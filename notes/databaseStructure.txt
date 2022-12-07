@@ -1,5 +1,27 @@
 Use SQL
 actors
-    -lines 
-    -characters
-    -script
+    -id INT
+    -first_name VARCHAR
+    -last_name VARCHAR
+
+(add later)
+    - cookies
+    - date?
+    - plays
+
+characters
+    -character id INT
+    -character name VARCHAR
+    -actor id INT 
+    -line count INT
+
+
+CREATE TABLE actors (ID INT NOT NULL, first_name VARCHAR NOT NULL, last_name VARCHAR NOT NULL, PRIMARY KEY (ID));
+
+CREATE TABLE characters 
+(ID INT NOT NULL, 
+name VARCHAR NOT NULL,
+actor_id INT,
+line_count INT,
+speaks_count INT,
+PRIMARY KEY(ID));

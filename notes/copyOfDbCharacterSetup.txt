@@ -1,0 +1,22 @@
+loop to create characters in the database from character data
+
+TODO: change this so we aren't creating the ID ourselves. Auto increment with IDENTITY(start_val, increment_val)
+
+let id = 1;
+    for (let character in characterData) {
+      const { name, lineCount, speaksNum } = characterData[character];
+      console.log(name, lineCount, speaksNum);
+      const values = [id, name, lineCount, speaksNum];
+      const text = `INSERT INTO characters
+        (ID, name, line_count, speaks_count)
+        VALUES ($1, $2, $3, $4)`;
+      console.log('id: ', id);
+      await db.query(text, values).catch((error) => {
+        return next({
+          log: 'error in getCharacterData in controller',
+          message: `error: ${error} occured when adding to the db`,
+        });
+      });
+      ++id;
+    }
+    res.locals.added = 'characters added to the db';

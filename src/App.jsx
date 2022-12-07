@@ -1,22 +1,30 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React, { Component, useState } from 'react';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state;
-  }
+export default function App() {
+  const [actors, addActor] = useState([]);
 
-  componentDidMount() {
-    fetch('/script')
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
-  }
+  const handleInput = (event) => {
+    addActor(actors.push(event.target.value));
+  };
 
-  render() {
-    return <h1>Here is the react app!!!!!!!!!!!!</h1>;
-  }
+  // let actorList = [...this.state.actors];
+  // const list = [];
+  // for (let i = 0; i < actorList.length; i++) {
+  //   list.push(<li>{actorList[i]}</li>);
+  // }
+
+  return (
+    <div>
+      <h1>Here is the react app!!!!!!!!!!!!</h1>
+      <div>
+        <input onChange={handleInput} placeholder='enter actor name' />
+        <button>Add actor to list</button>
+      </div>
+      <ul>{list}</ul>
+    </div>
+  );
 }
+//   }
+// }
 
-export default App;
+// render(<App />, document.getElementById('app'));

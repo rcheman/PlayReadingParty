@@ -5,7 +5,7 @@
   "main": "./public/index.js",
   "scripts": {
     "start": "webpack-dev-server .",
-    "dev": "concurrently \" webpack-dev-server --progress --color \" \"node ./server/server.js\"",
+    "dev": "NODE_ENV=development concurrently \" webpack-dev-server --progress --color \" \"nodemon ./server/server.js\"",
     "build": "webpack .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "front": "NODE_ENV=development webpack-dev-server --open",

@@ -1,8 +1,8 @@
 const characterData = require('../characterData.js');
+const db = require('./models/actorModels');
 
 const scriptController = {
-  getCharacterData: (req, res, next) => {
-    res.locals.characterData = characterData;
+  getCharacterData: async (req, res, next) => {
     return next();
   },
 };

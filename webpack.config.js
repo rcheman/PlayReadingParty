@@ -31,5 +31,8 @@ module.exports = {
     open: true,
     hot: true,
     liveReload: true,
+    proxy: {
+      '/script': 'http://localhost:3000',
+    },
   },
 };

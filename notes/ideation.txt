@@ -61,6 +61,8 @@ input how many actors
 - style the script to have nicer looking font and have it be centered
 - stretch: have other actor's names or initals by their characters
 - save actor name in cookies to be able to return to script location
+- auto assign characters to actors
+- stretch: option to have the actors choose their preferred characters
 
 
 back-end

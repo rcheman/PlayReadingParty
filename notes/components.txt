@@ -1,0 +1,7 @@
+components to have
+*********************
+input area 
+display area (separate page?)
+    - redirect through route handling?
+
+

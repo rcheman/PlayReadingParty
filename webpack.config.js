@@ -3,12 +3,12 @@ const path = require('path');
 const { node } = require('webpack');
 
 module.exports = {
-  entry: './index.js',
+  entry: './public/index.js',
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'main.js',
   },
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
   },
@@ -17,14 +17,14 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules)/,
         use: 'babel-loader',
       },
     ],
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, './build'),
+      directory: path.join(__dirname, './public'),
       publicPath: '/',
     },
     port: 9500,

@@ -7,6 +7,13 @@ class App extends Component {
     this.state;
   }
 
+  componentDidMount() {
+    fetch('/script')
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  }
+
   render() {
     return <h1>Here is the react app</h1>;
   }

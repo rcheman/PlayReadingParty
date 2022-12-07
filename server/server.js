@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const scriptController = require('./controller.js');
 
 const app = express();
 
@@ -10,6 +11,10 @@ app.use(express.json());
 
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));
+
+app.get('/script', scriptController.getCharacterData, (req, res) => {
+  return res.status(200).json(res.locals.characterData);
+});
 
 // unknown rout handler
 app.use((req, res) => res.sendStatus(404));

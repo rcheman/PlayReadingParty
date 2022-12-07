@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const script = fs.readFileSync(
-  path.resolve(__dirname, './script/twelfth_night.txt'),
+  path.resolve(__dirname, './playScript/twelfth_night.txt'),
   'utf8'
 );
 

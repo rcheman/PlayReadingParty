@@ -6,4 +6,11 @@ const Script = () => {
   // to make each name a h2 tag and each full line after it a p tag
   // return the jsx html elements
   //
+  return (
+    <div>
+      <h2>script</h2>
+    </div>
+  );
 };
+
+export default Script;

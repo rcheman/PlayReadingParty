@@ -12,8 +12,14 @@ app.use(express.json());
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));
 
+// currently returning nothing
 app.get('/script', scriptController.getCharacterData, (req, res) => {
   return res.sendStatus(200);
+});
+
+// add a new actor to the db
+app.post('/newActor', scriptController.newActor, (req, res) => {
+  return res.sendStatus(204);
 });
 
 // unknown rout handler

@@ -1,6 +1,6 @@
 loop to create characters in the database from character data
 
-TODO: change this so we aren't creating the ID ourselves. Auto increment with IDENTITY(start_val, increment_val)
+TODO: change this so we aren't creating the ID ourselves. Auto increment with ID SERIAL PRIMARY KEY
 
 let id = 1;
     for (let character in characterData) {

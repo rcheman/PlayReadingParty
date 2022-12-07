@@ -7,9 +7,14 @@ let id = 1;
       const { name, lineCount, speaksNum } = characterData[character];
       console.log(name, lineCount, speaksNum);
       const values = [id, name, lineCount, speaksNum];
+
+
       const text = `INSERT INTO characters
         (ID, name, line_count, speaks_count)
         VALUES ($1, $2, $3, $4)`;
+
+
+
       console.log('id: ', id);
       await db.query(text, values).catch((error) => {
         return next({

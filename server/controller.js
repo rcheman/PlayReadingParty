@@ -1,4 +1,4 @@
-const characterData = require('../characterData.js');
+const playData = require('../playData.js');
 const db = require('./models/actorModels');
 
 const scriptController = {
@@ -28,6 +28,10 @@ const scriptController = {
           message: `error: ${error} occured when adding actor to the db`,
         });
       });
+  },
+
+  getPlay: (req, res, next) => {
+    console.log(playData.fullPlay);
   },
 };
 

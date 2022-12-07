@@ -51,10 +51,9 @@ const App = () => {
           <li>{actor[0] + ' ' + actor[1]}</li>
         ))}
       </ul>
+      <button>Open Play Script</button>
     </div>
   );
 };
-//   }
-// }
 
 export default App;

@@ -16,7 +16,7 @@ characters
     -line count INT
 
 
-CREATE TABLE actors (ID INT NOT NULL, first_name VARCHAR NOT NULL, last_name VARCHAR NOT NULL, PRIMARY KEY (ID));
+CREATE TABLE actors (ID SERIAL PRIMARY KEY, first_name VARCHAR NOT NULL, last_name VARCHAR NOT NULL);
 
 CREATE TABLE characters 
 (ID INT NOT NULL, 

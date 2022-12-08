@@ -12,7 +12,11 @@ const App = () => {
   };
 
   const changeScript = () => {
-    changeScriptOption('twelfthNight');
+    if (scriptOption === 'test') {
+      changeScriptOption('twelfthNight');
+    } else {
+      changeScriptOption('test');
+    }
   };
 
   useEffect(() => {
@@ -34,8 +38,13 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={switchScript}>Open/Close Script</button>
-      <button onClick={changeScript}>Change Script</button>
+      <header>
+        <h1>Play Reading Assistant</h1>
+        <nav>
+          <button onClick={switchScript}>Open/Close Script</button>
+          <button onClick={changeScript}>Change Script</button>
+        </nav>
+      </header>
       {showScript ? (
         <Script actors={actors} scriptOption={scriptOption} />
       ) : (

@@ -4,7 +4,6 @@ const actorController = {
   newActor: (req, res, next) => {
     // req.body.fullname should be an array with first and last name
     const { firstName, lastName } = req.body;
-    console.log(req.body);
     // add actor to the database
     // firstName = firstName.toLowercase();
     const values = [firstName.toLowerCase(), lastName.toLowerCase()];
@@ -14,7 +13,6 @@ const actorController = {
 
     db.query(text, values)
       .then(() => {
-        console.log('added actor to the db');
         return next();
       })
       .catch((error) => {
@@ -30,7 +28,6 @@ const actorController = {
     const text = `SELECT * FROM actors`;
     db.query(text)
       .then((actorList) => {
-        console.log(actorList.rows);
         res.locals.actorList = actorList.rows;
         return next();
       })
@@ -45,15 +42,12 @@ const actorController = {
   getActorCharacters: (req, res, next) => {
     // TODO: add query property to change what table we are checking
     const { firstName, lastName, option } = req.query;
-    console.log(option);
     let characterdb;
     if (option === 'test') {
       characterdb = 'test_characters';
     } else {
       characterdb = 'characters';
     }
-    console.log('first name of current actor: ', firstName);
-    console.log(characterdb);
     const values = [firstName, lastName];
     const text = `SELECT c.name as characterName
     FROM actors
@@ -63,7 +57,6 @@ const actorController = {
 
     db.query(text, values)
       .then((characterList) => {
-        console.log(characterList.rows);
         res.locals.currentCharactersList = characterList.rows;
         return next();
       })

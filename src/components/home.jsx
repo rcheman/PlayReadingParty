@@ -29,9 +29,7 @@ const Home = ({ setActors, actors, scriptOption }) => {
       body: JSON.stringify(nameObj),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log('successfully added to db: ', data);
-      })
+      .then((data) => {})
       .catch((error) => {
         console.error('Error: ', error);
       });
@@ -41,13 +39,13 @@ const Home = ({ setActors, actors, scriptOption }) => {
   // get the actor names and display current actor names
   return (
     <div id='home'>
-      <h1>Here is the react app!!!!!!!!!!!!</h1>
       <form onSubmit={handleInput}>
         <input ref={actorFirstName} placeholder="enter actor's first name" />
         <input ref={actorLastName} placeholder="enter actor's last name" />
         <button type='submit'>Add actors to list</button>
       </form>
       <ul id='actorList'>
+        <h3>Actors</h3>
         {actors.map((actor) => (
           <li>{actor[0] + ' ' + actor[1]}</li>
         ))}

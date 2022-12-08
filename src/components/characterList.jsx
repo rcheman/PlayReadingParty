@@ -34,8 +34,8 @@ const CharacterList = ({ scriptOption }) => {
   // render list of characters and their data
   return (
     <div className='characterList'>
-      <h2>Characters in the play: </h2>
-      {charactersElements}
+      <h3>Characters in the play: </h3>
+      <ul>{charactersElements}</ul>
     </div>
   );
 };

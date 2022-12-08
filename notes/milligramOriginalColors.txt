@@ -1,0 +1,29 @@
+original colors list:
+
+body: #606c76
+
+blockQuote leftBorder: #d1d1d1
+button background-color: #9b4dca
+button color: #fff
+
+button:focus background-color: #606c76
+button:focus border-color: #606c76
+^ color: #fff
+
+input select:focus border-color: #9b4dca
+
+
+
+new colors list:
+
+body: #f2e9e4
+
+blockQuote: #c9ada7
+
+button bacground-color: #22223B
+button color: #f2e9e4
+
+button: focus : #4a4e69
+
+
+selected character: #9a8c98

@@ -15,7 +15,6 @@ const Script = ({ actors, scriptOption }) => {
   url.searchParams.append('title', scriptOption);
 
   useEffect(() => {
-    console.log(currentCharacters);
     fetch(url.href)
       .then((response) => response.json())
       .then((fetchedScript) => {
@@ -23,7 +22,6 @@ const Script = ({ actors, scriptOption }) => {
           // script[i]
           fullScript.push(fetchedScript[i]);
         }
-        console.log(fetchedScript);
         setScript(fullScript);
       })
       .catch((error) => {
@@ -31,14 +29,10 @@ const Script = ({ actors, scriptOption }) => {
       });
   }, []);
 
-  console.log('script in promise chain', script);
   // create div and p elements for each chunk of lines
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
   let currentActorCharacter;
-
-  console.log('current characters', currentCharacters);
-  console.log(characterSet);
 
   for (let i = 0; i < script.length; i++) {
     // assign the character name as the className for the div
@@ -51,9 +45,11 @@ const Script = ({ actors, scriptOption }) => {
     const characterClass = classNames(name, currentActorCharacter);
     lineChunks.push(
       <div className={characterClass}>
-        {script[i].map((lines) => (
-          <p>{lines}</p>
-        ))}
+        <blockquote>
+          {script[i].map((lines) => (
+            <p>{lines}</p>
+          ))}
+        </blockquote>
       </div>
     );
   }

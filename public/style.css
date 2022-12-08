@@ -1,28 +1,56 @@
-.characterList {
+h1 {
+  margin: 20px;
+  text-align: center;
+}
+
+body {
+  color: #22223b;
+  background-color: #f2e9e4;
+}
+
+button,
+input[type='button'] {
+  background-color: #22223b;
+  border-color: #22223b;
+}
+
+button:hover,
+button:focus {
+  background-color: #4a4e69;
+  border-color: #4a4e69;
+}
+
+header {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  margin: 20px;
-  width: 50%;
+  align-items: center;
+}
+
+nav {
+  width: 35%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .currentActor {
-  background-color: green;
+  background-color: #c9ada7;
+  border-radius: 15px;
 }
 
-#scriptDiv {
-  /* background-color: blue; */
+#home {
   display: flex;
-  flex-direction: column;
-  width: 80%;
-}
-
-#scriptDiv p {
-  text-align: left;
+  margin: 50px;
+  justify-content: space-around;
 }
 
 #scriptPage {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+#actorNav {
+  display: flex;
+  justify-content: space-between;
+  width: 65%;
 }

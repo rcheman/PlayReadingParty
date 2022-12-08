@@ -6,11 +6,11 @@ const Character = (props) => {
   const { name, lineCount, speaksNum } = props.characterData;
 
   return (
-    <div className='characterData'>
-      <h4>Name: {name}</h4>
-      <p>Total Lines: {lineCount}</p>
-      <p>Amount Character Speaks: {speaksNum}</p>
-    </div>
+    <ul className='characterData'>
+      <h5>Name: {name}</h5>
+      <li>Total Lines: {lineCount}</li>
+      <li>Amount Character Speaks: {speaksNum}</li>
+    </ul>
   );
 };
 

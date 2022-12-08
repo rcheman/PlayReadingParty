@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const ActorScriptButton = ({
   firstName,
@@ -10,7 +11,6 @@ const ActorScriptButton = ({
 }) => {
   // on change, change the value of current actor
   const onClickChange = (e) => {
-    console.log('e', e.target.value);
     const value = e.target.value.split(' ');
     setCurrentActor([value[0], value[1]]);
 
@@ -32,12 +32,13 @@ const ActorScriptButton = ({
       });
   };
 
+  const buttonClasses = ['actorNameButton', 'button-small'];
   // set button value as a string with first and last name
   const buttonVal = `${firstName} ${lastName}`;
   return (
     <input
       onClick={onClickChange}
-      className='actorNameButton'
+      className={buttonClasses}
       type='button'
       value={buttonVal}
     />

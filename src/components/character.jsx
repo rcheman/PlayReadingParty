@@ -1,12 +1,17 @@
 import React from 'react';
 
-const Character = (characterData) => {
+const Character = (props) => {
+  console.log('in character component');
   // render individual character list with stats
+
+  const { name, lineCount, speaksNum } = props.characterData;
+  console.log(name);
+  console.log(lineCount);
   return (
-    <div class='characterData'>
-      <h4>Name: {characterData.name}</h4>
-      <p>Total Lines: {characterData.lineCount}</p>
-      <p>Amount Character Speaks: {characterData.speaksNum}</p>
+    <div className='characterData'>
+      <h4>Name: {name}</h4>
+      <p>Total Lines: {lineCount}</p>
+      <p>Amount Character Speaks: {speaksNum}</p>
     </div>
   );
 };

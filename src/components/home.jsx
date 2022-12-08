@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import CharacterList from './characterList';
 
 const Home = () => {
   const [actors, setActors] = useState([]);
@@ -51,6 +52,9 @@ const Home = () => {
           <li>{actor[0] + ' ' + actor[1]}</li>
         ))}
       </ul>
+      <div>
+        <CharacterList />
+      </div>
     </div>
   );
 };

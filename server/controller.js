@@ -32,7 +32,7 @@ const scriptController = {
   },
 
   getCharacterData: (req, res, next) => {
-    res.locals.getCharacterData = playData.characterObjs;
+    res.locals.characterData = playData.characterObjs;
     return next();
   },
 };

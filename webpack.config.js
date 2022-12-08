@@ -17,22 +17,25 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /(node_modules)/,
+        exclude: /node_modules/,
         use: 'babel-loader',
       },
     ],
+  },
+  watchOptions: {
+    ignored: /node_modules/,
   },
   devServer: {
     static: {
       directory: path.join(__dirname, './public'),
       publicPath: '/',
     },
-    port: 9500,
-    open: true,
-    hot: true,
-    liveReload: true,
+    port: 8080,
+    // open: true,
+    // hot: true,
+    // liveReload: true,
     proxy: {
-      '/script': 'http://localhost:3000',
+      '!/public': 'http://localhost:3000',
     },
   },
 };

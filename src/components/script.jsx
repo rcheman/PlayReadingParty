@@ -4,6 +4,7 @@ import ActorScriptNav from './actorScriptNav';
 const Script = ({ actors }) => {
   const [script, setScript] = useState([]);
   const [currentActor, setCurrentActor] = useState([]);
+  const [currentCharacters, setCurrentCharacters] = useState([]);
 
   // fetch script from the backend
   let fullScript = [];
@@ -14,7 +15,6 @@ const Script = ({ actors }) => {
         for (let i = 0; i < script.length; i++) {
           // script[i]
           fullScript.push(script[i]);
-          console.log(script[i][0]);
         }
         // fullScript = fullScript.flat();
         setScript(fullScript);
@@ -42,9 +42,16 @@ const Script = ({ actors }) => {
   // pull the characters whose id's match the current actor's id
   // give lines that are that actor's lines a separate class name
 
+  // fetch request to get the names of the characters that the current actor is assigned to
+
   return (
     <div id='scriptPage'>
-      <ActorScriptNav actors={actors} setCurrentActor={setCurrentActor} />
+      <ActorScriptNav
+        actors={actors}
+        currentActor={currentActor}
+        setCurrentActor={setCurrentActor}
+        setCurrentCharacters={setCurrentCharacters}
+      />
       <h2>script</h2>
       <h5>
         Current Actor: {currentActor[0]} {currentActor[1]}

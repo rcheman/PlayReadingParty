@@ -4,7 +4,10 @@ const path = require('path');
 const twelfthNightPath = './playScript/twelfth_night.txt';
 const testScriptPath = './playScript/testPlay.txt';
 
-const script = fs.readFileSync(path.resolve(__dirname, testScriptPath), 'utf8');
+const script = fs.readFileSync(
+  path.resolve(__dirname, twelfthNightPath),
+  'utf8'
+);
 
 const characterObjs = {};
 

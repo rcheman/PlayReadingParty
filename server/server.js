@@ -28,6 +28,14 @@ app.get('/getActors', actorController.getActors, (req, res) => {
   return res.status(200).json(res.locals.actorList);
 });
 
+app.get(
+  '/currentCharacters',
+  actorController.getActorCharacters,
+  (req, res) => {
+    return res.status(200).json(res.locals.currentCharactersList);
+  }
+);
+
 // add a new actor to the db
 app.post('/newActor', actorController.newActor, (req, res) => {
   return res.sendStatus(204);

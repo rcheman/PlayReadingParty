@@ -1,0 +1,28 @@
+.characterList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 20px;
+  width: 50%;
+}
+
+.currentActor {
+  background-color: green;
+}
+
+#scriptDiv {
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+#scriptDiv p {
+  text-align: left;
+}
+
+#scriptPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

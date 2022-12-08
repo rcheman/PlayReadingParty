@@ -16,7 +16,10 @@ characters
     -line count INT
 
 
-CREATE TABLE actors (ID SERIAL PRIMARY KEY, first_name VARCHAR NOT NULL, last_name VARCHAR NOT NULL);
+CREATE TABLE actors 
+(ID SERIAL PRIMARY KEY, 
+first_name VARCHAR NOT NULL, 
+last_name VARCHAR NOT NULL);
 
 CREATE TABLE characters 
 (ID INT NOT NULL, 
@@ -25,3 +28,14 @@ actor_id INT,
 line_count INT,
 speaks_count INT,
 PRIMARY KEY(ID));
+
+CREATE TABLE test_characters
+(ID SERIAL PRIMARY KEY,
+name VARCHAR NOT NULL,
+actor_id INT,
+line_count int,
+speaks_count INT)
+
+INSERT INTO test_characters
+(name, actor_id, line_count, speaks_count),
+VALUES ('matt', 5, 2);

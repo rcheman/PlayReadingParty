@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import ActorScriptNav from './actorScriptNav';
 
-const Script = () => {
+const Script = ({ actors }) => {
   const [script, setScript] = useState([]);
+  const [currentActor, setCurrentActor] = useState([]);
 
   // fetch script from the backend
   let fullScript = [];
@@ -36,9 +38,17 @@ const Script = () => {
     );
   }
 
+  // on actor nav button change
+  // pull the characters whose id's match the current actor's id
+  // give lines that are that actor's lines a separate class name
+
   return (
     <div id='scriptPage'>
+      <ActorScriptNav actors={actors} setCurrentActor={setCurrentActor} />
       <h2>script</h2>
+      <h5>
+        Current Actor: {currentActor[0]} {currentActor[1]}
+      </h5>
       <div id='scriptDiv'>{lineChunks}</div>
     </div>
   );

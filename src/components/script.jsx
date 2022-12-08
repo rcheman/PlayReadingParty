@@ -2,22 +2,28 @@ import React, { useState, useEffect } from 'react';
 import ActorScriptNav from './actorScriptNav';
 import classNames from 'classnames';
 
-const Script = ({ actors }) => {
+const Script = ({ actors, scriptOption }) => {
   const [script, setScript] = useState([]);
   const [currentActor, setCurrentActor] = useState([]);
   const [currentCharacters, setCurrentCharacters] = useState([]);
+  const [chunkedLines, setLines] = useState([]);
 
   // fetch script from the backend
   let fullScript = [];
+
+  let url = new URL('http://localhost:3000/script');
+  url.searchParams.append('title', scriptOption);
+
   useEffect(() => {
-    fetch('/script')
+    console.log(currentCharacters);
+    fetch(url.href)
       .then((response) => response.json())
-      .then((script) => {
-        for (let i = 0; i < script.length; i++) {
+      .then((fetchedScript) => {
+        for (let i = 0; i < fetchedScript.length; i++) {
           // script[i]
-          fullScript.push(script[i]);
+          fullScript.push(fetchedScript[i]);
         }
-        // fullScript = fullScript.flat();
+        console.log(fetchedScript);
         setScript(fullScript);
       })
       .catch((error) => {
@@ -25,12 +31,13 @@ const Script = ({ actors }) => {
       });
   }, []);
 
+  console.log('script in promise chain', script);
   // create div and p elements for each chunk of lines
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
   let currentActorCharacter;
 
-  console.log(currentCharacters);
+  console.log('current characters', currentCharacters);
   console.log(characterSet);
 
   for (let i = 0; i < script.length; i++) {
@@ -64,6 +71,7 @@ const Script = ({ actors }) => {
         currentActor={currentActor}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
+        scriptOption={scriptOption}
       />
       <h2>script</h2>
       <h5>

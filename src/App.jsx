@@ -5,9 +5,14 @@ import Home from './components/home';
 const App = () => {
   const [showScript, setShowScript] = useState(false);
   const [actors, setActors] = useState([]);
+  const [scriptOption, changeScriptOption] = useState('test');
 
   const switchScript = () => {
     setShowScript(!showScript);
+  };
+
+  const changeScript = () => {
+    changeScriptOption('twelfthNight');
   };
 
   useEffect(() => {
@@ -30,10 +35,16 @@ const App = () => {
   return (
     <div>
       <button onClick={switchScript}>Open/Close Script</button>
+      <button onClick={changeScript}>Change Script</button>
       {showScript ? (
-        <Script actors={actors} />
+        <Script actors={actors} scriptOption={scriptOption} />
       ) : (
-        <Home setActors={setActors} actors={actors} key={'home'} />
+        <Home
+          setActors={setActors}
+          actors={actors}
+          key={'home'}
+          scriptOption={scriptOption}
+        />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CharacterList from './characterList';
 
-const Home = ({ setActors, actors }) => {
+const Home = ({ setActors, actors, scriptOption }) => {
   // const [actors, setActors] = useState([]);
 
   const actorFirstName = useRef('');
@@ -38,24 +38,6 @@ const Home = ({ setActors, actors }) => {
     event.preventDefault();
   };
 
-  // on load, fetch the actor names from the db
-  // useEffect(() => {
-  //   fetch('/getActors')
-  //     .then((response) => response.json())
-  //     .then((actorList) => {
-  //       let fullActorList = [...actors];
-
-  //       actorList.forEach((actorRow) => {
-  //         const fullName = [actorRow.first_name, actorRow.last_name];
-  //         fullActorList.push(fullName);
-  //       });
-  //       setActors(fullActorList);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error: ', error);
-  //     });
-  // }, []);
-
   // get the actor names and display current actor names
   return (
     <div id='home'>
@@ -70,7 +52,7 @@ const Home = ({ setActors, actors }) => {
           <li>{actor[0] + ' ' + actor[1]}</li>
         ))}
       </ul>
-      <CharacterList />
+      <CharacterList scriptOption={scriptOption} />
     </div>
   );
 };

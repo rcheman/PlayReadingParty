@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Character from './character';
 
-const CharacterList = (props) => {
+const CharacterList = ({ scriptOption }) => {
   const [characters, setCharacters] = useState([]);
   const fetchedCharacters = [];
+  let url = new URL('http://localhost:3000/characterData');
+  url.searchParams.append('title', scriptOption);
 
   useEffect(() => {
     // fetch request to get the character data
-    fetch('/characterData')
+
+    fetch(url.href)
       .then((response) => response.json())
       .then((characterObjs) => {
         for (let name in characterObjs) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Character from './character';
 
-const CharacterList = () => {
+const CharacterList = (props) => {
   const [characters, setCharacters] = useState([]);
   const fetchedCharacters = [];
 
@@ -23,16 +23,13 @@ const CharacterList = () => {
   // make an array of character information
   const charactersElements = [];
   for (let i = 0; i < characters.length; i++) {
-    charactersElements.push(<Character characterData={characters[i]} />);
+    charactersElements.push(
+      <Character key={`character ${i}`} characterData={characters[i]} />
+    );
   }
 
   // render list of characters and their data
-  return (
-    <div>
-      <p>this will be a character list</p>
-      {charactersElements}
-    </div>
-  );
+  return <div className='characterList'>{charactersElements}</div>;
 };
 
 export default CharacterList;

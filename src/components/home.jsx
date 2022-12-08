@@ -40,21 +40,19 @@ const Home = () => {
 
   // get the actors names
   return (
-    <div>
+    <div id='home'>
       <h1>Here is the react app!!!!!!!!!!!!</h1>
       <form onSubmit={handleInput}>
         <input ref={actorFirstName} placeholder="enter actor's first name" />
         <input ref={actorLastName} placeholder="enter actor's last name" />
         <button type='submit'>Add actors to list</button>
       </form>
-      <ul>
+      <ul id='actorList'>
         {actors.map((actor) => (
           <li>{actor[0] + ' ' + actor[1]}</li>
         ))}
       </ul>
-      <div>
-        <CharacterList />
-      </div>
+      <CharacterList />
     </div>
   );
 };

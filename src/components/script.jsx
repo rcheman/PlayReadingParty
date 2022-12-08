@@ -47,7 +47,10 @@ const Script = ({ actors, scriptOption }) => {
       <div className={characterClass}>
         <blockquote>
           {script[i].map((lines) => (
-            <p>{lines}</p>
+            <span>
+              {lines}
+              <br></br>
+            </span>
           ))}
         </blockquote>
       </div>

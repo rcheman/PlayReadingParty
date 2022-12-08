@@ -34,7 +34,12 @@ nav {
 
 .currentActor {
   background-color: #c9ada7;
-  border-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.currentActor blockquote {
+  border-left-color: #22223b;
 }
 
 #home {

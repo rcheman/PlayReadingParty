@@ -29,7 +29,12 @@ const CharacterList = (props) => {
   }
 
   // render list of characters and their data
-  return <div className='characterList'>{charactersElements}</div>;
+  return (
+    <div className='characterList'>
+      <h2>Characters in the play: </h2>
+      {charactersElements}
+    </div>
+  );
 };
 
 export default CharacterList;

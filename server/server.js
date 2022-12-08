@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
-const scriptController = require('./controller.js');
+const scriptController = require('./scriptController.js');
+const actorController = require('./actorController');
 
 const app = express();
 
@@ -22,8 +23,13 @@ app.get('/characterData', scriptController.getCharacterData, (req, res) => {
   return res.status(200).json(res.locals.characterData);
 });
 
+// get a list of all the actors
+app.get('/getActors', actorController.getActors, (req, res) => {
+  return res.status(200).json(res.locals.actorList);
+});
+
 // add a new actor to the db
-app.post('/newActor', scriptController.newActor, (req, res) => {
+app.post('/newActor', actorController.newActor, (req, res) => {
   return res.sendStatus(204);
 });
 

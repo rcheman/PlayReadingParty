@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import CharacterList from './characterList';
 
 const Home = () => {
@@ -19,6 +19,7 @@ const Home = () => {
     actorLastName.current.value = '';
 
     const nameObj = { firstName: fullName[0], lastName: fullName[1] };
+
     // fetch request to the backend to add the new actor to the database
     fetch('/newActor', {
       method: 'POST',
@@ -34,11 +35,28 @@ const Home = () => {
       .catch((error) => {
         console.error('Error: ', error);
       });
-
     event.preventDefault();
   };
 
-  // get the actors names
+  // on load, fetch the actor names from the db
+  useEffect(() => {
+    fetch('/getActors')
+      .then((response) => response.json())
+      .then((actorList) => {
+        let fullActorList = [...actors];
+
+        actorList.forEach((actorRow) => {
+          const fullName = [actorRow.first_name, actorRow.last_name];
+          fullActorList.push(fullName);
+        });
+        setActors(fullActorList);
+      })
+      .catch((error) => {
+        console.error('Error: ', error);
+      });
+  }, []);
+
+  // get the actor names and display current actor names
   return (
     <div id='home'>
       <h1>Here is the react app!!!!!!!!!!!!</h1>

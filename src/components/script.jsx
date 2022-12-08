@@ -10,9 +10,11 @@ const Script = () => {
       .then((response) => response.json())
       .then((script) => {
         for (let i = 0; i < script.length; i++) {
+          // script[i]
           fullScript.push(script[i]);
+          console.log(script[i][0]);
         }
-        fullScript = fullScript.flat();
+        // fullScript = fullScript.flat();
         setScript(fullScript);
       })
       .catch((error) => {
@@ -20,15 +22,24 @@ const Script = () => {
       });
   }, []);
 
-  //  create p elements for each line in the script
-  return (
-    <div id='scriptPage'>
-      <h2>script</h2>
-      <div id='scriptDiv'>
-        {script.map((lines) => (
+  // create div and p elements for each chunk of lines
+  const lineChunks = [];
+  for (let i = 0; i < script.length; i++) {
+    // assign the character name as the className for the div
+    const name = script[i][0].replace('.', '').toLowerCase();
+    lineChunks.push(
+      <div className={`${name}`}>
+        {script[i].map((lines) => (
           <p>{lines}</p>
         ))}
       </div>
+    );
+  }
+
+  return (
+    <div id='scriptPage'>
+      <h2>script</h2>
+      <div id='scriptDiv'>{lineChunks}</div>
     </div>
   );
 };

@@ -11,9 +11,8 @@ const App = () => {
 
   return (
     <div>
-      {showScript ? <Script /> : <Home />}
-
       <button onClick={switchScript}>Open/Close Script</button>
+      {showScript ? <Script /> : <Home />}
     </div>
   );
 };

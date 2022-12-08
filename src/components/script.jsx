@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ActorScriptNav from './actorScriptNav';
+import classNames from 'classnames';
 
 const Script = ({ actors }) => {
   const [script, setScript] = useState([]);
@@ -26,11 +27,23 @@ const Script = ({ actors }) => {
 
   // create div and p elements for each chunk of lines
   const lineChunks = [];
+  const characterSet = new Set(currentCharacters);
+  let currentActorCharacter;
+
+  console.log(currentCharacters);
+  console.log(characterSet);
+
   for (let i = 0; i < script.length; i++) {
     // assign the character name as the className for the div
     const name = script[i][0].replace('.', '').toLowerCase();
+    if (characterSet.has(name.toUpperCase())) {
+      currentActorCharacter = `currentActor`;
+    } else {
+      currentActorCharacter = 'notCurrentActor';
+    }
+    const characterClass = classNames(name, currentActorCharacter);
     lineChunks.push(
-      <div className={`${name}`}>
+      <div className={characterClass}>
         {script[i].map((lines) => (
           <p>{lines}</p>
         ))}

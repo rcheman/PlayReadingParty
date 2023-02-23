@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react';
-import Script from './components/script';
-import Home from './components/home';
+import Script from './components/Script';
+import Home from './components/Home';
 
 const App = () => {
   const [showScript, setShowScript] = useState(false);
@@ -52,7 +52,7 @@ const App = () => {
         <Home
           setActors={setActors}
           actors={actors}
-          key={'home'}
+          key={'Home'}
           scriptOption={scriptOption}
         />
       )}

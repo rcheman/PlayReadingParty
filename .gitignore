@@ -1,4 +1,5 @@
+.idea
+
 node_modules
 public/main.js
-main.js.LICENSE.txt
-
+public/main.js.LICENSE.txt

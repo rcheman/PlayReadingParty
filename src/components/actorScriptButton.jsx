@@ -12,16 +12,12 @@ const ActorScriptButton = ({
   // on change, change the value of current actor
   const onClickChange = (e) => {
     const value = e.target.value.split(' ');
-    setCurrentActor([value[0], value[1]]);
-
-    // create url with current actor parameter name
-    let url = new URL('http://localhost:3000/currentCharacters');
-    url.searchParams.append('firstName', value[0]);
-    url.searchParams.append('lastName', value[1]);
-    url.searchParams.append('option', scriptOption);
+    const firstName = value[0];
+    const lastName = value[1];
+    setCurrentActor([firstName, lastName]);
 
     // fetch request to get the current characters for the current actor
-    fetch(url.href)
+    fetch(`/currentCharacters/${firstName}/${lastName}/${scriptOption}`)
       .then((response) => response.json())
       .then((characters) => {
         const charArr = characters.map((character) => character.charactername);

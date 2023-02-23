@@ -41,13 +41,14 @@ const actorController = {
 
   getActorCharacters: (req, res, next) => {
     // TODO: add query property to change what table we are checking
-    const { firstName, lastName, option } = req.query;
+    const { firstName, lastName, option } = req.params;
     let characterdb;
     if (option === 'test') {
       characterdb = 'test_characters';
     } else {
       characterdb = 'characters';
     }
+    // TODO use actorID to refer to actors rather than by concatenating firstName and lastName
     const values = [firstName, lastName];
     const text = `SELECT c.name as characterName
     FROM actors

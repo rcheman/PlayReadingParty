@@ -17,12 +17,12 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 // returns the script as a nested array
-app.get('/script', scriptController.getPlay, (req, res) => {
+app.get('/script/:title', scriptController.getPlay, (req, res) => {
   return res.status(200).json(res.locals.fullPlay);
 });
 
 // return the character objects
-app.get('/characterData', scriptController.getCharacterData, (req, res) => {
+app.get('/characterData/:title', scriptController.getCharacterData, (req, res) => {
   return res.status(200).json(res.locals.characterData);
 });
 
@@ -32,7 +32,7 @@ app.get('/getActors', actorController.getActors, (req, res) => {
 });
 
 app.get(
-  '/currentCharacters',
+  '/currentCharacters/:firstName/:lastName/:option',
   actorController.getActorCharacters,
   (req, res) => {
     return res.status(200).json(res.locals.currentCharactersList);

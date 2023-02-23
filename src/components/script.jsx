@@ -11,11 +11,8 @@ const Script = ({ actors, scriptOption }) => {
   // fetch script from the backend
   let fullScript = [];
 
-  let url = new URL('http://localhost:3000/script');
-  url.searchParams.append('title', scriptOption);
-
   useEffect(() => {
-    fetch(url.href)
+    fetch('/script/' + scriptOption)
       .then((response) => response.json())
       .then((fetchedScript) => {
         for (let i = 0; i < fetchedScript.length; i++) {

@@ -7,7 +7,7 @@ const App = () => {
   const [actors, setActors] = useState([]);
   const [scriptOption, changeScriptOption] = useState('test');
 
-  const switchScript = () => {
+  const openScript = () => {
     setShowScript(!showScript);
   };
 
@@ -19,6 +19,7 @@ const App = () => {
     }
   };
 
+  // get the actor list initially on render
   useEffect(() => {
     fetch('/getActors')
       .then((response) => response.json())
@@ -41,7 +42,7 @@ const App = () => {
       <header>
         <h1>Play Reading Assistant</h1>
         <nav>
-          <button onClick={switchScript}>Open/Close Script</button>
+          <button onClick={openScript}>Open/Close Script</button>
           <button onClick={changeScript}>Change Script</button>
         </nav>
       </header>

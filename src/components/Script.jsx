@@ -6,25 +6,18 @@ const Script = ({ actors, scriptOption }) => {
   const [script, setScript] = useState([]);
   const [currentActor, setCurrentActor] = useState([]);
   const [currentCharacters, setCurrentCharacters] = useState([]);
-  const [chunkedLines, setLines] = useState([]);
 
-  // fetch script from the backend
-  let fullScript = [];
-
+  // fetch the specified script
   useEffect(() => {
     fetch('/script/' + scriptOption)
       .then((response) => response.json())
       .then((fetchedScript) => {
-        for (let i = 0; i < fetchedScript.length; i++) {
-          // script[i]
-          fullScript.push(fetchedScript[i]);
-        }
-        setScript(fullScript);
+        setScript([...fetchedScript]);
       })
       .catch((error) => {
         console.error(`error: ${error} when fetching script`);
       });
-  }, []);
+  }, [scriptOption]);
 
   // create div and p elements for each chunk of lines
   const lineChunks = [];

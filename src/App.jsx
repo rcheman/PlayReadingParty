@@ -1,13 +1,13 @@
-import React, { Component, useState, useEffect } from 'react';
-import Script from './components/script';
-import Home from './components/home';
+import React, { useState, useEffect } from 'react';
+import Script from './components/Script';
+import Home from './components/Home';
 
 const App = () => {
   const [showScript, setShowScript] = useState(false);
   const [actors, setActors] = useState([]);
   const [scriptOption, changeScriptOption] = useState('test');
 
-  const switchScript = () => {
+  const openScript = () => {
     setShowScript(!showScript);
   };
 
@@ -19,6 +19,8 @@ const App = () => {
     }
   };
 
+  // get the actor list initially on render
+  // TODO: switch to useQuery to run simultaneously to the render instead of after initial render
   useEffect(() => {
     fetch('/getActors')
       .then((response) => response.json())
@@ -41,7 +43,7 @@ const App = () => {
       <header>
         <h1>Play Reading Assistant</h1>
         <nav>
-          <button onClick={switchScript}>Open/Close Script</button>
+          <button onClick={openScript}>Open/Close Script</button>
           <button onClick={changeScript}>Change Script</button>
         </nav>
       </header>
@@ -51,7 +53,7 @@ const App = () => {
         <Home
           setActors={setActors}
           actors={actors}
-          key={'home'}
+          key='Home'
           scriptOption={scriptOption}
         />
       )}

@@ -47,7 +47,7 @@ const Home = ({ setActors, actors, scriptOption }) => {
       <ul id='actorList'>
         <h3>Actors</h3>
         {actors.map((actor) => (
-          <li>{actor[0] + ' ' + actor[1]}</li>
+          <li key={actor}>{actor[0] + ' ' + actor[1]}</li>
         ))}
       </ul>
       <CharacterList scriptOption={scriptOption} />

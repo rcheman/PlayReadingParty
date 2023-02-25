@@ -20,7 +20,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetch('/getActors')
+    fetch('/actors')
       .then((response) => response.json())
       .then((actorList) => {
         let fullActorList = [...actors];

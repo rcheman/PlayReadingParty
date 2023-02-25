@@ -21,7 +21,7 @@ const Home = ({ setActors, actors, scriptOption }) => {
     const nameObj = { firstName: fullName[0], lastName: fullName[1] };
 
     // fetch request to the backend to add the new actor to the database
-    fetch('/newActor', {
+    fetch('/actors', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

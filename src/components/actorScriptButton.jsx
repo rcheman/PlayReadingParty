@@ -17,7 +17,7 @@ const ActorScriptButton = ({
     setCurrentActor([firstName, lastName]);
 
     // fetch request to get the current characters for the current actor
-    fetch(`/currentCharacters/${firstName}/${lastName}/${scriptOption}`)
+    fetch(`/actors/${firstName}/${lastName}/${scriptOption}`)
       .then((response) => response.json())
       .then((characters) => {
         const charArr = characters.map((character) => character.charactername);

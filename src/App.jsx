@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Script from './components/Script';
 import Home from './components/Home';
 
@@ -20,6 +20,7 @@ const App = () => {
   };
 
   // get the actor list initially on render
+  // TODO: switch to useQuery to run simultaneously to the render instead of after initial render
   useEffect(() => {
     fetch('/getActors')
       .then((response) => response.json())
@@ -52,7 +53,7 @@ const App = () => {
         <Home
           setActors={setActors}
           actors={actors}
-          key={'Home'}
+          key='Home'
           scriptOption={scriptOption}
         />
       )}

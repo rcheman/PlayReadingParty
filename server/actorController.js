@@ -2,11 +2,9 @@ const db = require('./models/actorModels');
 
 const actorController = {
   newActor: (req, res, next) => {
-    // req.body.fullname should be an array with first and last name
     const { firstName, lastName } = req.body;
     // add actor to the database
-    // firstName = firstName.toLowercase();
-    const values = [firstName.toLowerCase(), lastName.toLowerCase()];
+    const values = [firstName, lastName];
     const text = `INSERT INTO actors 
           (first_name, last_name)
           VALUES ($1, $2)`;

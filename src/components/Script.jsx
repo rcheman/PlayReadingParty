@@ -24,9 +24,9 @@ const Script = ({ actors, scriptOption }) => {
   let currentActorCharacter;
 
   for (let i = 0; i < script.length; i++) {
-    // assign the character name as the className for the div
-    const name = script[i][0].replace('.', '').toLowerCase();
-    if (characterSet.has(name.toUpperCase())) {
+    // checks if the character name for this chunk is the name of a character assigned to the current actor
+    const name = script[i][0].replace('.', '').toUpperCase();
+    if (characterSet.has(name)) {
       currentActorCharacter = `currentActor`;
     } else {
       currentActorCharacter = 'notCurrentActor';

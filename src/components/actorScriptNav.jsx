@@ -13,11 +13,11 @@ const ActorScriptNav = ({
       <ActorScriptButton
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
-        currentActor={currentActor}
-        firstName={actor[0]}
-        lastName={actor[1]}
+        firstName={actor.firstName}
+        lastName={actor.lastName}
+        id={actor.id}
         scriptOption={scriptOption}
-        key={`${actor}Button`}
+        key={`${actor.firstName} ${actor.lastName}Button`}
       />
     );
   }

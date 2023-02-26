@@ -10,9 +10,9 @@ const CharacterList = ({ scriptOption }) => {
     // fetch request to get the character data
     fetch('/script/' + scriptOption + '/characters')
       .then((response) => response.json())
-      .then((characterObjs) => {
-        for (let name in characterObjs) {
-          fetchedCharacters.push(characterObjs[name]);
+      .then((data) => {
+        for (let name in data.characterData) {
+          fetchedCharacters.push(data.characterData[name]);
         }
         setCharacters(fetchedCharacters);
       })

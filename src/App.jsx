@@ -28,8 +28,12 @@ const App = () => {
         let fullActorList = [...actors];
 
         actorList.forEach((actorRow) => {
-          const fullName = [actorRow.first_name, actorRow.last_name];
-          fullActorList.push(fullName);
+          const actor = {
+            firstName: actorRow.first_name,
+            lastName: actorRow.last_name,
+            id: actorRow.id,
+          };
+          fullActorList.push(actor);
         });
         setActors(fullActorList);
       })

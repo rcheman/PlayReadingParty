@@ -4,7 +4,7 @@ const actorController = {
   newActor: (req, res, next) => {
     const { firstName, lastName } = req.body;
     // add actor to the database
-    const values = [firstName, lastName];
+    const values = [firstName.trim(), lastName.trim()];
     const text = `INSERT INTO actors 
           (first_name, last_name)
           VALUES ($1, $2)`;

@@ -10,9 +10,9 @@ const ActorScriptButton = ({
 }) => {
   // on change, change the value of current actor
   const onClickChange = (e) => {
-    const value = e.target.value.split(' ');
-    const firstName = value[0];
-    const lastName = value[1];
+    const value = e.target.value.split(' '); // todo, use actorId here instead of string manipulation
+    const firstName = value.at(0);
+    const lastName = value.at(-1);
     setCurrentActor([firstName, lastName]);
 
     // fetch request to get the current characters for the current actor

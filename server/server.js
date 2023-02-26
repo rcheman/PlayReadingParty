@@ -23,13 +23,13 @@ app.get('/script/:title', scriptController.getPlay, (req, res) => {
 
 // return the character objects
 app.get(
-  '/characterData/:title',
+  '/script/:title/characters',
   scriptController.getCharacterData,
   (req, res) => {
     return res.status(200).json(res.locals.characterData);
   }
 );
-// get a list of the actors assigned to the current actor
+// get a list of the characters assigned to the current actor
 app.get(
   '/actors/:firstName/:lastName/:option',
   actorController.getActorCharacters,

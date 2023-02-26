@@ -8,7 +8,7 @@ const CharacterList = ({ scriptOption }) => {
   // get the character data on the initial load and when the script option changes
   useEffect(() => {
     // fetch request to get the character data
-    fetch('/characterData/' + scriptOption)
+    fetch('/script/' + scriptOption + '/characters')
       .then((response) => response.json())
       .then((characterObjs) => {
         for (let name in characterObjs) {

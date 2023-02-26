@@ -1,12 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
 
 const ActorScriptButton = ({
   firstName,
   lastName,
   setCurrentActor,
   setCurrentCharacters,
-  currentActor,
   scriptOption,
 }) => {
   // on change, change the value of current actor

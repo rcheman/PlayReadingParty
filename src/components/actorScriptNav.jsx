@@ -5,7 +5,6 @@ const ActorScriptNav = ({
   actors,
   setCurrentActor,
   setCurrentCharacters,
-  currentActor,
   scriptOption,
 }) => {
   const buttons = [];

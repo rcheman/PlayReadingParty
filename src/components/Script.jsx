@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ActorScriptNav from './actorScriptNav';
-import classNames from 'classnames';
 
 const Script = ({ actors, scriptOption }) => {
   const [script, setScript] = useState([]);
@@ -32,9 +31,8 @@ const Script = ({ actors, scriptOption }) => {
     } else {
       currentActorCharacter = 'notCurrentActor';
     }
-    const characterClass = classNames(name, currentActorCharacter);
     lineChunks.push(
-      <div className={characterClass}>
+      <div className={(name, currentActorCharacter)}>
         <blockquote>
           {script[i].map((lines) => (
             <span>
@@ -47,17 +45,10 @@ const Script = ({ actors, scriptOption }) => {
     );
   }
 
-  // on actor nav button change
-  // pull the characters whose id's match the current actor's id
-  // give lines that are that actor's lines a separate class name
-
-  // fetch request to get the names of the characters that the current actor is assigned to
-
   return (
     <div id='scriptPage'>
       <ActorScriptNav
         actors={actors}
-        currentActor={currentActor}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
         scriptOption={scriptOption}

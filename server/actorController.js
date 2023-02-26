@@ -38,21 +38,23 @@ const actorController = {
   },
 
   getActorCharacters: (req, res, next) => {
-    // TODO: add query property to change what table we are checking
-    const { firstName, lastName, option } = req.params;
+    const { actor } = req.query;
+    // skips over this middleware when there isn't a query
+    if (!actor) {
+      return next();
+    }
     let characterdb;
-    if (option === 'test') {
+    if (res.locals.title === 'test') {
       characterdb = 'test_characters';
     } else {
       characterdb = 'characters';
     }
-    // TODO use actorID to refer to actors rather than by concatenating firstName and lastName
-    const values = [firstName, lastName];
+    const values = [actor];
     const text = `SELECT c.name as characterName
     FROM actors
     LEFT JOIN ${characterdb} c
-    ON actors.ID=c.actor_id
-    WHERE first_name=$1 AND last_name=$2`;
+    ON actors.id=c.actor_id
+    WHERE actors.id=$1`;
 
     db.query(text, values)
       .then((characterList) => {

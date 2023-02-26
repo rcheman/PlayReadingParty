@@ -21,20 +21,15 @@ app.get('/script/:title', scriptController.getPlay, (req, res) => {
   return res.status(200).json(res.locals.fullPlay);
 });
 
-// return the character objects
+// return the character data
+// can also be used with an actor=id query to get just the characters assigned to that actor
 app.get(
   '/script/:title/characters',
   scriptController.getCharacterData,
-  (req, res) => {
-    return res.status(200).json(res.locals.characterData);
-  }
-);
-// get a list of the characters assigned to the current actor
-app.get(
-  '/actors/:firstName/:lastName/:option',
   actorController.getActorCharacters,
   (req, res) => {
-    return res.status(200).json(res.locals.currentCharactersList);
+    // sends back res.locals because it could send back either characterData or currentCharactersList
+    return res.status(200).json(res.locals);
   }
 );
 

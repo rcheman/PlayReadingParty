@@ -5,34 +5,26 @@ import Home from './components/Home';
 const App = () => {
   const [showScript, setShowScript] = useState(false);
   const [actors, setActors] = useState([]);
-  const [scriptOption, changeScriptOption] = useState('test');
+  const [currentScript, setCurrentScript] = useState('test');
 
   const openScript = () => {
     setShowScript(!showScript);
   };
 
   const changeScript = () => {
-    if (scriptOption === 'test') {
-      changeScriptOption('twelfthNight');
+    if (currentScript === 'test') {
+      setCurrentScript('twelfthNight');
     } else {
-      changeScriptOption('test');
+      setCurrentScript('test');
     }
   };
 
   // get the actor list initially on render
   // TODO: switch to useQuery to run simultaneously to the render instead of after initial render
   useEffect(() => {
-    fetch('/getActors')
+    fetch('/actors')
       .then((response) => response.json())
-      .then((actorList) => {
-        let fullActorList = [...actors];
-
-        actorList.forEach((actorRow) => {
-          const fullName = [actorRow.first_name, actorRow.last_name];
-          fullActorList.push(fullName);
-        });
-        setActors(fullActorList);
-      })
+      .then(setActors)
       .catch((error) => {
         console.error('Error: ', error);
       });
@@ -48,13 +40,13 @@ const App = () => {
         </nav>
       </header>
       {showScript ? (
-        <Script actors={actors} scriptOption={scriptOption} />
+        <Script actors={actors} currentScript={currentScript} />
       ) : (
         <Home
           setActors={setActors}
           actors={actors}
           key='Home'
-          scriptOption={scriptOption}
+          currentScript={currentScript}
         />
       )}
     </div>

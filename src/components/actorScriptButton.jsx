@@ -1,13 +1,12 @@
 import React from 'react';
-import classNames from 'classnames';
 
 const ActorScriptButton = ({
   firstName,
   lastName,
   setCurrentActor,
   setCurrentCharacters,
-  currentActor,
-  scriptOption,
+  currentScript,
+  id,
 }) => {
   // on change, change the value of current actor
   const onClickChange = (e) => {
@@ -17,24 +16,22 @@ const ActorScriptButton = ({
     setCurrentActor([firstName, lastName]);
 
     // fetch request to get the current characters for the current actor
-    fetch(`/currentCharacters/${firstName}/${lastName}/${scriptOption}`)
+    fetch(`/script/${currentScript}/characters?actor=${id}`)
       .then((response) => response.json())
-      .then((characters) => {
-        const charArr = characters.map((character) => character.charactername);
+      .then((characterData) => {
+        const charArr = characterData.map((character) => character.name);
         setCurrentCharacters(charArr);
       })
       .catch((error) => {
         console.error(`error: ${error} when fetching current characters`);
       });
   };
-
-  const buttonClasses = ['actorNameButton', 'button-small'];
   // set button value as a string with first and last name
   const buttonVal = `${firstName} ${lastName}`;
   return (
     <input
       onClick={onClickChange}
-      className={buttonClasses}
+      className='actorNameButton button-small'
       type='button'
       value={buttonVal}
     />

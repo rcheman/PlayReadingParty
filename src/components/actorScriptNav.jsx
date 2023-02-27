@@ -5,8 +5,7 @@ const ActorScriptNav = ({
   actors,
   setCurrentActor,
   setCurrentCharacters,
-  currentActor,
-  scriptOption,
+  currentScript,
 }) => {
   const buttons = [];
   for (let actor of actors) {
@@ -14,11 +13,11 @@ const ActorScriptNav = ({
       <ActorScriptButton
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
-        currentActor={currentActor}
-        firstName={actor[0]}
-        lastName={actor[1]}
-        scriptOption={scriptOption}
-        key={`${actor}Button`}
+        firstName={actor.firstName}
+        lastName={actor.lastName}
+        id={actor.id}
+        currentScript={currentScript}
+        key={actor.id}
       />
     );
   }

@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import ActorScriptNav from './actorScriptNav';
-import classNames from 'classnames';
 
-const Script = ({ actors, scriptOption }) => {
+const Script = ({ actors, currentScript }) => {
   const [script, setScript] = useState([]);
   const [currentActor, setCurrentActor] = useState([]);
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
   // fetch the specified script
   useEffect(() => {
-    fetch('/script/' + scriptOption)
+    fetch('/script/' + currentScript)
       .then((response) => response.json())
-      .then((fetchedScript) => {
-        setScript([...fetchedScript]);
-      })
+      .then(setScript)
       .catch((error) => {
         console.error(`error: ${error} when fetching script`);
       });
-  }, [scriptOption]);
+  }, [currentScript]);
 
   // create div and p elements for each chunk of lines
   const lineChunks = [];
@@ -25,16 +22,16 @@ const Script = ({ actors, scriptOption }) => {
   let currentActorCharacter;
 
   for (let i = 0; i < script.length; i++) {
-    // assign the character name as the className for the div
-    const name = script[i][0].replace('.', '').toLowerCase();
-    if (characterSet.has(name.toUpperCase())) {
+    // checks if the character name for this chunk is the name of a character assigned to the current actor
+    // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
+    const name = script[i][0].replace('.', '');
+    if (characterSet.has(name)) {
       currentActorCharacter = `currentActor`;
     } else {
       currentActorCharacter = 'notCurrentActor';
     }
-    const characterClass = classNames(name, currentActorCharacter);
     lineChunks.push(
-      <div className={characterClass}>
+      <div className={(name, currentActorCharacter)}>
         <blockquote>
           {script[i].map((lines) => (
             <span>
@@ -47,20 +44,13 @@ const Script = ({ actors, scriptOption }) => {
     );
   }
 
-  // on actor nav button change
-  // pull the characters whose id's match the current actor's id
-  // give lines that are that actor's lines a separate class name
-
-  // fetch request to get the names of the characters that the current actor is assigned to
-
   return (
     <div id='scriptPage'>
       <ActorScriptNav
         actors={actors}
-        currentActor={currentActor}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
-        scriptOption={scriptOption}
+        currentScript={currentScript}
       />
       <h2>script</h2>
       <h5>

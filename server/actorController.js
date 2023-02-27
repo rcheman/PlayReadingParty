@@ -1,11 +1,11 @@
 const db = require('./models/actorModels');
+const playData = require('./playData');
 
 const actorController = {
   newActor: (req, res, next) => {
-    // req.body.fullname should be an array with first and last name
     const { firstName, lastName } = req.body;
     // add actor to the database
-    const values = [firstName.toLowerCase().trim(), lastName.toLowerCase().trim()];
+    const values = [firstName.trim(), lastName.trim()];
     const text = `INSERT INTO actors 
           (first_name, last_name)
           VALUES ($1, $2)`;
@@ -27,7 +27,14 @@ const actorController = {
     const text = `SELECT * FROM actors`;
     db.query(text)
       .then((actorList) => {
-        res.locals.actorList = actorList.rows;
+        res.locals.actorList = actorList.rows.map(
+          (actor) =>
+            (actor = {
+              firstName: actor.first_name,
+              lastName: actor.last_name,
+              id: actor.id,
+            })
+        );
         return next();
       })
       .catch((error) => {
@@ -39,25 +46,41 @@ const actorController = {
   },
 
   getActorCharacters: (req, res, next) => {
-    // TODO: add query property to change what table we are checking
-    const { firstName, lastName, option } = req.params;
+    const { actor } = req.query;
+    const { title } = req.params;
+
+    // Returns the entire character list if there isn't a query
+    if (!actor) {
+      res.locals.characterData = Object.values(playData[title].characterObjs);
+      return next();
+    }
     let characterdb;
-    if (option === 'test') {
+    if (title === 'test') {
       characterdb = 'test_characters';
     } else {
       characterdb = 'characters';
     }
-    // TODO use actorID to refer to actors rather than by concatenating firstName and lastName
-    const values = [firstName, lastName];
+    const values = [actor];
     const text = `SELECT c.name as characterName
     FROM actors
     LEFT JOIN ${characterdb} c
-    ON actors.ID=c.actor_id
-    WHERE first_name=$1 AND last_name=$2`;
+    ON actors.id=c.actor_id
+    WHERE actors.id=$1`;
 
+    const characterData = [];
     db.query(text, values)
-      .then((characterList) => {
-        res.locals.currentCharactersList = characterList.rows;
+      .then((actorCharacters) => {
+        // filter out the characters from the character data based on what characters are assigned to the actor
+        for (let i = 0; i < actorCharacters.rows.length; i++) {
+          let assignedCharacter =
+            playData[title].characterObjs[
+              actorCharacters.rows[i].charactername
+            ];
+          if (assignedCharacter) {
+            characterData.push(assignedCharacter);
+          }
+        }
+        res.locals.characterData = characterData;
         return next();
       })
       .catch((error) => {

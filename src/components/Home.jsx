@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CharacterList from './characterList';
 
-const Home = ({ setActors, actors, scriptOption }) => {
+const Home = ({ setActors, actors, currentScript }) => {
   // const [actors, setActors] = useState([]);
 
   const actorFirstName = useRef('');
@@ -10,29 +10,27 @@ const Home = ({ setActors, actors, scriptOption }) => {
   // submit of actor name handler
   const handleInput = (event) => {
     let newActors = [...actors];
-    let fullName = [actorFirstName.current.value, actorLastName.current.value];
-    newActors.push(fullName);
+    let actor = {
+      firstName: actorFirstName.current.value,
+      lastName: actorLastName.current.value,
+    };
+    newActors.push(actor);
     // set actors in state to be our new actors
     setActors(newActors);
     // reset input value to empty string to clear out old input
     actorFirstName.current.value = '';
     actorLastName.current.value = '';
 
-    const nameObj = { firstName: fullName[0], lastName: fullName[1] };
-
     // fetch request to the backend to add the new actor to the database
-    fetch('/newActor', {
+    fetch('/actors', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(nameObj),
-    })
-      .then((response) => response.json())
-      .then((data) => {})
-      .catch((error) => {
-        console.error('Error: ', error);
-      });
+      body: JSON.stringify(actor),
+    }).catch((error) => {
+      console.error('Error: ', error);
+    });
     event.preventDefault();
   };
 
@@ -47,10 +45,10 @@ const Home = ({ setActors, actors, scriptOption }) => {
       <ul id='actorList'>
         <h3>Actors</h3>
         {actors.map((actor) => (
-          <li key={actor}>{actor[0] + ' ' + actor[1]}</li>
+          <li key={actor.id}>{actor.firstName + ' ' + actor.lastName}</li>
         ))}
       </ul>
-      <CharacterList scriptOption={scriptOption} />
+      <CharacterList currentScript={currentScript} />
     </div>
   );
 };

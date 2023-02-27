@@ -1,25 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Character from './Character';
 
-const CharacterList = ({ scriptOption }) => {
+const CharacterList = ({ currentScript }) => {
   const [characters, setCharacters] = useState([]);
-  const fetchedCharacters = [];
 
   // get the character data on the initial load and when the script option changes
   useEffect(() => {
     // fetch request to get the character data
-    fetch('/characterData/' + scriptOption)
+    fetch('/script/' + currentScript + '/characters')
       .then((response) => response.json())
-      .then((characterObjs) => {
-        for (let name in characterObjs) {
-          fetchedCharacters.push(characterObjs[name]);
-        }
-        setCharacters(fetchedCharacters);
-      })
+      .then(setCharacters)
       .catch((error) => {
         console.error(`error: ${error} when fetching character data`);
       });
-  }, [scriptOption]);
+  }, [currentScript]);
 
   // make an array of character information
   const charactersElements = [];

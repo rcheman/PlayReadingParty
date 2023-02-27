@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const twelfthNightPath = './playScript/twelfth_night.txt';
-const testScriptPath = './playScript/testPlay.txt';
+const twelfthNightPath = '../playScript/twelfth_night.txt';
+const testScriptPath = '../playScript/testPlay.txt';
 
 function parseScript(playPath, title) {
   const script = fs.readFileSync(path.resolve(__dirname, playPath), 'utf8');

@@ -25,7 +25,8 @@ const Script = ({ actors, title }) => {
 
   for (let i = 0; i < script.length; i++) {
     // checks if the character name for this chunk is the name of a character assigned to the current actor
-    const name = script[i][0].replace('.', '').toUpperCase();
+    // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
+    const name = script[i][0].replace('.', '');
     if (characterSet.has(name)) {
       currentActorCharacter = `currentActor`;
     } else {

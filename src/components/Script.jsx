@@ -10,9 +10,7 @@ const Script = ({ actors, currentScript }) => {
   useEffect(() => {
     fetch('/script/' + currentScript)
       .then((response) => response.json())
-      .then((fetchedScript) => {
-        setScript([...fetchedScript]);
-      })
+      .then(setScript)
       .catch((error) => {
         console.error(`error: ${error} when fetching script`);
       });

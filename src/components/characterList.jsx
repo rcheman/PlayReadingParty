@@ -9,9 +9,7 @@ const CharacterList = ({ currentScript }) => {
     // fetch request to get the character data
     fetch('/script/' + currentScript + '/characters')
       .then((response) => response.json())
-      .then((characterData) => {
-        setCharacters(characterData);
-      })
+      .then(setCharacters)
       .catch((error) => {
         console.error(`error: ${error} when fetching character data`);
       });

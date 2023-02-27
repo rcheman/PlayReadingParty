@@ -28,12 +28,9 @@ const Home = ({ setActors, actors, currentScript }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(actor),
-    })
-      .then((response) => response.json())
-      .then((data) => {})
-      .catch((error) => {
-        console.error('Error: ', error);
-      });
+    }).catch((error) => {
+      console.error('Error: ', error);
+    });
     event.preventDefault();
   };
 

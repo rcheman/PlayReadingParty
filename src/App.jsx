@@ -24,9 +24,7 @@ const App = () => {
   useEffect(() => {
     fetch('/actors')
       .then((response) => response.json())
-      .then((updatedActorList) => {
-        setActors([...actors, ...updatedActorList]);
-      })
+      .then(setActors)
       .catch((error) => {
         console.error('Error: ', error);
       });

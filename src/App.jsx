@@ -24,18 +24,8 @@ const App = () => {
   useEffect(() => {
     fetch('/actors')
       .then((response) => response.json())
-      .then((actorList) => {
-        let fullActorList = [...actors];
-
-        actorList.forEach((actorRow) => {
-          const actor = {
-            firstName: actorRow.first_name,
-            lastName: actorRow.last_name,
-            id: actorRow.id,
-          };
-          fullActorList.push(actor);
-        });
-        setActors(fullActorList);
+      .then((updatedActorList) => {
+        setActors([...actors, ...updatedActorList]);
       })
       .catch((error) => {
         console.error('Error: ', error);

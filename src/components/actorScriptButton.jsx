@@ -18,10 +18,8 @@ const ActorScriptButton = ({
     // fetch request to get the current characters for the current actor
     fetch(`/script/${scriptOption}/characters?actor=${id}`)
       .then((response) => response.json())
-      .then((data) => {
-        const charArr = data.currentCharactersList.map(
-          (character) => character.charactername
-        );
+      .then((characterData) => {
+        const charArr = characterData.map((character) => character.name);
         setCurrentCharacters(charArr);
       })
       .catch((error) => {

@@ -36,7 +36,7 @@ const Home = ({ setActors, actors, currentScript }) => {
       <ul id='actorList'>
         <h3>Actors</h3>
         {actors.map((actor) => (
-          <li key={actor.id}>{actor.firstName + ' ' + actor.lastName}</li>
+          <li key={actor.id}>{actor.name}</li>
         ))}
       </ul>
       <CharacterList currentScript={currentScript} />

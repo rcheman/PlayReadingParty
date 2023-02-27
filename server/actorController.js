@@ -48,13 +48,10 @@ const actorController = {
   getActorCharacters: (req, res, next) => {
     const { actor } = req.query;
     const { title } = req.params;
-    const characterData = [];
+
     // Returns the entire character list if there isn't a query
     if (!actor) {
-      for (let key in playData[title].characterObjs) {
-        characterData.push(playData[title].characterObjs[key]);
-      }
-      res.locals.characterData = characterData;
+      res.locals.characterData = Object.values(playData[title].characterObjs);
       return next();
     }
     let characterdb;
@@ -70,6 +67,7 @@ const actorController = {
     ON actors.id=c.actor_id
     WHERE actors.id=$1`;
 
+    const characterData = [];
     db.query(text, values)
       .then((actorCharacters) => {
         // filter out the characters from the character data based on what characters are assigned to the actor

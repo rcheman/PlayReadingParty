@@ -5,7 +5,7 @@ const ActorScriptButton = ({
   lastName,
   setCurrentActor,
   setCurrentCharacters,
-  scriptOption,
+  title,
   id,
 }) => {
   // on change, change the value of current actor
@@ -16,7 +16,7 @@ const ActorScriptButton = ({
     setCurrentActor([firstName, lastName]);
 
     // fetch request to get the current characters for the current actor
-    fetch(`/script/${scriptOption}/characters?actor=${id}`)
+    fetch(`/script/${title}/characters?actor=${id}`)
       .then((response) => response.json())
       .then((characterData) => {
         const charArr = characterData.map((character) => character.name);

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Character from './Character';
 
-const CharacterList = ({ scriptOption }) => {
+const CharacterList = ({ title }) => {
   const [characters, setCharacters] = useState([]);
 
   // get the character data on the initial load and when the script option changes
   useEffect(() => {
     // fetch request to get the character data
-    fetch('/script/' + scriptOption + '/characters')
+    fetch('/script/' + title + '/characters')
       .then((response) => response.json())
       .then((characterData) => {
         setCharacters(characterData);
@@ -15,7 +15,7 @@ const CharacterList = ({ scriptOption }) => {
       .catch((error) => {
         console.error(`error: ${error} when fetching character data`);
       });
-  }, [scriptOption]);
+  }, [title]);
 
   // make an array of character information
   const charactersElements = [];

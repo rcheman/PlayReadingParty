@@ -3,14 +3,11 @@ const playData = require('./playData');
 
 const actorController = {
   newActor: (req, res, next) => {
-    const { firstName, lastName } = req.body;
-    // add actor to the database
-    const values = [firstName.trim(), lastName.trim()];
-    const text = `INSERT INTO actors 
-          (first_name, last_name)
-          VALUES ($1, $2)`;
+    const { name } = req.body;
+    const values = [name.trim()];
 
-    db.query(text, values)
+    // add actor to the database
+    db.query(`INSERT INTO actors (name) VALUES ($1)`, values)
       .then(() => {
         return next();
       })

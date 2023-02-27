@@ -5,17 +5,17 @@ import Home from './components/Home';
 const App = () => {
   const [showScript, setShowScript] = useState(false);
   const [actors, setActors] = useState([]);
-  const [title, changeTitle] = useState('test');
+  const [currentScript, setCurrentScript] = useState('test');
 
   const openScript = () => {
     setShowScript(!showScript);
   };
 
   const changeScript = () => {
-    if (title === 'test') {
-      changeTitle('twelfthNight');
+    if (currentScript === 'test') {
+      setCurrentScript('twelfthNight');
     } else {
-      changeTitle('test');
+      setCurrentScript('test');
     }
   };
 
@@ -42,9 +42,14 @@ const App = () => {
         </nav>
       </header>
       {showScript ? (
-        <Script actors={actors} title={title} />
+        <Script actors={actors} currentScript={currentScript} />
       ) : (
-        <Home setActors={setActors} actors={actors} key='Home' title={title} />
+        <Home
+          setActors={setActors}
+          actors={actors}
+          key='Home'
+          currentScript={currentScript}
+        />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CharacterList from './characterList';
 
-const Home = ({ setActors, actors, title }) => {
+const Home = ({ setActors, actors, currentScript }) => {
   // const [actors, setActors] = useState([]);
 
   const actorFirstName = useRef('');
@@ -51,7 +51,7 @@ const Home = ({ setActors, actors, title }) => {
           <li key={actor.id}>{actor.firstName + ' ' + actor.lastName}</li>
         ))}
       </ul>
-      <CharacterList title={title} />
+      <CharacterList currentScript={currentScript} />
     </div>
   );
 };

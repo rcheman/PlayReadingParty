@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ActorScriptNav from './actorScriptNav';
 
-const Script = ({ actors, title }) => {
+const Script = ({ actors, currentScript }) => {
   const [script, setScript] = useState([]);
   const [currentActor, setCurrentActor] = useState([]);
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
   // fetch the specified script
   useEffect(() => {
-    fetch('/script/' + title)
+    fetch('/script/' + currentScript)
       .then((response) => response.json())
       .then((fetchedScript) => {
         setScript([...fetchedScript]);
@@ -16,7 +16,7 @@ const Script = ({ actors, title }) => {
       .catch((error) => {
         console.error(`error: ${error} when fetching script`);
       });
-  }, [title]);
+  }, [currentScript]);
 
   // create div and p elements for each chunk of lines
   const lineChunks = [];
@@ -52,7 +52,7 @@ const Script = ({ actors, title }) => {
         actors={actors}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
-        title={title}
+        currentScript={currentScript}
       />
       <h2>script</h2>
       <h5>

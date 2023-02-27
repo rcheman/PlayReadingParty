@@ -21,15 +21,12 @@ const actorController = {
 
   getActors: (req, res, next) => {
     // query the db to get a list of all the actors
-    const text = `SELECT * FROM actors`;
-    db.query(text)
+    db.query('SELECT * FROM actors')
       .then((actorList) => {
         res.locals.actorList = actorList.rows.map(
-          (actor) =>
-            (actor = {
-              firstName: actor.first_name,
-              lastName: actor.last_name,
+          (actor) => ({
               id: actor.id,
+              name: actor.name,
             })
         );
         return next();

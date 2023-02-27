@@ -3,7 +3,7 @@ import ActorScriptNav from './actorScriptNav';
 
 const Script = ({ actors, currentScript }) => {
   const [script, setScript] = useState([]);
-  const [currentActor, setCurrentActor] = useState([]);
+  const [currentActor, setCurrentActor] = useState({});
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
   // fetch the specified script
@@ -54,7 +54,7 @@ const Script = ({ actors, currentScript }) => {
       />
       <h2>script</h2>
       <h5>
-        Current Actor: {currentActor[0]} {currentActor[1]}
+        Current Actor: {currentActor.name}
       </h5>
       <div id='scriptDiv'>{lineChunks}</div>
     </div>

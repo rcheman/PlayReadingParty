@@ -11,11 +11,9 @@ const ActorScriptNav = ({
   for (let actor of actors) {
     buttons.push(
       <ActorScriptButton
+        actor={actor}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
-        firstName={actor.firstName}
-        lastName={actor.lastName}
-        id={actor.id}
         currentScript={currentScript}
         key={actor.id}
       />

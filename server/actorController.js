@@ -1,4 +1,5 @@
 const db = require('./models/actorModels');
+const playData = require('./playData');
 
 const actorController = {
   newActor: (req, res, next) => {
@@ -26,7 +27,14 @@ const actorController = {
     const text = `SELECT * FROM actors`;
     db.query(text)
       .then((actorList) => {
-        res.locals.actorList = actorList.rows;
+        res.locals.actorList = actorList.rows.map(
+          (actor) =>
+            (actor = {
+              firstName: actor.first_name,
+              lastName: actor.last_name,
+              id: actor.id,
+            })
+        );
         return next();
       })
       .catch((error) => {
@@ -39,12 +47,18 @@ const actorController = {
 
   getActorCharacters: (req, res, next) => {
     const { actor } = req.query;
-    // skips over this middleware when there isn't a query
+    const { title } = req.params;
+    const characterData = [];
+    // Returns the entire character list if there isn't a query
     if (!actor) {
+      for (let key in playData[title].characterObjs) {
+        characterData.push(playData[title].characterObjs[key]);
+      }
+      res.locals.characterData = characterData;
       return next();
     }
     let characterdb;
-    if (res.locals.title === 'test') {
+    if (title === 'test') {
       characterdb = 'test_characters';
     } else {
       characterdb = 'characters';
@@ -57,8 +71,18 @@ const actorController = {
     WHERE actors.id=$1`;
 
     db.query(text, values)
-      .then((characterList) => {
-        res.locals.currentCharactersList = characterList.rows;
+      .then((actorCharacters) => {
+        // filter out the characters from the character data based on what characters are assigned to the actor
+        for (let i = 0; i < actorCharacters.rows.length; i++) {
+          let assignedCharacter =
+            playData[title].characterObjs[
+              actorCharacters.rows[i].charactername
+            ];
+          if (assignedCharacter) {
+            characterData.push(assignedCharacter);
+          }
+        }
+        res.locals.characterData = characterData;
         return next();
       })
       .catch((error) => {

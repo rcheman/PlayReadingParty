@@ -26,14 +26,12 @@ const ActorScriptButton = ({
         console.error(`error: ${error} when fetching current characters`);
       });
   };
-
-  const buttonClasses = ['actorNameButton', 'button-small'];
   // set button value as a string with first and last name
   const buttonVal = `${firstName} ${lastName}`;
   return (
     <input
       onClick={onClickChange}
-      className={buttonClasses}
+      className='actorNameButton button-small'
       type='button'
       value={buttonVal}
     />

@@ -17,7 +17,7 @@ const ActorScriptNav = ({
         lastName={actor.lastName}
         id={actor.id}
         title={title}
-        key={`${actor.firstName} ${actor.lastName}Button`}
+        key={actor.id}
       />
     );
   }

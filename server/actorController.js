@@ -48,33 +48,26 @@ const actorController = {
       res.locals.characterData = Object.values(playData[title].characterObjs);
       return next();
     }
-    let characterdb;
-    if (title === 'test') {
-      characterdb = 'test_characters';
-    } else {
-      characterdb = 'characters';
-    }
-    const values = [actor];
-    const text = `SELECT c.name as characterName
-    FROM actors
-    LEFT JOIN ${characterdb} c
-    ON actors.id=c.actor_id
-    WHERE actors.id=$1`;
 
-    const characterData = [];
-    db.query(text, values)
+    const values = [actor, title];
+    const sql = `
+      SELECT c.name as name
+      FROM actors
+        JOIN characters c ON actors.id = c.actor_id
+        JOIN scripts s ON s.id = c.script_id
+      WHERE actors.id = $1
+        AND s.title = $2`; // todo use script id instead of title
+
+    res.locals.characterData = [];
+    db.query(sql, values)
       .then((actorCharacters) => {
         // filter out the characters from the character data based on what characters are assigned to the actor
         for (let i = 0; i < actorCharacters.rows.length; i++) {
-          let assignedCharacter =
-            playData[title].characterObjs[
-              actorCharacters.rows[i].charactername
-            ];
+          let assignedCharacter = playData[title].characterObjs[actorCharacters.rows[i].name];
           if (assignedCharacter) {
-            characterData.push(assignedCharacter);
+            res.locals.characterData.push(assignedCharacter);
           }
         }
-        res.locals.characterData = characterData;
         return next();
       })
       .catch((error) => {

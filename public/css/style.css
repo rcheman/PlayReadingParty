@@ -41,14 +41,19 @@ nav {
   justify-content: space-around;
 }
 
-.currentActor {
+#scriptDiv pre {
+  border-left-color: #d1d1d1;
+  padding: 1rem 1.5rem;
+  background-color: inherit;
+  font-family: Roboto, serif;
+  margin: 0 0 10px 0
+}
+
+#scriptDiv .currentActor {
+  border-left-color: #22223b;
   background-color: #c9ada7;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
-}
-
-.currentActor blockquote {
-  border-left-color: #22223b;
 }
 
 .row {
@@ -66,8 +71,6 @@ nav {
   margin-right: 20px;
   list-style: none;
 }
-
-
 
 #home {
   display: flex;

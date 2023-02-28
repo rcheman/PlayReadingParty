@@ -19,33 +19,21 @@ const Script = ({ actors, currentScript }) => {
   // create div and p elements for each chunk of lines
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
-  let currentActorCharacter;
 
   for (let i = 0; i < script.length; i++) {
     // checks if the character name for this chunk is the name of a character assigned to the current actor
     // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
     const name = script[i][0].replace('.', '');
     if (characterSet.has(name)) {
-      currentActorCharacter = `currentActor`;
+      lineChunks.push(<pre className='currentActor'>{script[i].join('\n')}</pre>);
     } else {
-      currentActorCharacter = 'notCurrentActor';
+      lineChunks.push(<pre>{script[i].join('\n')}</pre>
+      );
     }
-    lineChunks.push(
-      <div className={(name, currentActorCharacter)}>
-        <blockquote>
-          {script[i].map((lines) => (
-            <span>
-              {lines}
-              <br></br>
-            </span>
-          ))}
-        </blockquote>
-      </div>
-    );
   }
 
   return (
-    <div id='scriptPage'>
+    <div id="scriptPage">
       <ActorScriptNav
         actors={actors}
         setCurrentActor={setCurrentActor}
@@ -53,10 +41,8 @@ const Script = ({ actors, currentScript }) => {
         currentScript={currentScript}
       />
       <h2>script</h2>
-      <h5>
-        Current Actor: {currentActor.name}
-      </h5>
-      <div id='scriptDiv'>{lineChunks}</div>
+      <h5>Current Actor: {currentActor.name}</h5>
+      <div id="scriptDiv">{lineChunks}</div>
     </div>
   );
 };

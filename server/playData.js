@@ -67,4 +67,4 @@ function parseScript(playPath, title) {
 const TestPlay = parseScript(testScriptPath, 'Test Play');
 const TwelfthNight = parseScript(twelfthNightPath, 'Twelfth Night');
 
-module.exports = { playData };
+module.exports =  playData;

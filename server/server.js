@@ -16,6 +16,11 @@ app.use(express.json());
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));
 
+// returns an array of the titles of all the scripts
+app.get('/script', scriptController.getScriptTitles, (req, res) => {
+  return res.status(200).json(res.locals.scriptTitles);
+});
+
 // returns the script as a nested array
 app.get('/script/:title', scriptController.getPlay, (req, res) => {
   return res.status(200).json(res.locals.fullPlay);

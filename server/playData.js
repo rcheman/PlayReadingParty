@@ -4,6 +4,8 @@ const path = require('path');
 const twelfthNightPath = '../playScript/twelfth_night.txt';
 const testScriptPath = '../playScript/testPlay.txt';
 
+const playData = {};
+
 function parseScript(playPath, title) {
   const script = fs.readFileSync(path.resolve(__dirname, playPath), 'utf8');
   // Split script on double \n to get individual
@@ -59,10 +61,10 @@ function parseScript(playPath, title) {
   scriptData.fullPlay = fullPlay;
   scriptData.characterObjs = characterObjs;
 
-  return scriptData;
+  playData[scriptData.title] = scriptData;
 }
 
-const test = parseScript(testScriptPath, 'test');
-const twelfthNight = parseScript(twelfthNightPath, 'twelfthNight');
+const TestPlay = parseScript(testScriptPath, 'Test Play');
+const TwelfthNight = parseScript(twelfthNightPath, 'Twelfth Night');
 
-module.exports = { test, twelfthNight };
+module.exports = { playData };

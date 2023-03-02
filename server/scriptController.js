@@ -19,8 +19,8 @@ const scriptController = {
       })
       .catch((error) => {
         return next({
-          log: 'error in getScriptTitles in scriptController',
-          message: `error: ${error} occured when getting script titles`,
+          log: `error: ${error} occured when getting script titles`,
+          message: 'error in getScriptTitles in scriptController' ,
         });
       });
   },

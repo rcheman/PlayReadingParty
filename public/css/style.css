@@ -51,6 +51,10 @@ nav {
   border-left-color: #22223b;
 }
 
+.scriptButton {
+  margin-left: 22px;
+}
+
 #home {
   display: flex;
   margin: 50px;

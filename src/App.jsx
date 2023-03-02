@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Script from './components/Script';
 import Home from './components/Home';
+import ScriptNav from './components/ScriptNav';
 
 const App = () => {
   const [showScript, setShowScript] = useState(false);
   const [actors, setActors] = useState([]);
-  const [currentScript, setCurrentScript] = useState('test');
+  const [currentScript, setCurrentScript] = useState('Twelfth Night');
 
   const openScript = () => {
     setShowScript(!showScript);
-  };
-
-  const changeScript = () => {
-    if (currentScript === 'test') {
-      setCurrentScript('twelfthNight');
-    } else {
-      setCurrentScript('test');
-    }
   };
 
   // get the actor list initially on render
@@ -36,7 +29,7 @@ const App = () => {
         <h1>Play Reading Assistant</h1>
         <nav>
           <button onClick={openScript}>Open/Close Script</button>
-          <button onClick={changeScript}>Change Script</button>
+          <ScriptNav setCurrentScript={setCurrentScript} />
         </nav>
       </header>
       {showScript ? (

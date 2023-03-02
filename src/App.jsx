@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Script from './components/Script';
 import Home from './components/Home';
-import ScriptNav from './components/ScriptNav';
 
 const App = () => {
   const [showScript, setShowScript] = useState(false);
@@ -29,13 +28,13 @@ const App = () => {
         <h1>Play Reading Assistant</h1>
         <nav>
           <button onClick={openScript}>Open/Close Script</button>
-          <ScriptNav setCurrentScript={setCurrentScript} />
+          
         </nav>
       </header>
       {showScript ? (
         <Script actors={actors} currentScript={currentScript} />
       ) : (
-        <Home setActors={setActors} actors={actors} key="Home" currentScript={currentScript} />
+        <Home setActors={setActors} actors={actors} key="Home" currentScript={currentScript} setCurrentScript={setCurrentScript} />
       )}
     </div>
   );

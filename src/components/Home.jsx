@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CharacterList from './characterList';
+import ScriptNav from './ScriptNav';
 
-const Home = ({ setActors, actors, currentScript }) => {
+
+const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
   const newActorInput = useRef('');
 
   // submit of actor name handler
@@ -28,11 +30,15 @@ const Home = ({ setActors, actors, currentScript }) => {
 
   // get the actor names and display current actor names
   return (
-    <div id='home'>
+    <div id='home' className='column'>
+      <div className='row'>
+      <ScriptNav setCurrentScript={setCurrentScript} />
       <form onSubmit={newActorHandler}>
         <input ref={newActorInput} placeholder="enter actor's name" />
         <button type='submit'>Add actor</button>
       </form>
+      </div>
+      <div className='row'> 
       <ul id='actorList'>
         <h3>Actors</h3>
         {actors.map((actor) => (
@@ -40,6 +46,8 @@ const Home = ({ setActors, actors, currentScript }) => {
         ))}
       </ul>
       <CharacterList currentScript={currentScript} />
+      
+      </div>
     </div>
   );
 };

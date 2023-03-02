@@ -51,9 +51,23 @@ nav {
   border-left-color: #22223b;
 }
 
-.scriptButton {
-  margin-left: 22px;
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.scriptList {
+  margin-right: 20px;
+  list-style: none;
+}
+
+
 
 #home {
   display: flex;

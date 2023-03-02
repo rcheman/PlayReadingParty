@@ -16,19 +16,21 @@ const ScriptNav = ({ setCurrentScript }) => {
   const buttons = [];
   for (let title of titles) {
     buttons.push(
-      <button
-        onClick={() => {
-          setCurrentScript(title);
-        }}
-        className="scriptButton button-small"
-        key={title}
-      >
-        {title}
-      </button>
+      <li> 
+        <button
+          onClick={()=>{
+            setCurrentScript(title);
+          }}
+          className="button-small"
+          key={title}
+          >
+          {title}
+        </button>
+      </li>
     );
   }
 
-  return <div className="scriptNav">{buttons}</div>;
+  return <ul className="scriptList">{buttons}</ul>;
 };
 
 export default ScriptNav;

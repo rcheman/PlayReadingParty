@@ -42,12 +42,7 @@ const App = () => {
       {showScript ? (
         <Script actors={actors} currentScript={currentScript} />
       ) : (
-        <Home
-          setActors={setActors}
-          actors={actors}
-          key='Home'
-          currentScript={currentScript}
-        />
+        <Home setActors={setActors} actors={actors} key="Home" currentScript={currentScript} />
       )}
     </div>
   );

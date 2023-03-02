@@ -46,12 +46,7 @@ function parseScript(playPath, title) {
 
   // checks if a name is a valid name
   function isName(name) {
-    return (
-      isUppercase(name) &&
-      name.length > 1 &&
-      name.length < 15 &&
-      !name.match(/(ACT)/)
-    );
+    return isUppercase(name) && name.length > 1 && name.length < 15 && !name.match(/(ACT)/);
   }
 
   // character object constructor

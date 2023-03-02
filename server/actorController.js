@@ -23,12 +23,10 @@ const actorController = {
     // query the db to get a list of all the actors
     db.query('SELECT * FROM actors')
       .then((actorList) => {
-        res.locals.actorList = actorList.rows.map(
-          (actor) => ({
-              id: actor.id,
-              name: actor.name,
-            })
-        );
+        res.locals.actorList = actorList.rows.map((actor) => ({
+          id: actor.id,
+          name: actor.name,
+        }));
         return next();
       })
       .catch((error) => {

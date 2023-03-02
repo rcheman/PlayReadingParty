@@ -13,8 +13,8 @@ const actorController = {
       })
       .catch((error) => {
         return next({
-          log: 'error in newActor in actorController',
-          message: `error: ${error} occured when adding actor to the db`,
+          log: `error: ${error} occured when adding actor to the db`,
+          message: 'error in newActor in actorController',
         });
       });
   },
@@ -23,18 +23,16 @@ const actorController = {
     // query the db to get a list of all the actors
     db.query('SELECT * FROM actors')
       .then((actorList) => {
-        res.locals.actorList = actorList.rows.map(
-          (actor) => ({
-              id: actor.id,
-              name: actor.name,
-            })
-        );
+        res.locals.actorList = actorList.rows.map((actor) => ({
+          id: actor.id,
+          name: actor.name,
+        }));
         return next();
       })
       .catch((error) => {
         return next({
-          log: 'error in getActor in actorController',
-          message: `error: ${error} occured when getting actors from the db.`,
+          log: `error: ${error} occured when getting actors from the db.`,
+          message: 'error in getActor in actorController' ,
         });
       });
   },
@@ -72,8 +70,8 @@ const actorController = {
       })
       .catch((error) => {
         return next({
-          log: 'error in getActorCharacters in actorController.',
-          message: `error: ${error} occured when getting actor's characters from the db.`,
+          log: `error: ${error} occured when getting actor's characters from the db.`,
+          message: 'error in getActorCharacters in actorController.',
         });
       });
   },

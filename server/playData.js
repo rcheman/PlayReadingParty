@@ -1,8 +1,10 @@
-const fs = require('fs');
+const fs = require('node:fs');
 const path = require('path');
 
 const twelfthNightPath = '../playScript/twelfth_night.txt';
 const testScriptPath = '../playScript/testPlay.txt';
+
+const playData = {};
 
 function parseScript(playPath, title) {
   const script = fs.readFileSync(path.resolve(__dirname, playPath), 'utf8');
@@ -46,12 +48,7 @@ function parseScript(playPath, title) {
 
   // checks if a name is a valid name
   function isName(name) {
-    return (
-      isUppercase(name) &&
-      name.length > 1 &&
-      name.length < 15 &&
-      !name.match(/(ACT)/)
-    );
+    return isUppercase(name) && name.length > 1 && name.length < 15 && !name.match(/(ACT)/);
   }
 
   // character object constructor
@@ -64,10 +61,10 @@ function parseScript(playPath, title) {
   scriptData.fullPlay = fullPlay;
   scriptData.characterObjs = characterObjs;
 
-  return scriptData;
+  playData[scriptData.title] = scriptData;
 }
 
-const test = parseScript(testScriptPath, 'test');
-const twelfthNight = parseScript(twelfthNightPath, 'twelfthNight');
+const TestPlay = parseScript(testScriptPath, 'Test Play');
+const TwelfthNight = parseScript(twelfthNightPath, 'Twelfth Night');
 
-module.exports = { test, twelfthNight };
+module.exports =  playData;

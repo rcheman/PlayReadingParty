@@ -16,6 +16,11 @@ app.use(express.json());
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));
 
+// returns an array of the titles of all the scripts
+app.get('/script', scriptController.getScriptTitles, (req, res) => {
+  return res.status(200).json(res.locals.scriptTitles);
+});
+
 // returns the script as a nested array
 app.get('/script/:title', scriptController.getPlay, (req, res) => {
   return res.status(200).json(res.locals.fullPlay);
@@ -23,13 +28,9 @@ app.get('/script/:title', scriptController.getPlay, (req, res) => {
 
 // return the character data
 // can also be used with an actor=id query to get just the characters assigned to that actor
-app.get(
-  '/script/:title/characters',
-  actorController.getActorCharacters,
-  (req, res) => {
-    return res.status(200).json(res.locals.characterData);
-  }
-);
+app.get('/script/:title/characters', actorController.getActorCharacters, (req, res) => {
+  return res.status(200).json(res.locals.characterData);
+});
 
 // get a list of all the actors
 app.get('/actors', actorController.getActors, (req, res) => {
@@ -47,9 +48,9 @@ app.use((req, res) => res.sendStatus(404));
 // middleware error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
+    log: { err: 'An error occurred' },
     status: 500,
-    message: { err: 'An error occurred' },
+    message: 'Express error handler caught unknown middleware error'  ,
   };
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);

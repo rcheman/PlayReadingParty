@@ -12,7 +12,6 @@ app.use(cors());
 
 // parse the request body
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));

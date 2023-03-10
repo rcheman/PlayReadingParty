@@ -64,61 +64,52 @@ const scriptController = {
     const characterObjects = Object.values(scriptData.characterObjs);
 
     // check if the script already exists
-    db.query('SELECT * FROM scripts WHERE title=$1', [scriptData.title])
+    db.query(`SELECT 'found' FROM scripts WHERE title=$1`, [scriptData.title])
       .then((result) => {
         if (result.rows.length > 0) {
-          // the script is already in the database, send a conflict status
-          return res.sendStatus(409);
+          throw new Error('Script title already exists');
         }
         // script is not in the database, add it
         else {
-          db.query('INSERT INTO scripts (title, filename) VALUES ($1, $2) RETURNING id', [
+          return db.query('INSERT INTO scripts (title, filename) VALUES ($1, $2) RETURNING id', [
             scriptData.title,
             req.file.filename,
-          ])
-            .then((result) => {
-              const id = result.rows[0].id;
-              return id;
-            })
-            .then((id) => {
-              // Build out the arrays of column values
-              const names = [];
-              const counts = [];
-              const speakNums = [];
-              for (let char of characterObjects) {
-                names.push(char.name);
-                counts.push(char.lineCount);
-                speakNums.push(char.speaksNum);
-              }
-              // add all the characters to the database
-              let text = `INSERT INTO characters (script_id, name, line_count, speaks_count) 
-              VALUES ($1, UNNEST($2::TEXT[]), UNNEST($3::INTEGER[]),UNNEST($4::INTEGER[]))`;
-
-              db.query(text, [id, names, counts, speakNums])
-                .then(() => {
-                  res.locals.title = scriptData.title;
-                  return next();
-                })
-                .catch((error) => {
-                  return next({
-                    log: `error: ${error} occured when adding the characters to the database`,
-                    message: 'error when adding the characters to the database',
-                  });
-                });
-            })
-            .catch((error) => {
-              return next({
-                log: `error: ${error} occured when adding the script to the database`,
-                message: 'error when adding the script to the database',
-              });
-            });
+          ]);
         }
       })
-      .catch((error) => {
-        return next({
-          log: `error: ${error} occured when checking if script is in the database`,
-          message: 'error when adding the script to the database',
+      .then((result) => {
+        const id = result.rows[0].id;
+        return id;
+      })
+      .then((id) => {
+        // Build out the arrays of column values
+        const names = [];
+        const counts = [];
+        const speakNums = [];
+        for (let char of characterObjects) {
+          names.push(char.name);
+          counts.push(char.lineCount);
+          speakNums.push(char.speaksNum);
+        }
+        // add all the characters to the database
+        let text = `INSERT INTO characters (script_id, name, line_count, speaks_count) 
+          VALUES ($1, UNNEST($2::TEXT[]), UNNEST($3::INTEGER[]),UNNEST($4::INTEGER[]))`;
+
+        db.query(text, [id, names, counts, speakNums]).then(() => {
+          res.locals.title = scriptData.title;
+          return next();
         });
+      })
+      .catch((error) => {
+        if (error.message === 'Script title already exists') {
+          // the script is already in the database, send a conflict status
+          return res.sendStatus(409);
+        } else {
+          return next({
+            log: `error: ${error} occured when checking if script is in the database`,
+            message: 'error when adding the script to the database',
+          });
+        }
       });
   },
 };

@@ -72,6 +72,10 @@ nav {
   list-style: none;
 }
 
+.scriptButton {
+  margin-left: 22px;
+}
+
 #home {
   display: flex;
   margin: 50px;

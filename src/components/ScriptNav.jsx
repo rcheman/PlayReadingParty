@@ -15,14 +15,14 @@ const ScriptNav = ({ setCurrentScript, titles, setTitles }) => {
   const buttons = [];
   for (let title of titles) {
     buttons.push(
-      <li> 
+      <li>
         <button
-          onClick={()=>{
+          onClick={() => {
             setCurrentScript(title);
           }}
           className="button-small"
           key={title}
-          >
+        >
           {title}
         </button>
       </li>

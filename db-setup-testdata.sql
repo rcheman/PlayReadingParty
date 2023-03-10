@@ -1,5 +1,5 @@
-INSERT INTO scripts VALUES (1, 'test');
-INSERT INTO scripts VALUES (2, 'twelfthNight');
+INSERT INTO scripts VALUES (1, 'Test Play', 'testPlay.txt');
+INSERT INTO scripts VALUES (2, 'Twelfth Night', 'twelfth_night.txt');
 SELECT pg_catalog.setval('scripts_id_seq', 2, true);
 
 INSERT INTO actors VALUES (1, 'rachel cheman');

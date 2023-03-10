@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-const ScriptNav = ({ setCurrentScript }) => {
-  const [titles, setTitles] = useState([]);
+const ScriptNav = ({ setCurrentScript, titles, setTitles }) => {
   // get all the script titles
   useEffect(() => {
-    fetch('/script')
+    fetch('/scripts/title')
       .then((response) => response.json())
       .then(setTitles)
       .catch((error) => {

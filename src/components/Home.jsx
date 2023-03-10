@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CharacterList from './characterList';
 import ScriptNav from './ScriptNav';
-
+import Upload from './Upload';
 
 const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
+  const [titles, setTitles] = useState([]);
   const newActorInput = useRef('');
 
   // submit of actor name handler
@@ -30,13 +31,14 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
 
   // get the actor names and display current actor names
   return (
-    <div id='home' className='column'>
-      <div className='row'>
-      <ScriptNav setCurrentScript={setCurrentScript} />
-      <form onSubmit={newActorHandler}>
-        <input ref={newActorInput} placeholder="enter actor's name" />
-        <button type='submit'>Add actor</button>
-      </form>
+    <div id="home" className="column">
+      <div className="row">
+        <ScriptNav setCurrentScript={setCurrentScript} titles={titles} setTitles={setTitles} />
+        <Upload setCurrentScript={setCurrentScript} setTitles={setTitles} titles={titles} />
+        <form onSubmit={newActorHandler}>
+          <input ref={newActorInput} placeholder="enter actor's name" />
+          <button type="submit">Add actor</button>
+        </form>
       </div>
       <div className='row'> 
       <ul id='actorList'>

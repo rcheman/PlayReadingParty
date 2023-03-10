@@ -21,7 +21,7 @@ const scriptController = {
       })
       .catch((error) => {
         return next({
-          log: `error: ${error} occured when getting script titles`,
+          log: `error: ${error} occurred when getting script titles`,
           message: 'error in getScriptTitles in scriptController',
         });
       });
@@ -38,17 +38,30 @@ const scriptController = {
         cb(null, Date.now() + file.originalname);
       },
     });
+
+    function fileFilter(req, file, cb) {
+      const name = file.originalname;
+      const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\.[a-zA-Z0-9_-]+$/;
+      // limit filename size to less than 100 characters
+      // check for invalid file names
+      if (name.length < 100 && name.match(regex)) {
+        return cb(null, true);
+      } else {
+        return cb(new Error('File is incorrect format and was not uploaded'));
+      }
+    }
+
     // limit file uploads to less than 50MB
     const limits = { fileSize: MAX_FILESIZE_BYTES };
 
-    const upload = multer({ storage, limits });
+    const upload = multer({ storage, limits, fileFilter });
     const scriptUpload = upload.single('newScript');
 
     // actually upload the script
     scriptUpload(req, res, next, (error) => {
       if (error)
         return next({
-          log: `error: ${error} occured when uploading the script`,
+          log: `error: ${error} occurred when uploading the script`,
           message: 'error when uploading the script',
         });
       else {
@@ -106,7 +119,7 @@ const scriptController = {
           return res.sendStatus(409);
         } else {
           return next({
-            log: `error: ${error} occured when checking if script is in the database`,
+            log: `error: ${error} occurred when checking if script is in the database`,
             message: 'error when adding the script to the database',
           });
         }

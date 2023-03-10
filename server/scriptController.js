@@ -27,7 +27,7 @@ const scriptController = {
       });
   },
   saveScript: (req, res, next) => {
-    const MAXFILESIZE = 50 * 1024 * 1024; //50MB
+    const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; //50MB. If updating, change constant in Upload.jsx too.
 
     // configure multer storage to upload files to the path from the .env file
     const storage = multer.diskStorage({
@@ -39,7 +39,7 @@ const scriptController = {
       },
     });
     // limit file uploads to less than 50MB
-    const limits = { fileSize: MAXFILESIZE };
+    const limits = { fileSize: MAX_FILESIZE_BYTES };
 
     const upload = multer({ storage, limits });
     const scriptUpload = upload.single('newScript');

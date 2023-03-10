@@ -15,9 +15,18 @@ function processScripts(uploadPath) {
   return scripts;
 }
 
-// TODO: Add handling for other script formats ex: CHARACTERNAME. these are lines of text.
-//  currently only support CHARACTERNAME. \n these are lines of text
-//  similarly for splitting line chunks
+/*
+TODO: Add handling for other script formats 
+
+Currently we split line chunks on two new lines '\n\n' 
+and identify character names based on a period after some all caps letters and then a new line 
+ex: 'STEVE. \n My name is Steve and these are my lines.'
+
+However, some plays are formatted where the do NOT have a new line after the character name 
+ex:'BOB. My name is Bob and these are my lines.'
+
+This format without the new line between character name and line means that the current algorithm can't identify character names or line counts.
+*/
 
 function parseScript(playPath) {
   const script = fs.readFileSync(playPath, 'utf8');

@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 const Upload = ({ setCurrentScript, titles, setTitles }) => {
   const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
   const [file, setFile] = useState();
-  const [errMessage, setErrMessage] = useState({ message: '', display: 'none', color: 'red' });
+  const [uploadMessage, setUploadMessage] = useState({ message: '', error: false });
 
   const handleFileChange = (e) => {
     e.preventDefault();
     // check that the file size is less than 50 before allowing the upload
     if (e.target.files) {
       if (e.target.files[0].size > MAX_FILESIZE_BYTES) {
-        setErrMessage({ message: 'Selected file is too large. Max size is 50MB', display: 'block', color: 'red' });
+        setUploadMessage({ message: 'Selected file is too large. Max size is 50MB', error: true });
         setFile(null);
       } else {
         setFile(e.target.files[0]);
-        setErrMessage({ message: '', display: 'none' });
+        setUploadMessage({ message: '', error: false });
       }
     }
   };
@@ -39,20 +39,18 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
         return response.json();
       })
       .then((title) => {
-        if (title) {
-          // set the current script to the newly uploaded script
-          setCurrentScript(title);
-          setTitles([...titles, title]);
-          // reset error message
-          setErrMessage({ message: 'Successfully Uploaded', display: 'block', color: 'black' });
-          setFile(null);
-        }
+        // set the current script to the newly uploaded script
+        setCurrentScript(title);
+        setTitles([...titles, title]);
+        // reset error message
+        setUploadMessage({ message: 'Successfully Uploaded', error: false });
+        setFile(null);
       })
       .catch((err) => {
         if (err.message === 'script already exists') {
-          setErrMessage({ message: 'That script title already exists.', display: 'block', color: 'red' });
+          setUploadMessage({ message: 'That script title already exists.', error: true });
         } else {
-          setErrMessage({ message: 'File was not uploaded. Try again.', display: 'block', color: 'red' });
+          setUploadMessage({ message: 'File was not uploaded. Try again.', error: true });
           console.error(`error: ${err} when uploading script`);
         }
       });
@@ -63,7 +61,15 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
       <input type="file" accept=".txt,*" onChange={handleFileChange} />
       <p> {file && `${file.name} - ${file.type}`} </p>
       <button onClick={handleUploadClick}>Upload</button>
-      <p style={{ display: errMessage.display, color: errMessage.color }}>{errMessage.message}</p>
+      {uploadMessage.message.length > 0 && (
+        <p
+          style={
+            uploadMessage.error === true ? { display: 'block', color: 'red' } : { display: 'block', color: 'black' }
+          }
+        >
+          {uploadMessage.message}
+        </p>
+      )}
     </div>
   );
 };

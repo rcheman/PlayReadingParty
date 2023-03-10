@@ -12,12 +12,18 @@ app.use(cors());
 
 // parse the request body
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../public')));
 
-// returns an array of the titles of all the scripts
-app.get('/script', scriptController.getScriptTitles, (req, res) => {
+// uploads a new script
+app.post('/script', scriptController.saveScript, scriptController.parseScript, (req, res) => {
+  return res.status(200).json(res.locals.title);
+});
+
+// returns a list of all the script titles
+app.get('/scripts/title', scriptController.getScriptTitles, (req, res) => {
   return res.status(200).json(res.locals.scriptTitles);
 });
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Upload = ({ setCurrentScript, titles, setTitles }) => {
-  const MAXFILESIZE = 50 * 1024 * 1024; // 50MB
+  const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
   const [file, setFile] = useState();
   const [errMessage, setErrMessage] = useState({ message: '', display: 'none', color: 'red' });
 
@@ -9,7 +9,7 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
     e.preventDefault();
     // check that the file size is less than 50 before allowing the upload
     if (e.target.files) {
-      if (e.target.files[0].size > MAXFILESIZE) {
+      if (e.target.files[0].size > MAX_FILESIZE_BYTES) {
         setErrMessage({ message: 'Selected file is too large. Max size is 50MB', display: 'block', color: 'red' });
         setFile(null);
       } else {

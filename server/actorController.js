@@ -1,5 +1,5 @@
 const db = require('./models/actorModels');
-const playData = require('./playData');
+const { playData } = require('./playData.js');
 
 const actorController = {
   newActor: (req, res, next) => {

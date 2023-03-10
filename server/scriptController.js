@@ -1,4 +1,4 @@
-const playData = require('./playData.js');
+const { playData, parseScript } = require('./playData.js');
 const db = require('./models/actorModels');
 
 const scriptController = {

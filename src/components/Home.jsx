@@ -10,7 +10,7 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
   // submit of actor name handler
   const newActorHandler = (event) => {
     event.preventDefault();
-    const newActor = {name: newActorInput.current.value};
+    const newActor = { name: newActorInput.current.value };
 
     // Add the new actor to the database
     fetch('/actors', {
@@ -19,14 +19,16 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newActor),
-    }).then(() => {
-      // set actors in state to be our new actors
-      setActors([...actors, newActor]);
-      // reset input value to empty string to clear out old input
-      newActorInput.current.value = '';
-    }).catch((error) => {
-      console.error('Error: ', error);
-    });
+    })
+      .then(() => {
+        // set actors in state to be our new actors
+        setActors([...actors, newActor]);
+        // reset input value to empty string to clear out old input
+        newActorInput.current.value = '';
+      })
+      .catch((error) => {
+        console.error('Error: ', error);
+      });
   };
 
   // get the actor names and display current actor names
@@ -40,15 +42,14 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
           <button type="submit">Add actor</button>
         </form>
       </div>
-      <div className='row'> 
-      <ul id='actorList'>
-        <h3>Actors</h3>
-        {actors.map((actor) => (
-          <li key={actor.id}>{actor.name}</li>
-        ))}
-      </ul>
-      <CharacterList currentScript={currentScript} />
-      
+      <div className="row">
+        <ul id="actorList">
+          <h3>Actors</h3>
+          {actors.map((actor) => (
+            <li key={actor.id}>{actor.name}</li>
+          ))}
+        </ul>
+        <CharacterList currentScript={currentScript} />
       </div>
     </div>
   );

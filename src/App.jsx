@@ -28,13 +28,18 @@ const App = () => {
         <h1>Play Reading Assistant</h1>
         <nav>
           <button onClick={openScript}>Open/Close Script</button>
-          
         </nav>
       </header>
       {showScript ? (
         <Script actors={actors} currentScript={currentScript} />
       ) : (
-        <Home setActors={setActors} actors={actors} key="Home" currentScript={currentScript} setCurrentScript={setCurrentScript} />
+        <Home
+          setActors={setActors}
+          actors={actors}
+          key="Home"
+          currentScript={currentScript}
+          setCurrentScript={setCurrentScript}
+        />
       )}
     </div>
   );

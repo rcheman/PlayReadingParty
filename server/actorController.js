@@ -32,7 +32,7 @@ const actorController = {
       .catch((error) => {
         return next({
           log: `error: ${error} occured when getting actors from the db.`,
-          message: 'error in getActor in actorController' ,
+          message: 'error in getActor in actorController',
         });
       });
   },

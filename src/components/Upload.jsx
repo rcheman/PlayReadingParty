@@ -26,7 +26,7 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
 
     // set the file as Form Data and send it to the server
     const formData = new FormData();
-    formData.append('newScript', file);
+    formData.append('scriptFormField', file);
 
     fetch('/script', {
       method: 'POST',
@@ -62,13 +62,7 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
       <p> {file && `${file.name} - ${file.type}`} </p>
       <button onClick={handleUploadClick}>Upload</button>
       {uploadMessage.message.length > 0 && (
-        <p
-          style={
-            uploadMessage.error === true ? { display: 'block', color: 'red' } : { display: 'block', color: 'black' }
-          }
-        >
-          {uploadMessage.message}
-        </p>
+        <div style={uploadMessage.error === true ? { color: 'red' } : { color: 'black' }}>{uploadMessage.message}</div>
       )}
     </div>
   );

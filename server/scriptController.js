@@ -40,14 +40,14 @@ const scriptController = {
     });
 
     function fileFilter(req, file, cb) {
+      // TODO: instead of erroring out on incorrect file names, change unaccepted symbols to something safe like an underscore
       const name = file.originalname;
-      const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\.[a-zA-Z0-9_-]+$/;
-      // limit filename size to less than 100 characters
       // check for invalid file names
-      if (name.length < 100 && name.match(regex)) {
+      if (name.length < 100 && name.match(/^[a-zA-Z0-9](?:[a-zA-Z0-9 '._-]*[a-zA-Z0-9])?$/)) {
+        // cb expects null and then a boolean for whether the file should be accepted. See multer docs on fileFilter for more info.
         return cb(null, true);
       } else {
-        return cb(new Error('File is incorrect format and was not uploaded'));
+        return cb(new Error('File name is incorrect format and file was not uploaded'));
       }
     }
 
@@ -55,7 +55,7 @@ const scriptController = {
     const limits = { fileSize: MAX_FILESIZE_BYTES };
 
     const upload = multer({ storage, limits, fileFilter });
-    const scriptUpload = upload.single('newScript');
+    const scriptUpload = upload.single('scriptFormField');
 
     // actually upload the script
     scriptUpload(req, res, next, (error) => {
@@ -95,7 +95,7 @@ const scriptController = {
         return id;
       })
       .then((id) => {
-        // Build out the arrays of column values
+        // Build out the arrays of column values so we can insert all characters in one query
         const names = [];
         const counts = [];
         const speakNums = [];
@@ -108,10 +108,11 @@ const scriptController = {
         let text = `INSERT INTO characters (script_id, name, line_count, speaks_count) 
           VALUES ($1, UNNEST($2::TEXT[]), UNNEST($3::INTEGER[]),UNNEST($4::INTEGER[]))`;
 
-        db.query(text, [id, names, counts, speakNums]).then(() => {
-          res.locals.title = scriptData.title;
-          return next();
-        });
+        return db.query(text, [id, names, counts, speakNums]);
+      })
+      .then(() => {
+        res.locals.title = scriptData.title;
+        return next();
       })
       .catch((error) => {
         if (error.message === 'Script title already exists') {
@@ -119,7 +120,7 @@ const scriptController = {
           return res.sendStatus(409);
         } else {
           return next({
-            log: `error: ${error} occurred when checking if script is in the database`,
+            log: `error: ${error} occurred when adding script to the database`,
             message: 'error when adding the script to the database',
           });
         }

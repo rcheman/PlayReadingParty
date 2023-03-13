@@ -25,7 +25,7 @@ const App = () => {
   return (
     <div>
       <header>
-        <h1>Play Reading Assistant</h1>
+        <h1>Play Reading Party</h1>
         <nav>
           <button onClick={openScript}>Open/Close Script</button>
         </nav>

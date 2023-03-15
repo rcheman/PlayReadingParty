@@ -16,6 +16,8 @@ function parseTitle(scriptText) {
   if (matches !== null && matches.length === 2) {
     return matches[1]; // Return just the title itself
   }
+
+  throw new Error('Could not identify a title in the script');
 }
 
 function parseLines(scriptText) {

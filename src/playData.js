@@ -7,7 +7,7 @@ function processScripts(uploadPath) {
   const scripts = {};
   const files = fs.readdirSync(uploadPath);
   files.forEach((file) => {
-    const path = uploadPath + file;
+    const path = uploadPath + '/' + file;
     const temp = parseScript(path);
     scripts[temp.title] = temp;
   });

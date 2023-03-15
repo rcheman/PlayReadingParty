@@ -10,17 +10,23 @@ To get a local copy up and running, follow these steps
 
 ### Prerequisites
 
-- npm
+- Install npm
   ([How to install Node and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
+- Setup a postgres database and run [db-setup.sql](db-setup.sql) on it.
 
 ### Installation
 
 1. Clone the repo
-2. Install NPM packages
+2. Install NPM packages and build: `npm install && npm run build`
 3. Set up environment variables
-
-- Create a .env file in the root directory of the project
-- Add the path for where you want script files to be stored after they have been uploaded by the user
-  ```js
-  UPLOADPATH =/example/path/scriptUploads;
-  ```
+   - Create a .env file in the root directory of the project
+   - Add the path for where you want script files to be stored after they have been uploaded by the user
+     ```js
+     UPLOADPATH =/example/path/scriptUploads;
+     ```
+   - Add a database uri for your postgres database
+     ```
+     DATABASE_URI=postrges://user:password@localhost
+     ```
+4. Run `npm start` to start Play Reading Party.
+5. Navigate to http://localhost:3000 in your browser

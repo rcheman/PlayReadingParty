@@ -1,10 +1,8 @@
 const { Pool } = require('pg');
-
-const PG_URI =
-  'postgres://hrhsnuah:1Jnz9Is2EKIg9LTIh-t0lnaa4o1lsQqk@chunee.db.elephantsql.com/hrhsnuah';
+require('dotenv').config();
 
 const pool = new Pool({
-  connectionString: PG_URI,
+  connectionString: process.env.DATABASE_URI,
 });
 
 module.exports = {

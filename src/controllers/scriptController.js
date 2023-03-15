@@ -1,6 +1,6 @@
-const { playData, parseScript } = require('./playData.js');
-const db = require('./models/actorModels');
 const multer = require('multer');
+const db = require('../repository/database.js');
+const { playData, parseScript } = require('../playData.js');
 require('dotenv').config();
 
 const scriptController = {

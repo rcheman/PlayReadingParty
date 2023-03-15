@@ -1,24 +1,13 @@
 const multer = require('multer');
-const db = require('../repository/database.js');
-const { playData, parseScript } = require('../playData.js');
-const { parseCharacters } = require('../playData');
-const fs = require('node:fs');
 require('dotenv').config();
 
+const scriptRepo = require('../repository/scriptRepository.js');
+
 const scriptController = {
-  getPlay: (req, res, next) => {
-    const { title } = req.params;
-    res.locals.fullPlay = playData[title].fullPlay;
-    return next();
-  },
   getScriptTitles: (req, res, next) => {
-    // get all the script titles from the database
-    db.query('SELECT title FROM scripts')
-      .then((scriptTitles) => {
-        res.locals.scriptTitles = [];
-        scriptTitles.rows.forEach((script) => {
-          res.locals.scriptTitles.push(script.title);
-        });
+    scriptRepo.getTitles()
+      .then((scripts) => {
+        res.locals.scriptTitles = scripts;
         return next();
       })
       .catch((error) => {
@@ -28,6 +17,40 @@ const scriptController = {
         });
       });
   },
+
+  getCharacters: (req, res, next) => {
+    const { actor } = req.query;
+    const { title } = req.params;
+
+    scriptRepo.getCharacters(title, actor)
+      .then((characters) => {
+        res.locals.characters = characters;
+        return next();
+      })
+      .catch((error) => {
+        return next({
+          log: `error: ${error} occurred when getting actor's characters from the db.`,
+          message: 'error in getActorCharacters in actorController.',
+        });
+      });
+  },
+
+  getScript: (req, res, next) => {
+    const { title } = req.params; // todo script id
+
+    scriptRepo.getScript(process.env.UPLOADPATH, title)
+      .then((script) => {
+        res.locals.fullPlay = script;
+        next();
+      })
+      .catch((error) => {
+        next({
+          log: `error: ${error} occurred when getting the script`,
+          message: 'error when getting the script',
+        });
+      });
+  },
+
   saveScript: (req, res, next) => {
     const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; //50MB. If updating, change constant in Upload.jsx too.
 
@@ -71,50 +94,12 @@ const scriptController = {
       }
     });
   },
-  parseScript: (req, res, next) => {
-    // run the script through playData and save the results to the database
+  importScript: (req, res, next) => {
     const path = process.env.UPLOADPATH + req.file.filename;
-    const file = fs.readFileSync(path, 'utf8');
-    const scriptData = parseScript(file);
-    playData[scriptData.title] = scriptData;
-    const characterObjects = Object.values(parseCharacters(file));
 
-    // check if the script already exists
-    db.query(`SELECT 'found' FROM scripts WHERE title=$1`, [scriptData.title])
-      .then((result) => {
-        if (result.rows.length > 0) {
-          throw new Error('Script title already exists');
-        }
-        // script is not in the database, add it
-        else {
-          return db.query('INSERT INTO scripts (title, filename) VALUES ($1, $2) RETURNING id', [
-            scriptData.title,
-            req.file.filename,
-          ]);
-        }
-      })
-      .then((result) => {
-        const id = result.rows[0].id;
-        return id;
-      })
-      .then((id) => {
-        // Build out the arrays of column values so we can insert all characters in one query
-        const names = [];
-        const counts = [];
-        const speakNums = [];
-        for (let char of characterObjects) {
-          names.push(char.name);
-          counts.push(char.lineCount);
-          speakNums.push(char.speakCount);
-        }
-        // add all the characters to the database
-        let text = `INSERT INTO characters (script_id, name, line_count, speaks_count) 
-          VALUES ($1, UNNEST($2::TEXT[]), UNNEST($3::INTEGER[]),UNNEST($4::INTEGER[]))`;
-
-        return db.query(text, [id, names, counts, speakNums]);
-      })
-      .then(() => {
-        res.locals.title = scriptData.title;
+    scriptRepo.importScript(path)
+      .then((title) => {
+        res.locals.title = title;
         return next();
       })
       .catch((error) => {

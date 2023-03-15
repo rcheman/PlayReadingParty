@@ -5,6 +5,7 @@ const ScriptNav = ({ setCurrentScript, titles, setTitles }) => {
   useEffect(() => {
     fetch('/scripts/title')
       .then((response) => response.json())
+      .then((scripts) => scripts.map((s) => s.title))
       .then(setTitles)
       .catch((error) => {
         console.error(`error: ${error} when fetching script titles`);

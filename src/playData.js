@@ -1,21 +1,3 @@
-const fs = require('node:fs');
-require('dotenv').config();
-
-const playData = processScripts(process.env.UPLOADPATH);
-
-function processScripts(uploadPath) {
-  const scripts = {};
-  const files = fs.readdirSync(uploadPath);
-  files.forEach((filename) => {
-    const file = fs.readFileSync(uploadPath + '/' + filename, 'utf8');
-    const script = parseScript(file);
-    scripts[script.title].fullPlay = script.fullPlay;
-    scripts[script.title].characters = parseCharacters(file);
-  });
-
-  return scripts;
-}
-
 /*
 TODO: Add handling for other script formats 
 
@@ -29,29 +11,20 @@ ex:'BOB. My name is Bob and these are my lines.'
 This format without the new line between character name and line means that the current algorithm can't identify character names or line counts.
 */
 
-function parseScript(scriptText) {
-  // Different character's lines are separated by double \n
-  const lineChunks = scriptText.split('\n\n');
-  const scriptData = {};
-  // loop through the script and create character objects
-  for (let lineChunk of lineChunks) {
-
-    // Look for the script title if we haven't found it yet
-    if (!scriptData.title) {
-      const titlePrefix = 'Title:';
-
-      if (lineChunk.startsWith(titlePrefix)) {
-        scriptData.title = lineChunk.split('\n')[0].substring(0, titlePrefix.length).trim();
-      }
-    }
+function parseTitle(scriptText) {
+  const matches = scriptText.match(/^Title: (.+)$/m);
+  if (matches !== null && matches.length === 2) {
+    return matches[1]; // Return just the title itself
   }
+}
 
-  return lineChunks;
+function parseLines(scriptText) {
+  // Different character's lines are separated by double \n
+  return scriptText.split('\n\n');
 }
 
 function parseCharacters(scriptText) {
-  // Different character's lines are separated by double \n
-  const lineChunks = scriptText.split('\n\n');
+  const lineChunks = parseLines(scriptText);
   const characters = {};
   // loop through the script and create character objects
   for (let lineChunk of lineChunks) {
@@ -70,7 +43,7 @@ function parseCharacters(scriptText) {
     }
 
     // minus one to account for the first line of the chunk that is just the name
-    characters[name].lineCount += lineChunk.length - 1;
+    characters[name].lineCount += lineChunk.split('\n').length - 1;
     characters[name].speakCount++;
   }
 
@@ -91,4 +64,4 @@ function Character(name, lineCount, speakCount) {
   this.speakCount = speakCount;
 }
 
-module.exports = { Character, parseScript, parseCharacters };
+module.exports = { Character, parseTitle, parseLines, parseCharacters };

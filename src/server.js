@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
 
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 // uploads a new script
-app.post('/script', scriptController.saveScript, scriptController.parseScript, (req, res) => {
+app.post('/script', scriptController.saveScript, scriptController.importScript, (req, res) => {
   return res.status(200).json(res.locals.title);
 });
 
@@ -27,19 +28,19 @@ app.get('/scripts/title', scriptController.getScriptTitles, (req, res) => {
 });
 
 // returns the script as a nested array
-app.get('/script/:title', scriptController.getPlay, (req, res) => {
+app.get('/script/:title', scriptController.getScript, (req, res) => {
   return res.status(200).json(res.locals.fullPlay);
 });
 
 // return the character data
 // can also be used with an actor=id query to get just the characters assigned to that actor
-app.get('/script/:title/characters', actorController.getActorCharacters, (req, res) => {
-  return res.status(200).json(res.locals.characterData);
+app.get('/script/:title/characters', scriptController.getCharacters, (req, res) => {
+  return res.status(200).json(res.locals.characters);
 });
 
 // get a list of all the actors
 app.get('/actors', actorController.getActors, (req, res) => {
-  return res.status(200).json(res.locals.actorList);
+  return res.status(200).json(res.locals.actors);
 });
 
 // add a new actor to the db

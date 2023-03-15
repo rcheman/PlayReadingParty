@@ -21,6 +21,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

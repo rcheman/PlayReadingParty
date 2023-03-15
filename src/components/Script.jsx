@@ -7,6 +7,8 @@ const Script = ({ actors, currentScript }) => {
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
   // fetch the specified script
+  // todo handle errors in .then(), otherwise when an error gets returned, interpreted as script text, and then
+  // todo shows up on the page with every character of the string as its own line
   useEffect(() => {
     fetch('/script/' + currentScript)
       .then((response) => response.json())
@@ -20,14 +22,14 @@ const Script = ({ actors, currentScript }) => {
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
 
-  for (let i = 0; i < script.length; i++) {
+  for (let lineChunk of script) {
     // checks if the character name for this chunk is the name of a character assigned to the current actor
     // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
-    const name = script[i][0].replace('.', '');
+    const name = lineChunk.split('.')[0];
     if (characterSet.has(name)) {
-      lineChunks.push(<pre className='currentActor'>{script[i].join('\n')}</pre>);
+      lineChunks.push(<pre className='currentActor'>{lineChunk}</pre>);
     } else {
-      lineChunks.push(<pre>{script[i].join('\n')}</pre>
+      lineChunks.push(<pre>{lineChunk}</pre>
       );
     }
   }

@@ -3,7 +3,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('node:fs'));
 
 const db = require('./database.js');
-const { Character, parseTitle, parseLines, parseCharacters } = require('../playData.js');
+const { Character, parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
 function getCharacters(title, actorId = -1) {
   const values = [actorId, title];

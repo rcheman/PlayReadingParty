@@ -102,7 +102,7 @@ const scriptController = {
         for (let char of characterObjects) {
           names.push(char.name);
           counts.push(char.lineCount);
-          speakNums.push(char.speaksNum);
+          speakNums.push(char.speakCount);
         }
         // add all the characters to the database
         let text = `INSERT INTO characters (script_id, name, line_count, speaks_count) 

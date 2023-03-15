@@ -1,6 +1,8 @@
 const multer = require('multer');
 const db = require('../repository/database.js');
 const { playData, parseScript } = require('../playData.js');
+const { parseCharacters } = require('../playData');
+const fs = require('node:fs');
 require('dotenv').config();
 
 const scriptController = {
@@ -72,9 +74,10 @@ const scriptController = {
   parseScript: (req, res, next) => {
     // run the script through playData and save the results to the database
     const path = process.env.UPLOADPATH + req.file.filename;
-    const scriptData = parseScript(path);
+    const file = fs.readFileSync(path, 'utf8');
+    const scriptData = parseScript(file);
     playData[scriptData.title] = scriptData;
-    const characterObjects = Object.values(scriptData.characterObjs);
+    const characterObjects = Object.values(parseCharacters(file));
 
     // check if the script already exists
     db.query(`SELECT 'found' FROM scripts WHERE title=$1`, [scriptData.title])

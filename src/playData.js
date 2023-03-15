@@ -63,7 +63,7 @@ function parseScript(playPath) {
       }
       // check if the character already has an object and add to that object
       if (characterObjs[name]) {
-        characterObjs[name].speaksNum++;
+        characterObjs[name].speakCount++;
         // minus one to account for the first line that is just the name
         characterObjs[name].lineCount += count - 1;
       } else {
@@ -87,10 +87,10 @@ function isName(name) {
   return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
 }
 // character object constructor
-function Character(name, lineCount, speaksNum) {
+function Character(name, lineCount, speakCount) {
   this.name = name;
   this.lineCount = lineCount;
-  this.speaksNum = speaksNum;
+  this.speakCount = speakCount;
 }
 
 module.exports = { playData, parseScript };

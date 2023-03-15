@@ -34,7 +34,15 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
     })
       .then((response) => {
         if (response.status === 409) {
-          throw new Error('script already exists');
+          throw new Error('Script title already exists');
+        }
+        if (response.status === 452) {
+          throw new Error('Could not find a title, potentially invalid file type');
+        }
+        if (response.status === 500) {
+          throw new Error(
+            "File was not uploaded. Make sure the file name doesn't start with an underscore and only uses numbers, letters, and these symbols: ' . _ - "
+          );
         }
         return response.json();
       })
@@ -47,12 +55,7 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
         setFile(null);
       })
       .catch((err) => {
-        if (err.message === 'script already exists') {
-          setUploadMessage({ message: 'That script title already exists.', error: true });
-        } else {
-          setUploadMessage({ message: 'File was not uploaded. Try again.', error: true });
-          console.error(`error: ${err} when uploading script`);
-        }
+        setUploadMessage({ message: err.message, error: true });
       });
   };
 

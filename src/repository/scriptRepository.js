@@ -2,6 +2,7 @@ const path = require('path');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('node:fs'));
 
+const ServerError = require('../utils');
 const db = require('./database.js');
 const { Character, parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
@@ -23,13 +24,14 @@ function getTitles() {
   return db.query('select id, title from scripts').then((result) => {
     return result.rows.map((s) => ({
       id: s.id,
-      title: s.title
+      title: s.title,
     }));
   });
 }
 
 function getScript(scriptDir, title) {
-  return db.query('select filename from scripts where title = $1 limit 1', [title])
+  return db
+    .query('select filename from scripts where title = $1 limit 1', [title])
     .then((result) => {
       return fs.readFileAsync(scriptDir + '/' + result.rows[0].filename, 'utf8');
     })
@@ -41,7 +43,8 @@ function importScript(filepath) {
   let characters;
 
   // Add script and characters if it doesn't already exist
-  return fs.readFileAsync(filepath, 'utf8')
+  return fs
+    .readFileAsync(filepath, 'utf8')
     .then((file) => {
       title = parseTitle(file);
       characters = parseCharacters(file);
@@ -50,7 +53,7 @@ function importScript(filepath) {
     })
     .then((result) => {
       if (result.rows.length > 0) {
-        throw new Error('Script title already exists');
+        throw new ServerError(409, 'Script title already exists');
       }
 
       return db.query('INSERT INTO scripts (title, filename) VALUES ($1, $2) RETURNING id', [

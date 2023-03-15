@@ -22,7 +22,7 @@ To get a local copy up and running, follow these steps
    - Create a .env file in the root directory of the project
    - Add the path for where you want script files to be stored after they have been uploaded by the user
      ```js
-     UPLOADPATH =/example/path/scriptUploads;
+     UPLOADPATH=/example/path/scriptUploads
      ```
    - Add a database uri for your postgres database
      ```

@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
+const ServerError = require('./utils.js');
 
 const app = express();
 
@@ -58,7 +59,7 @@ app.use((err, req, res, next) => {
     status: 500,
     message: 'Express error handler caught unknown middleware error',
   };
-  const errorObj = Object.assign({}, defaultErr, err);
+  const errorObj = err instanceof ServerError ? err : defaultErr;
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });

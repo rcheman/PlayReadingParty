@@ -1,3 +1,4 @@
+const ServerError = require('./utils');
 /*
 TODO: Add handling for other script formats 
 
@@ -17,7 +18,7 @@ function parseTitle(scriptText) {
     return matches[1]; // Return just the title itself
   }
 
-  throw new Error('Could not identify a title in the script');
+  throw new ServerError(452, 'Could not identify a title in the script');
 }
 
 function parseLines(scriptText) {
@@ -30,7 +31,6 @@ function parseCharacters(scriptText) {
   const characters = {};
   // loop through the script and create character objects
   for (let lineChunk of lineChunks) {
-
     // A line chunk always starts with the character name followed by a period
     const name = lineChunk.split('.')[0];
 

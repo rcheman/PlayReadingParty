@@ -1,11 +1,14 @@
 const multer = require('multer');
+const fs = require('node:fs');
 require('dotenv').config();
 
 const scriptRepo = require('../repository/scriptRepository.js');
+const ServerError = require('../utils.js');
 
 const scriptController = {
   getScriptTitles: (req, res, next) => {
-    scriptRepo.getTitles()
+    scriptRepo
+      .getTitles()
       .then((scripts) => {
         res.locals.scriptTitles = scripts;
         return next();
@@ -22,7 +25,8 @@ const scriptController = {
     const { actor } = req.query;
     const { title } = req.params;
 
-    scriptRepo.getCharacters(title, actor)
+    scriptRepo
+      .getCharacters(title, actor)
       .then((characters) => {
         res.locals.characters = characters;
         return next();
@@ -38,7 +42,8 @@ const scriptController = {
   getScript: (req, res, next) => {
     const { title } = req.params; // todo script id
 
-    scriptRepo.getScript(process.env.UPLOADPATH, title)
+    scriptRepo
+      .getScript(process.env.UPLOADPATH, title)
       .then((script) => {
         res.locals.fullPlay = script;
         next();
@@ -72,7 +77,7 @@ const scriptController = {
         // cb expects null and then a boolean for whether the file should be accepted. See multer docs on fileFilter for more info.
         return cb(null, true);
       } else {
-        return cb(new Error('File name is incorrect format and file was not uploaded'));
+        return cb(new Error('File name is incorrectly formatted', false));
       }
     }
 
@@ -97,15 +102,20 @@ const scriptController = {
   importScript: (req, res, next) => {
     const path = process.env.UPLOADPATH + req.file.filename;
 
-    scriptRepo.importScript(path)
+    scriptRepo
+      .importScript(path)
       .then((title) => {
         res.locals.title = title;
         return next();
       })
       .catch((error) => {
-        if (error.message === 'Script title already exists') {
-          // the script is already in the database, send a conflict status
-          return res.sendStatus(409);
+        // remove the uploaded file, some error occured while processing it
+        fs.unlink(path, (err) => {
+          if (err) throw err;
+        });
+        // handles errors for duplicate script and unable to find a title
+        if (error instanceof ServerError) {
+          return next(error);
         } else {
           return next({
             log: `error: ${error} occurred when adding script to the database`,

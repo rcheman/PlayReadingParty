@@ -4,7 +4,7 @@
   "private": true,
   "main": "./public/index.js",
   "scripts": {
-    "start": "webpack-dev-server .",
+    "start": "node src/server.js",
     "dev": "NODE_ENV=development concurrently \" webpack-dev-server --progress --color \" \"nodemon --inspect src/server.js\"",
     "build": "webpack .",
     "test": "echo \"Error: no test specified\" && exit 1",

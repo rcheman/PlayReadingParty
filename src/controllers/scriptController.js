@@ -109,10 +109,8 @@ const scriptController = {
         return next();
       })
       .catch((error) => {
-        // remove the uploaded file, some error occured while processing it
-        fs.unlink(path, (err) => {
-          if (err) throw err;
-        });
+        // remove the uploaded file because some error occured while processing it
+        fs.unlinkSync(path);
         // handles errors for duplicate script and unable to find a title
         if (error instanceof ServerError) {
           return next(error);

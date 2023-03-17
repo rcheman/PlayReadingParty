@@ -5,13 +5,12 @@ function newActor(name) {
 }
 
 function getActors() {
-  return db.query('SELECT * FROM actors')
-    .then((result) => {
-      return result.rows.map((actor) => ({
-        id: actor.id,
-        name: actor.name,
-      }));
-    });
+  return db.query('SELECT * FROM actors').then((result) => {
+    return result.rows.map((actor) => ({
+      id: actor.id,
+      name: actor.name,
+    }));
+  });
 }
 
 module.exports = { newActor, getActors };

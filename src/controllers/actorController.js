@@ -4,8 +4,10 @@ const actorController = {
   newActor: (req, res, next) => {
     const { name } = req.body;
 
-    actorRepo.newActor(name)
-      .then(() => {
+    actorRepo
+      .newActor(name)
+      .then((actor) => {
+        res.locals.actor = actor;
         return next();
       })
       .catch((error) => {
@@ -17,7 +19,8 @@ const actorController = {
   },
 
   getActors: (req, res, next) => {
-    actorRepo.getActors()
+    actorRepo
+      .getActors()
       .then((actors) => {
         res.locals.actors = actors;
         return next();
@@ -25,7 +28,21 @@ const actorController = {
       .catch((error) => {
         return next({
           log: `error: ${error} occurred when getting actors from the db.`,
-          message: 'error in getActor in actorController',
+          message: 'error in getActors in actorController',
+        });
+      });
+  },
+  deleteActor: (req, res, next) => {
+    const { id } = req.params;
+    actorRepo
+      .deleteActor(id)
+      .then(() => {
+        return next();
+      })
+      .catch((error) => {
+        return next({
+          log: `error: ${error} occurred when deleting actor from the db.`,
+          message: 'error in deleteActor in actorController',
         });
       });
   },

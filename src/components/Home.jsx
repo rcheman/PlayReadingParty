@@ -41,9 +41,7 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
   };
 
   const deleteActor = (event) => {
-    const actor = event.target.value.split(',');
-    const name = actor[0];
-    const id = actor[1];
+    const id = event.target.value
     fetch('/actors/' + id, {
       method: 'DELETE',
     })
@@ -51,7 +49,7 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
         if (response.ok) {
           // upon successful deletion, remove that actor's name from the actor list
           setDeleteError('');
-          setActors(() => actors.filter((actor) => actor.name !== name));
+          setActors(actors.filter((actor) => actor.id.toString() !== id));
         } else {
           throw new Error('Error when deleting the actor.');
         }
@@ -79,7 +77,7 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
           <div style={{ color: 'red' }}>{deleteError}</div>
           {actors.map((actor) => (
             <li key={actor.id}>
-              <button onClick={deleteActor} className="delete" value={`${actor.name},${actor.id}`}>
+              <button onClick={deleteActor} className="delete" value={actor.id}>
                 -
               </button>
               {actor.name}

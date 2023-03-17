@@ -44,9 +44,14 @@ app.get('/actors', actorController.getActors, (req, res) => {
   return res.status(200).json(res.locals.actors);
 });
 
-// add a new actor to the db
+// add a new actor to the db, return the actor object
 app.post('/actors', actorController.newActor, (req, res) => {
-  return res.sendStatus(204);
+  return res.status(201).json(res.locals.actor);
+});
+
+// delete an actor from the database based on their id
+app.delete('/actors/:id', actorController.deleteActor, (req, res) => {
+  return res.sendStatus(200);
 });
 
 // unknown rout handler

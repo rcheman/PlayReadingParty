@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 
 const AddActor = ({actors, setActors}) => {
   const [addActorError, setAddActorError] = useState('');
-  const [newActor, setNewActor] = useState('');
 
 const newActorHandler = (e) => {
   e.preventDefault()
+  const newActor = e.target.elements.actorName.value;
   // Add the new actor to the database, returning the new actor object
   fetch('/actors', {
     method: 'POST',
@@ -25,7 +25,6 @@ const newActorHandler = (e) => {
       // add the actor to the actor list and reset values
       setActors([...actors, actor])
       setAddActorError('');
-      setNewActor('');
       e.target.reset();
     })
     .catch((error) => {
@@ -35,7 +34,7 @@ const newActorHandler = (e) => {
 
   return (
       <form onSubmit={newActorHandler}>
-          <input onChange={(e)=>setNewActor(e.target.value)} placeholder="enter actor's name" />
+          <input name="actorName" placeholder="enter actor's name" />
           <div style={{ color: 'red' }}>{addActorError}</div>
           <button type="submit">Add actor</button>
       </form>

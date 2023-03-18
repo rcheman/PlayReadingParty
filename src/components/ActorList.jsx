@@ -4,7 +4,7 @@ const ActorList = ({actors, setActors}) => {
   const [deleteError, setDeleteError] = useState('');
 
 
-  const deleteActor = (event) => {
+  const deleteActorHandler = (event) => {
     const id = event.target.value
     fetch('/actors/' + id, {
       method: 'DELETE',
@@ -29,7 +29,7 @@ const ActorList = ({actors, setActors}) => {
           <div className='error'>{deleteError}</div>
           {actors.map((actor) => (
             <li key={actor.id}>
-              <button onClick={deleteActor} className="delete" value={actor.id}>
+              <button onClick={deleteActorHandler} className="delete" value={actor.id}>
                 -
               </button>
               {actor.name}

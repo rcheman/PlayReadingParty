@@ -6,11 +6,18 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
   // get all the script titles
   useEffect(() => {
     fetch('/scripts/title')
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok){
+          return response.json()
+        }
+        else {
+          throw new Error ('Error when getting the scripts')
+        }
+      })
       .then((scripts) => scripts.map((s) => s.title))
       .then(setTitles)
       .catch((error) => {
-        console.error(`error: ${error} when fetching script titles`);
+        setScriptError(error.message)
       });
   }, []);
 

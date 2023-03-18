@@ -64,7 +64,7 @@ app.use((req, res) => res.sendStatus(404));
 // middleware error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: { err: `An error occurred. ${err}` },
+    log: { err: `An error occurred. ${err.log ? err.log : err.message}` },
     status: 500,
     message: 'Express error handler caught unknown middleware error',
   };

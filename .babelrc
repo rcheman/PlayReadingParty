@@ -2,4 +2,3 @@
   "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": ["@babel/plugin-transform-runtime"]
 }
-// TODO: finish adding preset stuff from tutorial

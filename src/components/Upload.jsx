@@ -6,9 +6,6 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
   const [uploadMessage, setUploadMessage] = useState({ message: '', error: false });
 
   const handleFileChange = (e) => {
-    //TODO: remove e.preventDefault(), this is not a form
-    // e.preventDefault();
-
     // check that the file size is less than 50 before allowing the upload
     if (e.target.files) {
       if (e.target.files[0].size > MAX_FILESIZE_BYTES) {

@@ -95,7 +95,7 @@ const scriptController = {
         // cb expects null and then a boolean for whether the file should be accepted. See multer docs on fileFilter for more info.
         return cb(null, true);
       } else {
-        return cb(new Error('File name is incorrectly formatted', false));
+        return cb(new Error('File name is incorrectly formatted'), false);
       }
     }
 

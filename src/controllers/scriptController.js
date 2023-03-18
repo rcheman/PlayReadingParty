@@ -3,7 +3,7 @@ const fs = require('node:fs');
 require('dotenv').config();
 
 const scriptRepo = require('../repository/scriptRepository.js');
-const ServerError = require('../utils.js');
+const ServerError = require('../services/utils.js');
 
 const scriptController = {
   getScriptTitles: (req, res, next) => {

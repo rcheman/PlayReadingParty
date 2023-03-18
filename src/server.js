@@ -4,7 +4,9 @@ const cors = require('cors');
 
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
-const ServerError = require('./utils.js');
+const ServerError = require('./services/utils.js');
+
+require('./services/startupChecks').assert();
 
 const app = express();
 

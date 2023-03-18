@@ -1,4 +1,4 @@
-const ServerError = require('../utils');
+const ServerError = require('./utils');
 /*
 TODO: Add handling for other script formats 
 

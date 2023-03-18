@@ -2,7 +2,7 @@ const path = require('path');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('node:fs'));
 
-const ServerError = require('../utils');
+const ServerError = require('../services/utils');
 const db = require('./database.js');
 const { Character, parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 

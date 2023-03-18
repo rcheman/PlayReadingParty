@@ -11,7 +11,7 @@ const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
   return (
     <div id="home" className="column">
       <div className="row">
-        <ScriptNav setCurrentScript={setCurrentScript} titles={titles} setTitles={setTitles} />
+        <ScriptNav setCurrentScript={setCurrentScript} currentScript={currentScript} titles={titles} setTitles={setTitles} />
         <Upload setCurrentScript={setCurrentScript} setTitles={setTitles} titles={titles} />
         <AddActor actors={actors} setActors={setActors}/>
       </div>

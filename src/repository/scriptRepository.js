@@ -37,6 +37,12 @@ function getScript(scriptDir, title) {
     })
     .then(parseLines);
 }
+function deleteScript(title) {
+  return db.query('DELETE FROM scripts WHERE title = $1 RETURNING filename;', [title])
+    .then((result) => {
+      return result.rows[0].filename;
+    })
+}
 
 function importScript(filepath) {
   let title;
@@ -83,4 +89,5 @@ function importScript(filepath) {
     });
 }
 
-module.exports = { getCharacters, getTitles, getScript, importScript };
+
+module.exports = { getCharacters, getTitles, getScript, importScript, deleteScript };

@@ -39,6 +39,10 @@ app.get('/script/:title/characters', scriptController.getCharacters, (req, res) 
   return res.status(200).json(res.locals.characters);
 });
 
+app.delete('/script/:title', scriptController.deleteScript, (req, res) => {
+  return res.sendStatus(200)
+})
+
 // get a list of all the actors
 app.get('/actors', actorController.getActors, (req, res) => {
   return res.status(200).json(res.locals.actors);

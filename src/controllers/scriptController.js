@@ -62,7 +62,7 @@ const scriptController = {
     scriptRepo.deleteScript(title)
       .then((filename) => {
         // remove the local copy of the script
-        const path = process.env.UPLOADPATH + filename
+        const path = process.env.UPLOADPATH + '/' + filename
         fs.unlinkSync(path)
         return next()
       })

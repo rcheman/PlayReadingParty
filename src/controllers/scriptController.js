@@ -56,6 +56,24 @@ const scriptController = {
       });
   },
 
+  deleteScript: (req, res, next) => {
+    const { title } = req.params;
+    // delete the script from the db
+    scriptRepo.deleteScript(title)
+      .then((filename) => {
+        // remove the local copy of the script
+        const path = process.env.UPLOADPATH + filename
+        fs.unlinkSync(path)
+        return next()
+      })
+      .catch((error) => {
+        return next({
+          log: `error: ${error} occurred when getting the script`,
+          message: 'error when deleting the script',
+      });
+
+      })
+  },
   saveScript: (req, res, next) => {
     const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; //50MB. If updating, change constant in Upload.jsx too.
 

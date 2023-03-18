@@ -81,6 +81,10 @@ nav {
   margin-right: 10px;
 }
 
+.error{
+  color: red;
+}
+
 #home {
   display: flex;
   margin: 50px;

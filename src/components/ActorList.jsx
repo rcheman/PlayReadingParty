@@ -26,7 +26,7 @@ const ActorList = ({actors, setActors}) => {
   return (
         <ul id="actorList">
           <h3>Actors</h3>
-          <div style={{ color: 'red' }}>{deleteError}</div>
+          <div className='error'>{deleteError}</div>
           {actors.map((actor) => (
             <li key={actor.id}>
               <button onClick={deleteActor} className="delete" value={actor.id}>

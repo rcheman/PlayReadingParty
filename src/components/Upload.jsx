@@ -18,7 +18,8 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
     }
   };
 
-  const handleUploadClick = () => {
+  const handleUploadClick = (e) => {
+    e.preventDefault()
     if (!file) {
       return;
     }
@@ -52,6 +53,7 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
         // reset error message
         setUploadMessage({ message: 'Successfully Uploaded', error: false });
         setFile(null);
+        e.target.reset()
       })
       .catch((err) => {
         setUploadMessage({ message: err.message, error: true });
@@ -60,9 +62,12 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
 
   return (
     <div>
-      <input type="file" accept=".txt,*" onChange={handleFileChange} />
-      <p> {file && `${file.name} - ${file.type}`} </p>
-      <button onClick={handleUploadClick}>Upload</button>
+      <h3>Upload a new script</h3>
+      <form onSubmit={handleUploadClick}>
+        <input type="file" accept=".txt,*" onChange={handleFileChange} />
+        <p> {file && `${file.name} - ${file.type}`} </p>
+        <button type='submit'>Upload</button>
+      </form>
       {uploadMessage.message.length > 0 && (
         <div style={uploadMessage.error === true ? { color: 'red' } : { color: 'black' }}>{uploadMessage.message}</div>
       )}

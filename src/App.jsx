@@ -5,7 +5,7 @@ import Home from './components/Home';
 const App = () => {
   const [showScript, setShowScript] = useState(false);
   const [actors, setActors] = useState([]);
-  const [currentScript, setCurrentScript] = useState('Twelfth Night');
+  const [currentScript, setCurrentScript] = useState('');
 
   const openScript = () => {
     setShowScript(!showScript);

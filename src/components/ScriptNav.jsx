@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
+const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => {
   const [scriptError, setScriptError] = useState('')
 
   // get all the script titles
@@ -14,7 +14,7 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
           throw new Error ('Error when getting the scripts')
         }
       })
-      .then(setTitles)
+      .then(setScripts)
       .catch((error) => {
         setScriptError(error.message)
       });
@@ -28,7 +28,7 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
     .then((response) => {
       if (response.ok) {
         setScriptError('')
-        setTitles(titles.filter((t) => t.id.toString() !== deleteId))
+        setScripts(scripts.filter((t) => t.id.toString() !== deleteId))
         if (deleteId === currentScript){
           setCurrentScript(null)
         }
@@ -43,17 +43,17 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
 
   // create individual buttons for each script title
   const buttons = [];
-  for (let title of titles) {
+  for (let s of scripts) {
     buttons.push(
-      <li key={"scriptButton" + title.id}>
-        <button className='delete' onClick={deleteScript} value={title.id}>-</button>
+      <li key={"scriptButton" + s.id}>
+        <button className='delete' onClick={deleteScript} value={s.id}>-</button>
         <button
           onClick={() => {
-            setCurrentScript(title.id);
+            setCurrentScript(s.id);
           }}
           className="button-small"
         >
-          {title.title}
+          {s.title}
         </button>
       </li>
     );

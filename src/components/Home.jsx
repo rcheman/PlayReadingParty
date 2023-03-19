@@ -6,13 +6,13 @@ import ActorList from './ActorList';
 import AddActor from './AddActor';
 
 const Home = ({ setActors, actors, currentScript, setCurrentScript }) => {
-  const [titles, setTitles] = useState([]);
+  const [scripts, setScripts] = useState([]);
 
   return (
     <div id="home" className="column">
       <div className="row">
-        <ScriptNav setCurrentScript={setCurrentScript} currentScript={currentScript} titles={titles} setTitles={setTitles} />
-        <Upload setCurrentScript={setCurrentScript} setTitles={setTitles} titles={titles} />
+        <ScriptNav setCurrentScript={setCurrentScript} currentScript={currentScript} scripts={scripts} setScripts={setScripts} />
+        <Upload setCurrentScript={setCurrentScript} setScripts={setScripts} scripts={scripts} />
         <AddActor actors={actors} setActors={setActors}/>
       </div>
       <div className="row">

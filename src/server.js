@@ -31,17 +31,17 @@ app.get('/scripts/title', scriptController.getScriptTitles, (req, res) => {
 });
 
 // returns the script text as a nested array
-app.get('/script/:script', scriptController.getScript, (req, res) => {
+app.get('/script/:scriptId', scriptController.getScript, (req, res) => {
   return res.status(200).json(res.locals.scriptText);
 });
 
 // return the character data
 // can also be used with an actor=id query to get just the characters assigned to that actor
-app.get('/script/:script/characters', scriptController.getCharacters, (req, res) => {
+app.get('/script/:scriptId/characters', scriptController.getCharacters, (req, res) => {
   return res.status(200).json(res.locals.characters);
 });
 
-app.delete('/script/:script', scriptController.deleteScript, (req, res) => {
+app.delete('/script/:scriptId', scriptController.deleteScript, (req, res) => {
   return res.sendStatus(200)
 })
 
@@ -56,7 +56,7 @@ app.post('/actors', actorController.newActor, (req, res) => {
 });
 
 // delete an actor from the database based on their id
-app.delete('/actors/:id', actorController.deleteActor, (req, res) => {
+app.delete('/actors/:actorId', actorController.deleteActor, (req, res) => {
   return res.sendStatus(200);
 });
 

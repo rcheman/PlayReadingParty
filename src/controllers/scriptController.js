@@ -22,11 +22,11 @@ const scriptController = {
   },
 
   getCharacters: (req, res, next) => {
-    const { actor } = req.query;
-    const { script } = req.params;
+    const { actorId } = req.query;
+    const { scriptId } = req.params;
 
     scriptRepo
-      .getCharacters(script, actor)
+      .getCharacters(scriptId, actorId)
       .then((characters) => {
         res.locals.characters = characters;
         return next();
@@ -40,10 +40,10 @@ const scriptController = {
   },
 
   getScript: (req, res, next) => {
-    const { script } = req.params;
+    const { scriptId } = req.params;
 
     scriptRepo
-      .getScript(process.env.UPLOADPATH, script)
+      .getScript(process.env.UPLOADPATH, scriptId)
       .then((scriptText) => {
         res.locals.scriptText = scriptText;
         next();
@@ -57,9 +57,9 @@ const scriptController = {
   },
 
   deleteScript: (req, res, next) => {
-    const { script } = req.params;
+    const { scriptId } = req.params;
     // delete the script from the db
-    scriptRepo.deleteScript(script)
+    scriptRepo.deleteScript(scriptId)
       .then((filename) => {
         // remove the local copy of the script
         const path = process.env.UPLOADPATH + '/' + filename

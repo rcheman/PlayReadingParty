@@ -33,9 +33,9 @@ const actorController = {
       });
   },
   deleteActor: (req, res, next) => {
-    const { id } = req.params;
+    const { actorId } = req.params;
     actorRepo
-      .deleteActor(id)
+      .deleteActor(actorId)
       .then(() => {
         return next();
       })

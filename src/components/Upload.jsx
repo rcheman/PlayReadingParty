@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Upload = ({ setCurrentScript, titles, setTitles }) => {
+const Upload = ({ setCurrentScript, scripts, setScripts }) => {
   const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
   const [file, setFile] = useState();
   const [uploadMessage, setUploadMessage] = useState({ message: '', error: false });
@@ -49,7 +49,7 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
       .then((script) => {
         // set the current script to the newly uploaded script
         setCurrentScript(script.id);
-        setTitles([...titles, script]);
+        setScripts([...scripts, script]);
         // reset error message
         setUploadMessage({ message: 'Successfully Uploaded', error: false });
         setFile(null);

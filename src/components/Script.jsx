@@ -22,25 +22,26 @@ const Script = ({ actors, currentScript }) => {
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
 
-  for (let lineChunk of script) {
+  for (let [i, lineChunk] of Object.entries(script)) {
     // checks if the character name for this chunk is the name of a character assigned to the current actor
     // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
     const name = lineChunk.split('.')[0];
     if (characterSet.has(name)) {
-      lineChunks.push(<pre className='currentActor'>{lineChunk}</pre>);
+      lineChunks.push(<pre className='currentActor' key={`chk-${i}`}>{lineChunk}</pre>);
     } else {
-      lineChunks.push(<pre>{lineChunk}</pre>
+      lineChunks.push(<pre key={`chk-${i}`}>{lineChunk}</pre>
       );
     }
   }
 
   return (
-    <div id="scriptPage">
+    <div id="scriptPage" key="scriptWrapper">
       <ActorScriptNav
         actors={actors}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
         currentScript={currentScript}
+        key="ActorScriptNav"
       />
       <h2>script</h2>
       <h5>Current Actor: {currentActor.name}</h5>

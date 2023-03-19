@@ -6,14 +6,13 @@ const ServerError = require('../services/utils');
 const db = require('./database.js');
 const { Character, parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
-function getCharacters(title, actorId = -1) {
-  const values = [actorId, title];
+function getCharacters(scriptId, actorId = -1) {
+  const values = [actorId, scriptId];
   const sql = `
-      SELECT c.id as id, c.name as name, line_count, speaks_count
-      FROM characters c
-               JOIN scripts s ON script_id = s.id
+      SELECT id, name, line_count, speaks_count
+      FROM characters
       WHERE ($1 = -1 or actor_id = $1)
-        AND s.title = $2`;
+        AND script_id = $2`;
 
   return db.query(sql, values).then((result) => {
     return result.rows.map((c) => new Character(c.name, c.line_count, c.speaks_count));
@@ -29,22 +28,23 @@ function getTitles() {
   });
 }
 
-function getScript(scriptDir, title) {
+function getScript(scriptDir, id) {
   return db
-    .query('select filename from scripts where title = $1 limit 1', [title])
+    .query('select filename from scripts where id = $1 limit 1', [id])
     .then((result) => {
       return fs.readFileAsync(scriptDir + '/' + result.rows[0].filename, 'utf8');
     })
     .then(parseLines);
 }
-function deleteScript(title) {
-  return db.query('DELETE FROM scripts WHERE title = $1 RETURNING filename;', [title])
+function deleteScript(id) {
+  return db.query('DELETE FROM scripts WHERE id = $1 RETURNING filename;', [id])
     .then((result) => {
       return result.rows[0].filename;
     })
 }
 
 function importScript(filepath) {
+  let scriptId;
   let title;
   let characters;
 
@@ -85,7 +85,7 @@ function importScript(filepath) {
       return db.query(text, [scriptId, names, counts, speakNums]);
     })
     .then(() => {
-      return title; // The title of the newly added script
+      return {id: scriptId, title}; // The id/title of the newly added script
     });
 }
 

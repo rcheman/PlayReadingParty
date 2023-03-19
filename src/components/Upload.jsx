@@ -46,10 +46,10 @@ const Upload = ({ setCurrentScript, titles, setTitles }) => {
         }
         return response.json();
       })
-      .then((title) => {
+      .then((script) => {
         // set the current script to the newly uploaded script
-        setCurrentScript(title);
-        setTitles([...titles, title]);
+        setCurrentScript(script.id);
+        setTitles([...titles, script]);
         // reset error message
         setUploadMessage({ message: 'Successfully Uploaded', error: false });
         setFile(null);

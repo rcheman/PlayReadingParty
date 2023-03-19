@@ -22,7 +22,7 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 
 // uploads a new script
 app.post('/script', scriptController.saveScript, scriptController.importScript, (req, res) => {
-  return res.status(200).json(res.locals.title);
+  return res.status(200).json({id: res.locals.id, title: res.locals.title});
 });
 
 // returns a list of all the script titles
@@ -30,18 +30,18 @@ app.get('/scripts/title', scriptController.getScriptTitles, (req, res) => {
   return res.status(200).json(res.locals.scriptTitles);
 });
 
-// returns the script as a nested array
-app.get('/script/:title', scriptController.getScript, (req, res) => {
-  return res.status(200).json(res.locals.fullPlay);
+// returns the script text as a nested array
+app.get('/script/:script', scriptController.getScript, (req, res) => {
+  return res.status(200).json(res.locals.scriptText);
 });
 
 // return the character data
 // can also be used with an actor=id query to get just the characters assigned to that actor
-app.get('/script/:title/characters', scriptController.getCharacters, (req, res) => {
+app.get('/script/:script/characters', scriptController.getCharacters, (req, res) => {
   return res.status(200).json(res.locals.characters);
 });
 
-app.delete('/script/:title', scriptController.deleteScript, (req, res) => {
+app.delete('/script/:script', scriptController.deleteScript, (req, res) => {
   return res.sendStatus(200)
 })
 

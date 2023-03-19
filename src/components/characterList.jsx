@@ -7,12 +7,14 @@ const CharacterList = ({ currentScript }) => {
   // get the character data on the initial load and when the script option changes
   useEffect(() => {
     // fetch request to get the character data
-    fetch('/script/' + currentScript + '/characters')
-      .then((response) => response.json())
-      .then(setCharacters)
-      .catch((error) => {
-        console.error(`error: ${error} when fetching character data`);
-      });
+    if (currentScript !== null) {
+      fetch('/script/' + currentScript + '/characters')
+        .then((response) => response.json())
+        .then(setCharacters)
+        .catch((error) => {
+          console.error(`error: ${error} when fetching character data`);
+        });
+    }
   }, [currentScript]);
 
   // make an array of character information
@@ -27,7 +29,7 @@ const CharacterList = ({ currentScript }) => {
   return (
     <div className='characterList'>
       <h3>Characters in the play</h3>
-      <ul>{currentScript !== '' && charactersElements}</ul>
+      <ul>{currentScript !== null && charactersElements}</ul>
     </div>
   );
 };

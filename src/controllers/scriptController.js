@@ -23,10 +23,10 @@ const scriptController = {
 
   getCharacters: (req, res, next) => {
     const { actor } = req.query;
-    const { title } = req.params;
+    const { script } = req.params;
 
     scriptRepo
-      .getCharacters(title, actor)
+      .getCharacters(script, actor)
       .then((characters) => {
         res.locals.characters = characters;
         return next();
@@ -40,12 +40,12 @@ const scriptController = {
   },
 
   getScript: (req, res, next) => {
-    const { title } = req.params; // todo script id
+    const { script } = req.params;
 
     scriptRepo
-      .getScript(process.env.UPLOADPATH, title)
-      .then((script) => {
-        res.locals.fullPlay = script;
+      .getScript(process.env.UPLOADPATH, script)
+      .then((scriptText) => {
+        res.locals.scriptText = scriptText;
         next();
       })
       .catch((error) => {
@@ -57,9 +57,9 @@ const scriptController = {
   },
 
   deleteScript: (req, res, next) => {
-    const { title } = req.params;
+    const { script } = req.params;
     // delete the script from the db
-    scriptRepo.deleteScript(title)
+    scriptRepo.deleteScript(script)
       .then((filename) => {
         // remove the local copy of the script
         const path = process.env.UPLOADPATH + '/' + filename
@@ -122,8 +122,9 @@ const scriptController = {
 
     scriptRepo
       .importScript(path)
-      .then((title) => {
-        res.locals.title = title;
+      .then((script) => {
+        res.locals.id = script.id;
+        res.locals.title = script.title;
         return next();
       })
       .catch((error) => {

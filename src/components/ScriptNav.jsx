@@ -14,7 +14,6 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
           throw new Error ('Error when getting the scripts')
         }
       })
-      .then((scripts) => scripts.map((s) => s.title))
       .then(setTitles)
       .catch((error) => {
         setScriptError(error.message)
@@ -22,16 +21,16 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
   }, []);
 
   function deleteScript(event){
-    const deleteTitle = event.target.value;
-    fetch('/script/' + deleteTitle, {
+    const deleteId = event.target.value;
+    fetch('/script/' + deleteId, {
       method: 'DELETE'
     })
     .then((response) => {
       if (response.ok) {
         setScriptError('')
-        setTitles(titles.filter((title) => title !== deleteTitle))
-        if (deleteTitle === currentScript){
-          setCurrentScript('')
+        setTitles(titles.filter((t) => t.id.toString() !== deleteId))
+        if (deleteId === currentScript){
+          setCurrentScript(null)
         }
       } else {
         throw new Error('Error when deleting the script')
@@ -47,15 +46,15 @@ const ScriptNav = ({ currentScript, setCurrentScript, titles, setTitles }) => {
   for (let title of titles) {
     buttons.push(
       <li>
-        <button className='delete' onClick={deleteScript} value={title}>-</button>
+        <button className='delete' onClick={deleteScript} value={title.id}>-</button>
         <button
           onClick={() => {
-            setCurrentScript(title);
+            setCurrentScript(title.id);
           }}
           className="button-small"
-          key={title}
+          key={'scriptButton' + title.id}
         >
-          {title}
+          {title.title}
         </button>
       </li>
     );

@@ -6,74 +6,65 @@ const scriptRepo = require('../repository/scriptRepository.js');
 const ServerError = require('../services/utils.js');
 
 const scriptController = {
-  getScriptTitles: (req, res, next) => {
-    scriptRepo
-      .getTitles()
-      .then((scripts) => {
-        res.locals.scriptTitles = scripts;
-        return next();
-      })
-      .catch((error) => {
-        return next({
-          log: `error: ${error} occurred when getting script titles`,
-          message: 'error in getScriptTitles in scriptController',
-        });
+  getScriptTitles: async (req, res, next) => {
+    try {
+      res.locals.scriptTitles = await scriptRepo.getTitles();
+      return next();
+    } catch(error) {
+      return next({
+        log: `error: ${error} occurred when getting script titles`,
+        message: 'error in getScriptTitles in scriptController',
       });
+    }
   },
 
-  getCharacters: (req, res, next) => {
+  getCharacters: async (req, res, next) => {
     const { actorId } = req.query;
     const { scriptId } = req.params;
 
-    scriptRepo
-      .getCharacters(scriptId, actorId)
-      .then((characters) => {
-        res.locals.characters = characters;
-        return next();
-      })
-      .catch((error) => {
-        return next({
-          log: `error: ${error} occurred when getting actor's characters from the db.`,
-          message: 'error in getActorCharacters in actorController.',
-        });
+    try {
+      res.locals.characters = await scriptRepo.getCharacters(scriptId, actorId);
+      return next();
+    } catch (error) {
+      return next({
+        log: `error: ${error} occurred when getting actor's characters from the db.`,
+        message: 'error in getActorCharacters in actorController.',
       });
+    }
   },
 
-  getScript: (req, res, next) => {
+  getScript: async (req, res, next) => {
     const { scriptId } = req.params;
 
-    scriptRepo
-      .getScript(process.env.UPLOADPATH, scriptId)
-      .then((scriptText) => {
-        res.locals.scriptText = scriptText;
-        next();
-      })
-      .catch((error) => {
-        next({
-          log: `error: ${error} occurred when getting the script`,
-          message: 'error when getting the script',
-        });
+    try {
+      res.locals.scriptText = await scriptRepo.getScript(process.env.UPLOADPATH, scriptId);
+      return next();
+    } catch (error) {
+      return next({
+        log: `error: ${error} occurred when getting the script`,
+        message: 'error when getting the script',
       });
+    }
   },
 
-  deleteScript: (req, res, next) => {
+  deleteScript: async (req, res, next) => {
     const { scriptId } = req.params;
-    // delete the script from the db
-    scriptRepo.deleteScript(scriptId)
-      .then((filename) => {
-        // remove the local copy of the script
-        const path = process.env.UPLOADPATH + '/' + filename
-        fs.unlinkSync(path)
-        return next()
-      })
-      .catch((error) => {
-        return next({
-          log: `error: ${error} occurred when getting the script`,
-          message: 'error when deleting the script',
-      });
 
-      })
+    try {
+      // delete the script from the db
+      const filename = await scriptRepo.deleteScript(scriptId);
+      // remove the local copy of the script
+      await fs.unlinkAsync(process.env.UPLOADPATH + '/' + filename);
+      return next();
+    } catch (error) {
+      return next({
+        log: `error: ${error} occurred when getting the script`,
+        message: 'error when deleting the script',
+      });
+    }
+
   },
+  
   saveScript: (req, res, next) => {
     const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; //50MB. If updating, change constant in Upload.jsx too.
 
@@ -117,29 +108,28 @@ const scriptController = {
       }
     });
   },
-  importScript: (req, res, next) => {
+  
+  importScript: async (req, res, next) => {
     const path = process.env.UPLOADPATH + req.file.filename;
 
-    scriptRepo
-      .importScript(path)
-      .then((script) => {
-        res.locals.id = script.id;
-        res.locals.title = script.title;
-        return next();
-      })
-      .catch((error) => {
-        // remove the uploaded file because some error occured while processing it
-        fs.unlinkSync(path);
-        // handles errors for duplicate script and unable to find a title
-        if (error instanceof ServerError) {
-          return next(error);
-        } else {
-          return next({
-            log: `error: ${error} occurred when adding script to the database`,
-            message: 'error when adding the script to the database',
-          });
-        }
-      });
+    try {
+      const script = await scriptRepo.importScript(path);
+      res.locals.id = script.id;
+      res.locals.title = script.title;
+      return next();
+    } catch (error) {
+      // remove the uploaded file because some error occurred while processing it
+      await fs.unlinkAsync(path);
+      // handles errors for duplicate script and unable to find a title
+      if (error instanceof ServerError) {
+        return next(error);
+      } else {
+        return next({
+          log: `error: ${error} occurred when adding script to the database`,
+          message: 'error when adding the script to the database',
+        });
+      }
+    }
   },
 };
 

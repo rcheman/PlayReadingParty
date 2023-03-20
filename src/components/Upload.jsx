@@ -18,7 +18,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     }
   };
 
-  const handleUploadClick = (e) => {
+  const handleUploadClick = async (e) => {
     e.preventDefault()
     if (!file) {
       return;
@@ -28,36 +28,34 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     const formData = new FormData();
     formData.append('scriptFormField', file);
 
-    fetch('/script', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => {
+    try {
+      const response = await fetch('/script', { method: 'POST', body: formData });
+
+      if (!response.ok) {
+        // default message
+        let message = "File was not uploaded. Make sure the file name doesn't start with an underscore and only uses numbers, letters, and these symbols: ' . _ - ";
+
         if (response.status === 409) {
-          throw new Error('Script title already exists');
+          message = 'Script title already exists';
+        } else if (response.status === 452) {
+          message = 'Could not find a title, potentially invalid file type';
         }
-        if (response.status === 452) {
-          throw new Error('Could not find a title, potentially invalid file type');
-        }
-        if (response.status === 500) {
-          throw new Error(
-            "File was not uploaded. Make sure the file name doesn't start with an underscore and only uses numbers, letters, and these symbols: ' . _ - "
-          );
-        }
-        return response.json();
-      })
-      .then((script) => {
-        // set the current script to the newly uploaded script
-        setCurrentScript(script.id);
-        setScripts([...scripts, script]);
-        // reset error message
-        setUploadMessage({ message: 'Successfully Uploaded', error: false });
-        setFile(null);
-        e.target.reset()
-      })
-      .catch((err) => {
-        setUploadMessage({ message: err.message, error: true });
-      });
+
+        setUploadMessage({ message, error: true });
+        return;
+      }
+
+      const script = await response.json();
+
+      setCurrentScript(script.id);
+      setScripts([...scripts, script]);
+      // reset error message
+      setUploadMessage({ message: 'Successfully Uploaded', error: false });
+      setFile(null);
+      e.target.reset()
+    } catch (error) {
+      setUploadMessage({ message: err.message, error: true });
+    }
   };
 
   return (

@@ -5,17 +5,23 @@ const CharacterList = ({ currentScript }) => {
   const [characters, setCharacters] = useState([]);
 
   // get the character data on the initial load and when the script option changes
-  useEffect(() => {
-    // fetch request to get the character data
-    if (currentScript !== null) {
-      fetch('/script/' + currentScript + '/characters')
-        .then((response) => response.json())
-        .then(setCharacters)
-        .catch((error) => {
-          console.error(`error: ${error} when fetching character data`);
-        });
+  useEffect(() => { (async () => { // useEffect cannot take an async function. Must wrap async in regular function
+    if (currentScript === null) {
+      return;
     }
-  }, [currentScript]);
+    // fetch request to get the character data
+    try {
+      const response = await fetch('/script/' + currentScript + '/characters');
+
+      if (response.ok) {
+        setCharacters(await response.json());
+      } else {
+        console.error(`server error: ${response.body} when fetching character data`);
+      }
+    } catch (error) {
+      console.error(`network error: ${error} when fetching character data`);
+    }
+  })();}, [currentScript]);
 
   // make an array of character information
   const charactersElements = [];

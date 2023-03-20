@@ -4,28 +4,26 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
   const [scriptError, setScriptError] = useState('')
 
   // get all the script titles
-  useEffect(() => {
-    fetch('/scripts/title')
-      .then((response) => {
-        if (response.ok){
-          return response.json()
-        }
-        else {
-          throw new Error ('Error when getting the scripts')
-        }
-      })
-      .then(setScripts)
-      .catch((error) => {
-        setScriptError(error.message)
-      });
-  }, []);
+  useEffect(() => { (async () => { // useEffect cannot take an async function. Must wrap async in regular function
+    try {
+      const response = await fetch('/scripts/title');
 
-  function deleteScript(event){
+      if (response.ok) {
+        setScripts(await response.json());
+      } else {
+        console.error(`server error: ${response.body} when fetching script`);
+      }
+    } catch (error) {
+      setScriptError(error.message);
+    }
+  })();}, []);
+
+  async function deleteScript(event){
     const deleteId = event.target.value;
-    fetch('/script/' + deleteId, {
-      method: 'DELETE'
-    })
-    .then((response) => {
+
+    try {
+      const response = await fetch('/script/' + deleteId, { method: 'DELETE' });
+
       if (response.ok) {
         setScriptError('')
         setScripts(scripts.filter((t) => t.id.toString() !== deleteId))
@@ -33,12 +31,11 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
           setCurrentScript(null)
         }
       } else {
-        throw new Error('Error when deleting the script')
+        setScriptError('Error when deleting the script')
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       setScriptError(error.message)
-    })
+    }
   }
 
   // create individual buttons for each script title

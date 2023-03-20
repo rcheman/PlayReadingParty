@@ -7,16 +7,19 @@ const Script = ({ actors, currentScript }) => {
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
   // fetch the specified script
-  // todo handle errors in .then(), otherwise when an error gets returned, interpreted as script text, and then
-  // todo shows up on the page with every character of the string as its own line
-  useEffect(() => {
-    fetch('/script/' + currentScript)
-      .then((response) => response.json())
-      .then(setScript)
-      .catch((error) => {
-        console.error(`error: ${error} when fetching script`);
-      });
-  }, [currentScript]);
+  useEffect(() => { (async () => { // useEffect cannot take an async function. Must wrap async in regular function
+    try {
+      const response = await fetch('/script/' + currentScript);
+
+      if (response.ok) {
+        setScript(await response.json());
+      } else {
+        console.error(`server error: ${response.body} when fetching script`);
+      }
+    } catch (error) {
+      console.error(`network error: ${error} when fetching script`);
+    }
+  })();}, [currentScript]);
 
   // create div and p elements for each chunk of lines
   const lineChunks = [];

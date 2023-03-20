@@ -3,33 +3,32 @@ import React, {useState} from 'react';
 const AddActor = ({actors, setActors}) => {
   const [addActorError, setAddActorError] = useState('');
 
-  const newActorHandler = (e) => {
-    e.preventDefault()
+  const newActorHandler = async (e) => {
+    e.preventDefault();
+
     const newActor = e.target.elements.actorName.value;
     // Add the new actor to the database, returning the new actor object
-    fetch('/actors', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: newActor }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Error when adding the actor');
-        }
-      })
-      .then((actor) => {
+    try {
+      const response = await fetch('/actors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newActor }),
+      });
+
+      if (response.ok) {
+        const actor = await response.json();
         // add the actor to the actor list and reset values
-        setActors([...actors, actor])
+        setActors([...actors, actor]);
         setAddActorError('');
         e.target.reset();
-      })
-      .catch((error) => {
-        setAddActorError(error.message);
-      });
+      } else {
+        setAddActorError('Error when adding the actor');
+      }
+    } catch (error) {
+      setAddActorError(error.message);
+    }
   };
 
   return (

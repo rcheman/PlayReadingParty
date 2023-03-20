@@ -2,19 +2,21 @@ import React from 'react';
 
 const ActorScriptButton = ({ actor, setCurrentActor, setCurrentCharacters, currentScript }) => {
   // on change, change the value of current actor
-  const setActorHandler = () => {
+  const setActorHandler = async () => {
     setCurrentActor(actor);
 
     // fetch request to get the current characters for the current actor
-    fetch(`/script/${currentScript}/characters?actorId=${actor.id}`)
-      .then((response) => response.json())
-      .then((characterData) => {
-        const charArr = characterData.map((character) => character.name);
-        setCurrentCharacters(charArr);
-      })
-      .catch((error) => {
+    try {
+      const response = await fetch(`/script/${currentScript}/characters?actorId=${actor.id}`);
+
+      if (response.ok) {
+        setCurrentCharacters((await response.json()).map((c) => c.name));
+      } else {
+        console.error('Server Error:', response.body);
+      }
+    } catch (error) {
         console.error(`error: ${error} when fetching current characters`);
-      });
+    }
   };
 
   return (

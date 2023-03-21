@@ -12,22 +12,28 @@ async function subscribe(req, res) {
     'Connection': 'keep-alive',
   });
 
-  const id = Math.random();
+  try {
+    const id = Math.random();
 
-  req.on('close', () => {
-    console.log(`Connection closed: ${id}`);
-    positionSubscribers.filter((subscriber) => subscriber.id !== id);
-  });
+    req.on('close', () => {
+      console.log(`Connection closed: ${id}`);
+      positionSubscribers.filter((subscriber) => subscriber.id !== id);
+    });
 
-  // Push res to subscribers, so we can send events as they come in.
-  positionSubscribers.push({ id, scriptId, res });
+    // Push res to subscribers, so we can send events as they come in.
+    positionSubscribers.push({ id, scriptId, res });
 
-  // send initial data for all actor positions, updates will be sent later as new positions are received
-  const dots = await dotRepo.getAll(scriptId);
+    // send initial data for all actor positions, updates will be sent later as new positions are received
+    const dots = await dotRepo.getAll(scriptId);
 
-  for (const dot of dots) {
-    dotIds[`${dot.actorId}-${dot.scriptId}`] = dot.id;
-    res.write("data: " + JSON.stringify({ actorId: dot.actorId, scriptId, position: dot.position }) + "\n\n");
+    for (const dot of dots) {
+      dotIds[`${dot.actorId}-${dot.scriptId}`] = dot.id;
+      res.write("data: " + JSON.stringify({ actorId: dot.actorId, scriptId, position: dot.position }) + "\n\n");
+    }
+  } catch (error) {
+    // don't abort request since client will just keep reconnecting.
+    // we've also already sent headers, so we cannot use the normal error flow.
+    console.log(error);
   }
 
   // request is kept open indefinitely, so we can send events in the response over time as they happen
@@ -66,7 +72,10 @@ async function reportPosition(req, res, next) {
     await dotRepo.set(dotIds[dotKey], position);
     return next();
   } catch (error) {
-    return next(error);
+    return next({
+      log: `error: ${error} occurred when saving position to database.`,
+      message: 'error in reportPosition',
+    });
   }
 }
 

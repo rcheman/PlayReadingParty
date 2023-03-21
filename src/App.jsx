@@ -32,7 +32,7 @@ const App = () => {
       <header>
         <h1>Play Reading Party</h1>
         <nav>
-          <button onClick={openScript}>Open/Close Script</button>
+          <button onClick={openScript} style={{visibility: currentScript === null ? 'hidden' : 'visible'}}>Open/Close Script</button>
         </nav>
       </header>
       {showScript ? (

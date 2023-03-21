@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ActorScriptNav from './actorScriptNav';
+import ReadingDots from './ReadingDots';
 
 const Script = ({ actors, currentScript }) => {
   const [script, setScript] = useState([]);
@@ -48,7 +49,15 @@ const Script = ({ actors, currentScript }) => {
       />
       <h2>script</h2>
       <h5>Current Actor: {currentActor.name}</h5>
-      <div id="scriptDiv">{lineChunks}</div>
+      <div style={{display:'flex', width:'100%'}}
+      >
+        <div id="scriptDiv">
+          <div>
+            {lineChunks}
+          </div>
+        </div>
+        <ReadingDots actors={actors} currentActor={currentActor} currentScript={currentScript} key="ReadingDots"/>
+      </div>
     </div>
   );
 };

@@ -76,7 +76,10 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
 
   const dotElements = [];
   for (const [id, position] of Object.entries(dots)) {
-    if (id == currentActor.id) {
+    // New actors could have been added by others since we've fetched the actor list. Must skip the dot in that case.
+    // TODO consider keeping a server sent events stream open for each browser and send it events telling it to update
+    // TODO so things like adding a new actor or script will be visible immediately by the other connected users
+    if (id == currentActor.id || actorNameMap[id] == undefined) {
       continue;
     }
 

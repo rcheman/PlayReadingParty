@@ -1,0 +1,100 @@
+import React, { useState, useEffect, useRef } from 'react';
+
+// Generate a unique and stable hue based on the actor name
+function getActorHue(actor) {
+  let input = 0;
+  for (const char of actor) {
+    input += char.charCodeAt(0);
+  }
+
+  return input % 360;
+}
+
+const ReadingDots = ({ actors, currentActor, currentScript }) => {
+  const [dots, setDots] = useState({});
+  const refDots = useRef({});
+  refDots.current = dots;
+
+  const actorNameMap = { };
+  for (const actor of actors) {
+    actorNameMap[actor.id] = actor.name;
+  }
+
+  useEffect(() => {
+    // get initial dots positions
+    const source = new EventSource(`/positions/${currentScript}`);
+    const positionReceiver = function (message) {
+      let m = JSON.parse(message.data);
+
+      const newDots = Object.assign({}, refDots.current);
+
+      newDots[m.actorId] = m.position;
+
+      setDots(newDots);
+      refDots.current = newDots;
+    };
+
+    source.addEventListener('message', positionReceiver);
+
+    let scrollTimeout;
+
+    let positionReporter = () => {
+      // replace a currently queued update if we're still scrolling before the update was sent.
+      // this helps reduce many small changes into one larger change request
+      clearTimeout(scrollTimeout);
+
+      scrollTimeout = setTimeout(() => {
+        let readingDotsHeightOffset =
+          document.getElementsByTagName('body')[0].getBoundingClientRect().height -
+          document.getElementById('readingDots').getBoundingClientRect().height;
+
+        let position = (window.scrollY - readingDotsHeightOffset) / (document.body.scrollHeight - readingDotsHeightOffset);
+        position = position.toPrecision(4);
+
+        fetch('/positions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({actorId:currentActor.id, scriptId: currentScript, position: position})
+        });
+      }, 50);
+    };
+
+    addEventListener('scroll', positionReporter);
+
+    // Clear any running timeouts when component unmounts to prevent them from stacking up
+    return () => {
+      source.removeEventListener('message', positionReceiver);
+      source.close();
+
+      removeEventListener('scroll', positionReporter);
+      clearTimeout(scrollTimeout);
+    };
+
+  }, [currentScript, currentActor]);
+
+  const dotElements = [];
+  for (const [id, position] of Object.entries(dots)) {
+    if (id == currentActor.id) {
+      continue;
+    }
+
+    const hue = getActorHue(actorNameMap[id]);
+    const color = `hsl(${hue}, 80%, 80%)`;
+
+    dotElements.push(
+      <span className="readingDot" key={`dot ${id}`} style={{ top: `${position * 100}%`, backgroundColor: color }}>
+        {actorNameMap[id]}
+      </span>
+    );
+  }
+
+  return (
+    <div id="readingDots" className="readingDots">
+      {dotElements}
+    </div>
+  );
+};
+
+export default ReadingDots;

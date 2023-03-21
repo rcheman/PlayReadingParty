@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
+const dotController = require('./controllers/dotController.js');
 const ServerError = require('./services/utils.js');
 
 require('./services/startupChecks').assert();
@@ -60,7 +61,15 @@ app.delete('/actors/:actorId', actorController.deleteActor, (req, res) => {
   return res.sendStatus(200);
 });
 
-// unknown rout handler
+// Server sent events route for subscribing to read position updates for a script. Request is deliberately kept open.
+app.get('/positions/:scriptId', dotController.subscribe);
+
+// Report the read position of an actor in a script
+app.post('/positions', dotController.reportPosition, (req, res) => {
+  return res.sendStatus(200);
+});
+
+// unknown route handler
 app.use((req, res) => res.sendStatus(404));
 
 // middleware error handler

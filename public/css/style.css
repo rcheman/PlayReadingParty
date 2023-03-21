@@ -41,6 +41,13 @@ nav {
   justify-content: space-around;
 }
 
+#scriptDiv {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
 #scriptDiv pre {
   border-left-color: #d1d1d1;
   padding: 1rem 1.5rem;
@@ -105,4 +112,19 @@ nav {
 
 #actorList {
   list-style: none;
+}
+
+.readingDots {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.readingDot {
+  position: relative;
+  transition: top 300ms ease;
+  transform: translateY(0.5em); /* move dot down so the entire thing can be visible on screen when viewed at the same position */
+  padding: 0.1em 1em;
+  border-radius: 1em 0 0 1em;
+  margin-bottom:-1.8em; /* make "height" 0 so the different dots can overlap */
 }

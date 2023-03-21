@@ -21,7 +21,7 @@ To get a local copy up and running, follow these steps
 3. Set up environment variables
    - Create a .env file in the root directory of the project
    - Add the path for where you want script files to be stored after they have been uploaded by the user
-     ```js
+     ```
      UPLOADPATH=/example/path/scriptUploads
      ```
    - Add a database uri for your postgres database

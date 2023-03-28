@@ -1,0 +1,23 @@
+Command line info
+******************
+
+service postgresql => shows list of commands to use with service postgresql
+service postgresql status => shows status of postgresql server(?)
+
+sudo su postgres => login as super user(?) with the default postgres user
+(within the bash for the container it is 'su - postgres')
+
+After running sudo su postgres, run 'psql' to actually enter the psql CLI.
+
+Within psql
+***********
+\l  => to get a list of all the databases
+\i <filepath>  => run a sql script file
+\dt => get database table names
+\c <database name> => connect to a different database
+\du => get database users
+
+When logging in to psql
+****************************
+psql -d <database name> -U username
+psql -d playreadingparty -U playreading

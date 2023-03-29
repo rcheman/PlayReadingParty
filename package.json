@@ -4,12 +4,9 @@
   "private": true,
   "main": "./public/index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "NODE_ENV=development concurrently \" webpack-dev-server --color \" \"nodemon --inspect src/server.js\"",
-    "build": "webpack .",
-    "podman:build": " podman image build -t play-reading .",
-    "podman:run": "podman run -v play_volume:/var/lib/postgresql/data --name postgres-db -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=playreading -e POSTGRES_DB=playreadingparty -d -p 5432:5432 play-reading",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./start.sh",
+    "dev": "./dev.sh",
+    "build": "webpack . && podman image build -t play-reading .",
     "front": "NODE_ENV=development webpack-dev-server --open",
     "back": "nodemon src/server.js"
   },

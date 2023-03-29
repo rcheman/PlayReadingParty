@@ -13,15 +13,13 @@ To get a local copy up and running, follow these steps
 - Install npm
   ([How to install Node and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
 - Install podman ([How to install Podman](https://podman.io/getting-started/installation))
-    * If you prefer, you can use Docker instead of podman and replace podman with Docker in the package.json scripts.
+  - If you prefer, you can use Docker instead of podman and replace podman with Docker in the package.json scripts.
 
 ### Installation
 
 1. Clone the repo
 2. Install NPM packages and build: `npm install && npm run build`
-3. Create postgres image from Dockerfile: `npm run podman:build`
-4. Spun up the postgres container: `npm run podman:run`
-5. Set up environment variables
+3. Set up environment variables
    - Create a .env file in the root directory of the project
    - Add the path for where you want script files to be stored after they have been uploaded by the user
      ```
@@ -29,7 +27,7 @@ To get a local copy up and running, follow these steps
      ```
    - Add a database uri for your postgres database
      ```
-     DATABASE_URI=postgresql://user:password@localhost:port/database_name
+     DATABASE_URI='postgresql://playreading:pass@localhost/playreadingparty'
      ```
-6. Run `npm start` to start Play Reading Party.
-7. Navigate to http://localhost:3000 in your browser
+4. Run `npm start` to start Play Reading Party.
+5. Navigate to http://localhost:3000 in your browser

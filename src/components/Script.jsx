@@ -1,32 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useLoaderData} from 'react-router-dom';
 import ActorScriptNav from './actorScriptNav';
 import ReadingDots from './ReadingDots';
+import Header from './Header';
 
-const Script = ({ actors, currentScript }) => {
-  const [script, setScript] = useState([]);
+// Load the actor names and script titles on page load. Returns currentScript id to pass on.
+export async function loader({ params }) {
+  const currentScript = params.scriptId
+  const [loadedActors, loadedScript] = await Promise.all(
+    [getActors(), getScript(currentScript)])
+
+  return { loadedActors, loadedScript, currentScript }
+}
+
+async function getActors() {
+  try {
+    const response = await fetch('/api/actors')
+
+    if (response.ok) {
+      return await response.json()
+    } else {
+      console.log('Server Error:', response.body);
+    }
+  } catch (error) {
+    console.error('Network Error:', error);
+  }
+}
+
+async function getScript(scriptId) {
+  try {
+    const response = await fetch('/api/script/' + scriptId);
+
+    if (response.ok) {
+      return await response.json()
+    } else {
+      console.error(`server error: ${response.body} when fetching script`);
+    }
+  } catch (error) {
+    console.error(`network error: ${error} when fetching script`);
+  }
+}
+
+const Script = () => {
+  const { loadedActors, loadedScript, currentScript } = useLoaderData()
   const [currentActor, setCurrentActor] = useState({});
   const [currentCharacters, setCurrentCharacters] = useState([]);
-
-  // fetch the specified script
-  useEffect(() => { (async () => { // useEffect cannot take an async function. Must wrap async in regular function
-    try {
-      const response = await fetch('/script/' + currentScript);
-
-      if (response.ok) {
-        setScript(await response.json());
-      } else {
-        console.error(`server error: ${response.body} when fetching script`);
-      }
-    } catch (error) {
-      console.error(`network error: ${error} when fetching script`);
-    }
-  })();}, [currentScript]);
 
   // create div and p elements for each chunk of lines
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
 
-  for (let [i, lineChunk] of Object.entries(script)) {
+  for (let [i, lineChunk] of Object.entries(loadedScript)) {
     // checks if the character name for this chunk is the name of a character assigned to the current actor
     // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
     const name = lineChunk.split('.')[0];
@@ -40,14 +64,15 @@ const Script = ({ actors, currentScript }) => {
 
   return (
     <div id="scriptPage" key="scriptWrapper">
+      <Header />
       <ActorScriptNav
-        actors={actors}
+        actors={loadedActors}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
         currentScript={currentScript}
         key="ActorScriptNav"
       />
-      <h2>script</h2>
+      <h2>Script</h2>
       <h5>Current Actor: {currentActor.name}</h5>
       <div style={{display:'flex', width:'100%'}}
       >
@@ -56,7 +81,7 @@ const Script = ({ actors, currentScript }) => {
             {lineChunks}
           </div>
         </div>
-        <ReadingDots actors={actors} currentActor={currentActor} currentScript={currentScript} key="ReadingDots"/>
+        <ReadingDots actors={loadedActors} currentActor={currentActor} currentScript={currentScript} key="ReadingDots"/>
       </div>
     </div>
   );

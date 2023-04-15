@@ -2,10 +2,9 @@ import React from 'react';
 import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Header from '../src/components/Header';
-import Home, { loader as homeLoader } from '../src/Home';
-import Script, {loader as scriptLoader} from '../src/components/Script'
-import ErrorPage from '../src/components/ErrorPage'
+import Home, { loader as homeLoader } from './Home';
+import Script, {loader as scriptLoader} from './components/Script'
+import ErrorPage from './components/ErrorPage'
 
 const router = createBrowserRouter([
   {
@@ -17,7 +16,8 @@ const router = createBrowserRouter([
   {
     path:'script/:scriptId',
     element: <Script />,
-    loader: scriptLoader
+    loader: scriptLoader,
+    errorElement: <ErrorPage />
   }
 ])
 

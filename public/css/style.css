@@ -18,7 +18,7 @@ body {
 }
 
 button,
-input[type='button'] {
+input[type='button'], .button {
   background-color: #22223b;
   border-color: #22223b;
 }
@@ -90,6 +90,10 @@ nav {
 
 .error{
   color: red;
+}
+
+.errorPage {
+  text-align: center;
 }
 
 #home {

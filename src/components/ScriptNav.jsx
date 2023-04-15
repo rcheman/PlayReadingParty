@@ -3,21 +3,6 @@ import React, { useEffect, useState } from 'react';
 const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => {
   const [scriptError, setScriptError] = useState('')
 
-  // get all the script titles
-  useEffect(() => { (async () => { // useEffect cannot take an async function. Must wrap async in regular function
-    try {
-      const response = await fetch('/scripts/title');
-
-      if (response.ok) {
-        setScripts(await response.json());
-      } else {
-        console.error(`server error: ${response.body} when fetching script`);
-      }
-    } catch (error) {
-      setScriptError(error.message);
-    }
-  })();}, []);
-
   async function deleteScript(event){
     const deleteId = event.target.value;
 

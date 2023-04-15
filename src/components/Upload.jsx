@@ -29,7 +29,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     formData.append('scriptFormField', file);
 
     try {
-      const response = await fetch('/script', { method: 'POST', body: formData });
+      const response = await fetch('/api/script', { method: 'POST', body: formData });
 
       if (!response.ok) {
         // default message

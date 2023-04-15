@@ -22,7 +22,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
 
   useEffect(() => {
     // get initial dots positions
-    const source = new EventSource(`/positions/${currentScript}`);
+    const source = new EventSource(`/api/positions/${currentScript}`);
     const positionReceiver = function (message) {
       let m = JSON.parse(message.data);
 
@@ -51,7 +51,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
         let position = (window.scrollY - readingDotsHeightOffset) / (document.body.scrollHeight - readingDotsHeightOffset);
         position = position.toPrecision(4);
 
-        fetch('/positions', {
+        fetch('/api/positions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

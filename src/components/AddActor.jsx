@@ -9,7 +9,7 @@ const AddActor = ({actors, setActors}) => {
     const newActor = e.target.elements.actorName.value;
     // Add the new actor to the database, returning the new actor object
     try {
-      const response = await fetch('/actors', {
+      const response = await fetch('/api/actors', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

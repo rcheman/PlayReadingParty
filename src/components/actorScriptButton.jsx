@@ -7,7 +7,7 @@ const ActorScriptButton = ({ actor, setCurrentActor, setCurrentCharacters, curre
 
     // fetch request to get the current characters for the current actor
     try {
-      const response = await fetch(`/script/${currentScript}/characters?actorId=${actor.id}`);
+      const response = await fetch(`/api/script/${currentScript}/characters?actorId=${actor.id}`);
 
       if (response.ok) {
         setCurrentCharacters((await response.json()).map((c) => c.name));

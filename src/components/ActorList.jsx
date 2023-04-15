@@ -7,7 +7,7 @@ const ActorList = ({actors, setActors}) => {
     const id = event.target.value
 
     try {
-      const response = await fetch('/actors/' + id, { method: 'DELETE' });
+      const response = await fetch('/api/actors/' + id, { method: 'DELETE' });
 
       if (response.ok) {
         // upon successful deletion, remove that actor's name from the actor list

@@ -50,6 +50,7 @@ const scriptController = {
   deleteScript: async (req, res, next) => {
     const { scriptId } = req.params;
 
+    // TODO: Allow a script to be deleted from the database even if we can't find the file locally (preset database script values can't be deleted currently)
     try {
       // delete the script from the db
       const filename = await scriptRepo.deleteScript(scriptId);

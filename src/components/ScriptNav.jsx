@@ -22,7 +22,7 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
     const deleteId = event.target.value;
 
     try {
-      const response = await fetch('/script/' + deleteId, { method: 'DELETE' });
+      const response = await fetch('/api/script/' + deleteId, { method: 'DELETE' });
 
       if (response.ok) {
         setScriptError('')

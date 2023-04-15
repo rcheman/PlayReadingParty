@@ -11,7 +11,7 @@ const CharacterList = ({ currentScript }) => {
     }
     // fetch request to get the character data
     try {
-      const response = await fetch('/script/' + currentScript + '/characters');
+      const response = await fetch('/api/script/' + currentScript + '/characters');
 
       if (response.ok) {
         setCharacters(await response.json());

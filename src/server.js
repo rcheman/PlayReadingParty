@@ -22,52 +22,56 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 // uploads a new script
-app.post('/script', scriptController.saveScript, scriptController.importScript, (req, res) => {
+app.post('/api/script', scriptController.saveScript, scriptController.importScript, (req, res) => {
   return res.status(200).json({id: res.locals.id, title: res.locals.title});
 });
 
 // returns a list of all the script titles
-app.get('/scripts/title', scriptController.getScriptTitles, (req, res) => {
+app.get('/api/scripts/title', scriptController.getScriptTitles, (req, res) => {
   return res.status(200).json(res.locals.scriptTitles);
 });
 
 // returns the script text as a nested array
-app.get('/script/:scriptId', scriptController.getScript, (req, res) => {
+app.get('/api/script/:scriptId', scriptController.getScript, (req, res) => {
   return res.status(200).json(res.locals.scriptText);
 });
 
 // return the character data
 // can also be used with an actor=id query to get just the characters assigned to that actor
-app.get('/script/:scriptId/characters', scriptController.getCharacters, (req, res) => {
+app.get('/api/script/:scriptId/characters', scriptController.getCharacters, (req, res) => {
   return res.status(200).json(res.locals.characters);
 });
 
-app.delete('/script/:scriptId', scriptController.deleteScript, (req, res) => {
+app.delete('/api/script/:scriptId', scriptController.deleteScript, (req, res) => {
   return res.sendStatus(200)
 })
 
 // get a list of all the actors
-app.get('/actors', actorController.getActors, (req, res) => {
+app.get('/api/actors', actorController.getActors, (req, res) => {
   return res.status(200).json(res.locals.actors);
 });
 
 // add a new actor to the db, return the actor object
-app.post('/actors', actorController.newActor, (req, res) => {
+app.post('/api/actors', actorController.newActor, (req, res) => {
   return res.status(201).json(res.locals.actor);
 });
 
 // delete an actor from the database based on their id
-app.delete('/actors/:actorId', actorController.deleteActor, (req, res) => {
+app.delete('/api/actors/:actorId', actorController.deleteActor, (req, res) => {
   return res.sendStatus(200);
 });
 
 // Server sent events route for subscribing to read position updates for a script. Request is deliberately kept open.
-app.get('/positions/:scriptId', dotController.subscribe);
+app.get('/api/positions/:scriptId', dotController.subscribe);
 
 // Report the read position of an actor in a script
-app.post('/positions', dotController.reportPosition, (req, res) => {
+app.post('/api/positions', dotController.reportPosition, (req, res) => {
   return res.sendStatus(200);
 });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/index.html'));
+})
 
 // unknown route handler
 app.use((req, res) => res.sendStatus(404));

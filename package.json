@@ -2,7 +2,7 @@
   "name": "play-reading",
   "version": "1.0.0",
   "private": true,
-  "main": "./public/index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "./start.sh",
     "dev": "./dev.sh",
@@ -29,7 +29,8 @@
     "path": "^0.12.7",
     "pg": "^8.8.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",

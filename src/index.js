@@ -3,8 +3,8 @@ import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import Home, { loader as homeLoader } from './Home';
-import Script, {loader as scriptLoader} from './components/Script'
-import ErrorPage from './components/ErrorPage'
+import Script, {loader as scriptLoader} from './components/Script';
+import ErrorPage from './components/ErrorPage';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     loader: scriptLoader,
     errorElement: <ErrorPage />
   }
-])
+]);
 
 
 
@@ -27,4 +27,4 @@ ReactDom.createRoot(document.getElementById("app")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
-)
+);

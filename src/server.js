@@ -69,6 +69,7 @@ app.post('/api/positions', dotController.reportPosition, (req, res) => {
   return res.sendStatus(200);
 });
 
+// Entire application uses client side routing origination in index.html, so all unhandled routes are handled through React Router
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 })

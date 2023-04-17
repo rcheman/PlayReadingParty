@@ -15,6 +15,8 @@ export async function loader() {
   return { loadedActors, loadedScripts}
 }
 
+//TODO: Consolidate api call functions into one file OR extract out common functionality for fetch/handle error
+
 async function getActors(){
   try {
     const response = await fetch('/api/actors')

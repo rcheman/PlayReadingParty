@@ -10,7 +10,8 @@ const Header = ({currentScript}) => {
         <h1>Play Reading Party</h1>
         <nav>
             <Link to={'/'} className='button'>Home</Link>
-            <Link to={`script/${currentScript}`} className='button' style={{display: currentScript ? 'inline':'none'}}>Open Script</Link>
+            {currentScript && (<Link to={`script/${currentScript}`} className='button'>Open Script</Link>)}
+
         </nav>
       </header>
     </div>

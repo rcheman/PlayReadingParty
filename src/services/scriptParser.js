@@ -60,10 +60,13 @@ function isName(name) {
   return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
 }
 // character object constructor
-function Character(name, lineCount, speakCount) {
+function Character(name, lineCount, speakCount, id= '0', actorId = '0') {
   this.name = name;
   this.lineCount = lineCount;
   this.speakCount = speakCount;
+  this.id = id;
+  this.actorId = actorId
+
 }
 
 module.exports = { Character, parseTitle, parseLines, parseCharacters };

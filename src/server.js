@@ -42,6 +42,11 @@ app.get('/api/script/:scriptId/characters', scriptController.getCharacters, (req
   return res.status(200).json(res.locals.characters);
 });
 
+// assigns a character to an actor
+app.post('/api/script/:scriptId/characters', scriptController.addCharacter, (req, res) => {
+  return res.sendStatus(200);
+})
+
 app.delete('/api/script/:scriptId', scriptController.deleteScript, (req, res) => {
   return res.status(200).json(res.locals.deletedScript);
 })

@@ -119,6 +119,61 @@ nav {
 
 #actorList {
   list-style: none;
+  max-height:30vh;
+  overflow: scroll;
+  width: 10vw;
+}
+
+
+.columnContainer {
+  margin: 8px;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+#actorColumnsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 70%;
+  max-height: 30vh;
+  overflow: scroll;
+}
+
+#unassignedColumnContainer {
+  border: 1px solid lightgrey;
+  max-height: 35vh;
+  overflow: scroll;
+  width: 220px;
+}
+
+#characterAssignmentTitle {
+  text-align: center;
+}
+
+.characterList {
+  padding: 8px;
+  min-height: 100px;
+}
+
+.columnTitle {
+  padding: 8px;
+  background-color: #d1d1d1;
+}
+
+.assignedCharacter {
+  border: 1px solid lightgrey;
+  border-radius: 2px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: white;
+  white-space: pre-line;
+}
+
+.assignedCharacter p {
+  margin-bottom: 0;
 }
 
 .readingDots {

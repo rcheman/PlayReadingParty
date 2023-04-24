@@ -38,10 +38,13 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
   }
 
   return (
-    <ul className='scriptList'>
+    <div>
       <h3>Scripts</h3>
+      <ul className='scriptList'>
       <div className='error'>{scriptError}</div>
-      {buttons}</ul>);
+      {buttons}</ul>
+    </div>
+  );
 };
 
 export default ScriptNav;

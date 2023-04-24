@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
-import CharacterList from './components/characterList';
 import ScriptNav from './components/ScriptNav';
 import Upload from './components/Upload';
 import ActorList from './components/ActorList';
 import AddActor from './components/AddActor';
 import Header from './components/Header';
 import { getActors, getScriptTitles } from './components/api';
+import CharacterAssignment from './components/CharacterAssignment';
 
 
 // Load the actor names and script titles on page load
@@ -38,12 +38,10 @@ const Home = () => {
         <ScriptNav setCurrentScript={setCurrentScript} currentScript={currentScript} scripts={scripts}
                    setScripts={setScripts} />
         <Upload setCurrentScript={setCurrentScript} setScripts={setScripts} scripts={scripts} />
-        <AddActor actors={actors} setActors={setActors} />
+        <AddActor actors={actors} setActors={setActors}/>
+        <ActorList actors={actors} setActors={setActors}/>
       </div>
-      <div className='row'>
-        <ActorList actors={actors} setActors={setActors} />
-        <CharacterList currentScript={currentScript} />
-      </div>
+        <CharacterAssignment actors={actors} currentScript={currentScript}/>
     </div>
   );
 };

@@ -1,17 +1,23 @@
 import React from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 
-const Character = (props) => {
-  // render individual character list with stats
-
-  const { name, lineCount, speakCount } = props.characterData;
+// Individual draggable character card with character data.
+const Character = ({character, index}) => {
+  // text is set as a string so the new line isn't displayed
+  const characterText = `${character.name} \n Lines: ${character.lineCount}`
 
   return (
-    <ul className='characterData'>
-      <h5>Name: {name}</h5>
-      <li>Total Lines: {lineCount}</li>
-      <li>Amount Character Speaks: {speakCount}</li>
-    </ul>
-  );
-};
+    <Draggable draggableId={character.id} index={index} key={character.id}>
+      {(provided) => (
+      <div className='assignedCharacter'
+           {...provided.draggableProps}
+           {...provided.dragHandleProps}
+           ref={provided.innerRef}>
+        <p>{characterText}</p>
+      </div>
+      )}
+    </Draggable>
+  )
+}
 
 export default Character;

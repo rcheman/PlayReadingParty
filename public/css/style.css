@@ -67,6 +67,7 @@ nav {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  height: 35%
 }
 
 .column {
@@ -77,6 +78,8 @@ nav {
 .scriptList {
   margin-right: 20px;
   list-style: none;
+  max-height:30vh;
+  overflow: scroll;
 }
 
 .scriptButton {

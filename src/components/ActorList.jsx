@@ -17,18 +17,20 @@ const ActorList = ({ actors, setActors }) => {
   };
 
   return (
-    <ul id='actorList'>
+    <div>
       <h3>Actors</h3>
-      <div className='error'>{deleteError}</div>
-      {actors.map((actor) => (
-        <li key={actor.id}>
-          <button onClick={deleteActorHandler} className='delete' value={actor.id}>
-            -
-          </button>
-          {actor.name}
-        </li>
-      ))}
-    </ul>
+      <ul id='actorList'>
+        <div className='error'>{deleteError}</div>
+        {actors.map((actor) => (
+          <li key={actor.id}>
+            <button onClick={deleteActorHandler} className='delete' value={actor.id}>
+              -
+            </button>
+            {actor.name}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

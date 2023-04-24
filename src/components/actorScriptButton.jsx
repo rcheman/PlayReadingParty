@@ -8,7 +8,10 @@ const ActorScriptButton = ({ actor, setCurrentActor, setCurrentCharacters, curre
     // We need to fetch the assigned characters of the actor we're switching to
     const result = await getCurrentActorCharacters(actor, currentScript);
     if (result.success) {
-      const characters = result.data.map((c) => c.name);
+      const characters = []
+      for (let key in result.data){
+        characters.push(result.data[key].name)
+      }
       setCurrentCharacters(characters);
     } else {
       console.error(result.data);

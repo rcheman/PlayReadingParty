@@ -33,6 +33,22 @@ const scriptController = {
     }
   },
 
+  addCharacter: async (req, res, next) => {
+    const { scriptId } = req.params;
+    const { characterId, actorId } = req.body;
+    console.log(scriptId, characterId, actorId)
+    try {
+      await scriptRepo.addCharacter(scriptId, characterId, actorId)
+      return next();
+    } catch (error) {
+      return next({
+        log: `error: ${error} occurred when assigning a character to an actor.`,
+        message: `error in addCharacter in actorController.`
+      })
+    }
+
+  },
+
   getScript: async (req, res, next) => {
     const { scriptId } = req.params;
 

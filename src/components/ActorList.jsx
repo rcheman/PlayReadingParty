@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { deleteActor } from './api';
 
 const ActorList = ({actors, setActors}) => {
   const [deleteError, setDeleteError] = useState('');
@@ -7,19 +8,14 @@ const ActorList = ({actors, setActors}) => {
     const id = event.target.value
 
     try {
-      const response = await fetch('/api/actors/' + id, { method: 'DELETE' });
-
-      if (response.ok) {
-        // upon successful deletion, remove that actor's name from the actor list
-        setDeleteError('');
-        setActors(actors.filter((actor) => actor.id.toString() !== id));
-      } else {
-        setDeleteError('Error when deleting the actor.');
-      }
+      await deleteActor(id)
+      // upon successful deletion, remove that actor's name from the actor list
+      setDeleteError('');
+      setActors(actors.filter((actor) => actor.id.toString() !== id));
     } catch (error) {
       setDeleteError(error.message);
     }
-  };
+  }
 
   return (
     <ul id="actorList">

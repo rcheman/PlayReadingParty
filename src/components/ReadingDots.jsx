@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { postPosition } from './api';
 
 // Generate a unique and stable hue based on the actor name
 function getActorHue(actor) {
@@ -43,7 +44,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
       // this helps reduce many small changes into one larger change request
       clearTimeout(scrollTimeout);
 
-      scrollTimeout = setTimeout(() => {
+      scrollTimeout = setTimeout(async () => {
         let readingDotsHeightOffset =
           document.getElementsByTagName('body')[0].getBoundingClientRect().height -
           document.getElementById('readingDots').getBoundingClientRect().height;
@@ -51,13 +52,8 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
         let position = (window.scrollY - readingDotsHeightOffset) / (document.body.scrollHeight - readingDotsHeightOffset);
         position = position.toPrecision(4);
 
-        fetch('/api/positions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({actorId:currentActor.id, scriptId: currentScript, position: position})
-        });
+          // fetch request to update position
+          await postPosition(currentActor.id, currentScript, position)
       }, 50);
     };
 

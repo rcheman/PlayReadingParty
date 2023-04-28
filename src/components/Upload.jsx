@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { uploadScript } from './api';
 
 const Upload = ({ setCurrentScript, scripts, setScripts }) => {
   const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
@@ -29,8 +30,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     formData.append('scriptFormField', file);
 
     try {
-      const response = await fetch('/api/script', { method: 'POST', body: formData });
-
+      const response = await uploadScript(formData)
       if (!response.ok) {
         // default message
         let message = "File was not uploaded. Make sure the file name doesn't start with an underscore and only uses numbers, letters, and these symbols: ' . _ - ";
@@ -44,7 +44,6 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
         setUploadMessage({ message, error: true });
         return;
       }
-
       const script = await response.json();
 
       setCurrentScript(script.id);
@@ -54,7 +53,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
       setFile(null);
       e.target.reset()
     } catch (error) {
-      setUploadMessage({ message: err.message, error: true });
+      setUploadMessage({ message: error.message, error: true });
     }
   };
 

@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { deleteScript } from './api';
 
 const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => {
   const [scriptError, setScriptError] = useState('')
 
-  async function deleteScript(event){
+  async function deleteScriptHandler(event){
     const deleteId = event.target.value;
 
     try {
-      const response = await fetch('/api/script/' + deleteId, { method: 'DELETE' });
-
-      if (response.ok) {
+      const response =  await deleteId(deleteId)
+      if (response.ok){
         setScriptError('')
         setScripts(scripts.filter((t) => t.id.toString() !== deleteId))
         if (deleteId === currentScript){
@@ -28,7 +28,7 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
   for (let s of scripts) {
     buttons.push(
       <li key={"scriptButton" + s.id}>
-        <button className='delete' onClick={deleteScript} value={s.id}>-</button>
+        <button className='delete' onClick={deleteScriptHandler} value={s.id}>-</button>
         <button
           onClick={() => {
             setCurrentScript(s.id);

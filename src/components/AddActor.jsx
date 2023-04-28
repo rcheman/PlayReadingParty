@@ -1,35 +1,21 @@
 import React, {useState} from 'react';
+import { newActor } from './api';
 
 const AddActor = ({actors, setActors}) => {
   const [addActorError, setAddActorError] = useState('');
 
   const newActorHandler = async (e) => {
     e.preventDefault();
-
-    const newActor = e.target.elements.actorName.value;
-    // Add the new actor to the database, returning the new actor object
+    const name = e.target.elements.actorName.value;
     try {
-      const response = await fetch('/api/actors', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: newActor }),
-      });
-
-      if (response.ok) {
-        const actor = await response.json();
-        // add the actor to the actor list and reset values
-        setActors([...actors, actor]);
-        setAddActorError('');
-        e.target.reset();
-      } else {
-        setAddActorError('Error when adding the actor');
-      }
-    } catch (error) {
-      setAddActorError(error.message);
+      // add the actor to the actor list and reset values
+      setActors([...actors, await newActor(name)])
+      setAddActorError('');
+      e.target.reset();
+    } catch {
+      setAddActorError('Error when adding the actor')
     }
-  };
+  }
 
   return (
     <form onSubmit={newActorHandler}>

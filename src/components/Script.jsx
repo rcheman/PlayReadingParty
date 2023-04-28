@@ -3,6 +3,7 @@ import { useLoaderData} from 'react-router-dom';
 import ActorScriptNav from './actorScriptNav';
 import ReadingDots from './ReadingDots';
 import Header from './Header';
+import { getActors, getScript } from './api';
 
 // Load the actor names and script titles on page load. Returns currentScript id to pass on.
 export async function loader({ params }) {
@@ -12,35 +13,6 @@ export async function loader({ params }) {
 
   return { loadedActors, loadedScript, currentScript }
 }
-
-async function getActors() {
-  try {
-    const response = await fetch('/api/actors')
-
-    if (response.ok) {
-      return await response.json()
-    } else {
-      console.log('Server Error:', response.body);
-    }
-  } catch (error) {
-    console.error('Network Error:', error);
-  }
-}
-
-async function getScript(scriptId) {
-  try {
-    const response = await fetch('/api/script/' + scriptId);
-
-    if (response.ok) {
-      return await response.json()
-    } else {
-      console.error(`server error: ${response.body} when fetching script`);
-    }
-  } catch (error) {
-    console.error(`network error: ${error} when fetching script`);
-  }
-}
-
 const Script = () => {
   const { loadedActors, loadedScript, currentScript } = useLoaderData()
   const [currentActor, setCurrentActor] = useState({});

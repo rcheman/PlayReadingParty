@@ -7,42 +7,13 @@ import Upload from './components/Upload';
 import ActorList from './components/ActorList';
 import AddActor from './components/AddActor';
 import Header from './components/Header'
+import { getActors, getScriptTitles } from './components/api';
 
 
 // Load the actor names and script titles on page load
 export async function loader() {
   const [loadedActors, loadedScripts] = await Promise.all([getActors(), getScriptTitles()])
   return { loadedActors, loadedScripts}
-}
-
-//TODO: Consolidate api call functions into one file OR extract out common functionality for fetch/handle error
-
-async function getActors(){
-  try {
-    const response = await fetch('/api/actors')
-
-    if (response.ok) {
-      return await response.json()
-    } else {
-      console.log('Server Error:', response.body);
-    }
-  } catch (error) {
-    console.error('Network Error:', error);
-  }
-}
-
-async function getScriptTitles(){
-  try {
-    const response = await fetch('/api/scripts/title');
-
-    if (response.ok) {
-      return await response.json();
-    } else {
-      console.error(`server error: ${response.body} when fetching script`);
-    }
-  } catch (error) {
-    return (error.message)
-  }
 }
 
 

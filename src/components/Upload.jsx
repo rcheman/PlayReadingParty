@@ -20,7 +20,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
   };
 
   const handleUploadClick = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!file) {
       return;
     }
@@ -30,21 +30,24 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     formData.append('scriptFormField', file);
 
     // Upload the script and handle any errors
-    const result = await uploadScript(formData)
+    const result = await uploadScript(formData);
     if (result.success) {
       setCurrentScript(result.data.id);
       setScripts([...scripts, result.data]);
-      setUploadMessage({message: 'Uploaded Successfully', error: false});
+      setUploadMessage({ message: 'Uploaded Successfully', error: false });
       setFile(null);
       e.target.reset();
     } else {
-      console.error(result.data)
+      console.error(result.data);
       if (result.status === 409) {
-        setUploadMessage({message: 'Script title already exists', error: true})
+        setUploadMessage({ message: 'Script title already exists', error: true });
       } else if (result.status === 452) {
-        setUploadMessage({message: 'Could not find a title, potentially invalid file type', error: true})
+        setUploadMessage({ message: 'Could not find a title, potentially invalid file type', error: true });
       } else {
-        setUploadMessage({message: "File was not uploaded. Make sure the file name doesn\'t start with an underscore and only uses numbers, letters, and these symbols: \' . _ - ", error: true})
+        setUploadMessage({
+          message: 'File was not uploaded. Make sure the file name doesn\'t start with an underscore and only uses numbers, letters, and these symbols: \' . _ - ',
+          error: true
+        });
       }
     }
   };
@@ -53,7 +56,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     <div>
       <h3>Upload a new script</h3>
       <form onSubmit={handleUploadClick}>
-        <input type="file" accept=".txt,*" onChange={handleFileChange} />
+        <input type='file' accept='.txt,*' onChange={handleFileChange} />
         <p> {file && `${file.name} - ${file.type}`} </p>
         <button type='submit'>Upload</button>
       </form>

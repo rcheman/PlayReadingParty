@@ -6,17 +6,17 @@ const ActorScriptButton = ({ actor, setCurrentActor, setCurrentCharacters, curre
   const setActorHandler = async () => {
     setCurrentActor(actor);
     // Get all the characters assigned to the current actor and update the currentCharacters list
-    const result = await getCurrentActorCharacters(actor, currentScript)
+    const result = await getCurrentActorCharacters(actor, currentScript);
     if (result.success) {
-      const characters = result.data.map((c) => c.name)
-      setCurrentCharacters(characters)
+      const characters = result.data.map((c) => c.name);
+      setCurrentCharacters(characters);
     } else {
-      console.error(result.data)
+      console.error(result.data);
     }
-  }
+  };
 
   return (
-    <button onClick={setActorHandler} className="actorNameButton button-small" value={actor.id}>
+    <button onClick={setActorHandler} className='actorNameButton button-small' value={actor.id}>
       {actor.name}
     </button>
   );

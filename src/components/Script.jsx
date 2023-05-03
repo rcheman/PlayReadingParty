@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLoaderData} from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import ActorScriptNav from './actorScriptNav';
 import ReadingDots from './ReadingDots';
 import Header from './Header';
@@ -7,23 +7,22 @@ import { getActors, getScript } from './api';
 
 // Load the actor names and script titles on page load. Returns currentScript id to pass on.
 export async function loader({ params }) {
-  const currentScript = params.scriptId
+  const currentScript = params.scriptId;
   const [loadedActors, loadedScript] = await Promise.all(
-    [getActors(), getScript(currentScript)])
-  if (loadedActors.success && loadedScript.success){
-    return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScript}
-  }
-  else if (loadedActors.success === false){
-    console.error(loadedActors.data)
-    return {loadedScript: loadedScript.data, currentScript}
-  }
-  else {
-    console.error(loadedScript.data)
-    return {loadedActors: loadedActors.data, currentScript}
+    [getActors(), getScript(currentScript)]);
+  if (loadedActors.success && loadedScript.success) {
+    return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScript };
+  } else if (loadedActors.success === false) {
+    console.error(loadedActors.data);
+    return { loadedScript: loadedScript.data, currentScript };
+  } else {
+    console.error(loadedScript.data);
+    return { loadedActors: loadedActors.data, currentScript };
   }
 }
+
 const Script = () => {
-  const { loadedActors, loadedScript, currentScript } = useLoaderData()
+  const { loadedActors, loadedScript, currentScript } = useLoaderData();
   const [currentActor, setCurrentActor] = useState({});
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
@@ -44,25 +43,26 @@ const Script = () => {
   }
 
   return (
-    <div id="scriptPage" key="scriptWrapper">
+    <div id='scriptPage' key='scriptWrapper'>
       <Header />
       <ActorScriptNav
         actors={loadedActors}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
         currentScript={currentScript}
-        key="ActorScriptNav"
+        key='ActorScriptNav'
       />
       <h2>Script</h2>
       <h5>Current Actor: {currentActor.name}</h5>
-      <div style={{display:'flex', width:'100%'}}
+      <div style={{ display: 'flex', width: '100%' }}
       >
-        <div id="scriptDiv">
+        <div id='scriptDiv'>
           <div>
             {lineChunks}
           </div>
         </div>
-        <ReadingDots actors={loadedActors} currentActor={currentActor} currentScript={currentScript} key="ReadingDots"/>
+        <ReadingDots actors={loadedActors} currentActor={currentActor} currentScript={currentScript}
+                     key='ReadingDots' />
       </div>
     </div>
   );

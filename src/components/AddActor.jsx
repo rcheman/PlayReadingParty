@@ -7,13 +7,16 @@ const AddActor = ({actors, setActors}) => {
   const newActorHandler = async (e) => {
     e.preventDefault();
     const name = e.target.elements.actorName.value;
-    try {
+    // Add the new actor values to the database
+    const result = await newActor(name)
+    if (result.success) {
       // add the actor to the actor list and reset values
-      setActors([...actors, await newActor(name)])
+      setActors([...actors, result.data])
       setAddActorError('');
       e.target.reset();
-    } catch {
-      setAddActorError('Error when adding the actor')
+    } else {
+      setAddActorError(result.data)
+      console.error(result.data)
     }
   }
 

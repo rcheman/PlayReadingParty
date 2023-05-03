@@ -6,15 +6,16 @@ const ActorList = ({actors, setActors}) => {
 
   const deleteActorHandler = async (event) => {
     const id = event.target.value
-
-    try {
-      await deleteActor(id)
+      const result = await deleteActor(id)
       // upon successful deletion, remove that actor's name from the actor list
-      setDeleteError('');
-      setActors(actors.filter((actor) => actor.id.toString() !== id));
-    } catch (error) {
-      setDeleteError(error.message);
-    }
+      if (result.success){
+        setDeleteError('');
+        setActors(actors.filter((actor) => actor.id.toString() !== id));
+      }
+      else {
+      setDeleteError(result.data);
+      console.error(result.data)
+      }
   }
 
   return (

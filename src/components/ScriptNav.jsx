@@ -6,21 +6,17 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
 
   async function deleteScriptHandler(event){
     const deleteId = event.target.value;
-
-    try {
-      const response =  await deleteId(deleteId)
-      if (response.ok){
+      // Delete the script from the database and remove it from the script list
+      const result =  await deleteScript(deleteId)
+      if (result.success){
         setScriptError('')
         setScripts(scripts.filter((t) => t.id.toString() !== deleteId))
         if (deleteId === currentScript){
           setCurrentScript(null)
         }
       } else {
-        setScriptError('Error when deleting the script')
+        setScriptError(result.data)
       }
-    } catch (error) {
-      setScriptError(error.message)
-    }
   }
 
   // create individual buttons for each script title
@@ -42,7 +38,7 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
   }
 
   return (
-  <ul className="scriptList"> 
+  <ul className="scriptList">
   <h3>Scripts</h3>
   <div className='error'>{scriptError}</div>
   {buttons}</ul>);

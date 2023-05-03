@@ -5,8 +5,15 @@ const ActorScriptButton = ({ actor, setCurrentActor, setCurrentCharacters, curre
   // on change, change the value of current actor
   const setActorHandler = async () => {
     setCurrentActor(actor);
-    setCurrentCharacters(await getCurrentActorCharacters(actor, currentScript))
+    // Get all the characters assigned to the current actor and update the currentCharacters list
+    const result = await getCurrentActorCharacters(actor, currentScript)
+    if (result.success) {
+      const characters = result.data.map((c) => c.name)
+      setCurrentCharacters(characters)
+    } else {
+      console.error(result.data)
     }
+  }
 
   return (
     <button onClick={setActorHandler} className="actorNameButton button-small" value={actor.id}>

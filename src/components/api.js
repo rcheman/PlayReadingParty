@@ -1,132 +1,84 @@
 async function getActors() {
-  try {
-    const response = await fetch('/api/actors')
-
-    if (response.ok) {
-      return await response.json()
-    } else {
-      console.log('Server Error:', response.body);
-    }
-  } catch (error) {
-    console.error('Network Error:', error);
-  }
-}
-
-async function getScript(scriptId) {
-  try {
-    const response = await fetch('/api/script/' + scriptId);
-
-    if (response.ok) {
-      return await response.json()
-    } else {
-      console.error(`server error: ${response.body} when fetching script`);
-    }
-  } catch (error) {
-    console.error(`network error: ${error} when fetching script`);
-  }
-}
-
-async function getScriptTitles(){
-  try {
-    const response = await fetch('/api/scripts/title');
-
-    if (response.ok) {
-      return await response.json();
-    } else {
-      console.error(`server error: ${response.body} when fetching script`);
-    }
-  } catch (error) {
-    return (error)
-  }
+  return await apiCall('GET', 'actors')
 }
 
 async function deleteActor(id) {
-  try {
-    const response = await fetch('/api/actors/' + id, { method: 'DELETE' });
-    return response.ok
-  } catch (error) {
-    console.error(error.message)
-  }
+  return await apiCall('DELETE', `actors/${id}`)
 };
 
+async function newActor(name) {
+  name = JSON.stringify({name})
+  return await apiCall('POST', 'actors', name, {'Content-Type' :'application/json'})
+}
 
 async function getCurrentActorCharacters(actor, currentScript) {
-  try {
-    const response = await fetch(`/api/script/${currentScript}/characters?actorId=${actor.id}`);
-    if (response.ok) {
-      const  data = await response.json()
-      const characters = data.map((c) => c.name)
-      return characters
-    } else {
-      console.error('Server Error:', response.body);
-    }
-  } catch (error) {
-    console.error(`error: ${error} when fetching current characters`);
-  }
-}
-
-async function deleteScript(deleteId) {
-  try {
-    const response = await fetch('/api/script/' + deleteId, { method: 'DELETE' });
-    return response;
-  } catch (error) {
-    console.error('Network Error: ', error.message)
-  }
-}
-
-async function newActor(name) {
-  try {
-    const response = await fetch('/api/actors', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name }),
-    });
-    if (response.ok) {
-      const actor = await response.json()
-      return actor;
-    } else {
-      console.error(`server error: ${response.body} when adding new actor`);
-    }
-  } catch (error) {
-    return (error.message)
-  }
+  return await apiCall('GET', `script/${currentScript}/characters?actorId=${actor.id}`)
 }
 
 async function getCharacters(currentScript){
-  try {
-    const response = await fetch('/api/script/' + currentScript + '/characters');
-
-    if (response.ok) {
-      const characters = await response.json()
-      return characters;
-    } else {
-      console.error(`server error: ${response.body} when fetching character data`);
-    }
-  } catch (error) {
-    console.error(`network error: ${error} when fetching character data`);
-  }
+  return await apiCall('GET', `script/${currentScript}/characters`)
 }
 
-async function postPosition(actorId, scriptId, position){
-  try {
-    const response = await fetch('/api/positions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({actorId, scriptId, position})
-    })
-    return response.ok;
-  } catch (error) {
-    console.error(`network error: ${error} when posting position`);
-  }
+async function getScript(scriptId) {
+  return await apiCall('GET', 'script/' + scriptId)
+}
+
+async function getScriptTitles() {
+  return await apiCall('GET', 'scripts/title')
+}
+
+async function deleteScript(deleteId) {
+  return await apiCall('DELETE', `script/${deleteId}`)
 }
 
 async function uploadScript(formData){
-  return await fetch('/api/script', { method: 'POST', body: formData });
+  return await apiCall('POST', 'script', formData)
 }
 
+async function postPosition(actorId, scriptId, position){
+  const body = JSON.stringify({actorId, scriptId, position})
+  return await apiCall('POST', 'positions', body, {'Content-Type' : 'application/json'})
+}
+
+async function apiCall(method, uri, body = null, headers = {}){
+
+  try {
+    const response = await fetch('/api/' + uri, {
+      method: method,
+      headers: headers,
+      body: body
+    })
+    // Set data for successful fetch
+    if (response.ok ) {
+      if (method === 'DELETE'){
+        return {
+          success: true,
+          data: 'Deleted'
+        }
+      }
+      else {
+        return {
+          success: true,
+          data: await response.json()
+        }
+      }
+    }
+    // Set errors from an unsuccessful fetch request
+    else {
+      return {
+        success: false,
+        data: 'Error: ' + await response.json(),
+        status: response.status
+      }
+    }
+  }
+  // Set errors from not being able to connect to the server
+  catch (error) {
+    return {
+      success: false,
+      data: 'Network error: ' + error.message
+    }
+  }
+}
 
 export { getActors, getScript, getScriptTitles, deleteActor, getCurrentActorCharacters, deleteScript, newActor, getCharacters, postPosition, uploadScript}

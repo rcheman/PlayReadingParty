@@ -11,7 +11,10 @@ const CharacterList = ({ currentScript }) => {
       return;
     }
     // fetch request to get the character data
-      setCharacters( await getCharacters(currentScript))
+    const result = await getCharacters(currentScript)
+    if (result.success) {
+      setCharacters(result.data)
+    }
   })();}, [currentScript]);
 
   // make an array of character information

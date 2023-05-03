@@ -29,31 +29,23 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     const formData = new FormData();
     formData.append('scriptFormField', file);
 
-    try {
-      const response = await uploadScript(formData)
-      if (!response.ok) {
-        // default message
-        let message = "File was not uploaded. Make sure the file name doesn't start with an underscore and only uses numbers, letters, and these symbols: ' . _ - ";
-
-        if (response.status === 409) {
-          message = 'Script title already exists';
-        } else if (response.status === 452) {
-          message = 'Could not find a title, potentially invalid file type';
-        }
-
-        setUploadMessage({ message, error: true });
-        return;
-      }
-      const script = await response.json();
-
-      setCurrentScript(script.id);
-      setScripts([...scripts, script]);
-      // reset error message
-      setUploadMessage({ message: 'Successfully Uploaded', error: false });
+    // Upload the script and handle any errors
+    const result = await uploadScript(formData)
+    if (result.success) {
+      setCurrentScript(result.data.id);
+      setScripts([...scripts, result.data]);
+      setUploadMessage({message: 'Uploaded Successfully', error: false});
       setFile(null);
-      e.target.reset()
-    } catch (error) {
-      setUploadMessage({ message: error.message, error: true });
+      e.target.reset();
+    } else {
+      console.error(result.data)
+      if (result.status === 409) {
+        setUploadMessage({message: 'Script title already exists', error: true})
+      } else if (result.status === 452) {
+        setUploadMessage({message: 'Could not find a title, potentially invalid file type', error: true})
+      } else {
+        setUploadMessage({message: "File was not uploaded. Make sure the file name doesn\'t start with an underscore and only uses numbers, letters, and these symbols: \' . _ - ", error: true})
+      }
     }
   };
 

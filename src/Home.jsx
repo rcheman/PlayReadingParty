@@ -13,7 +13,19 @@ import { getActors, getScriptTitles } from './components/api';
 // Load the actor names and script titles on page load
 export async function loader() {
   const [loadedActors, loadedScripts] = await Promise.all([getActors(), getScriptTitles()])
-  return { loadedActors, loadedScripts}
+  if (loadedActors.success && loadedScripts.success){
+    return { loadedActors: loadedActors.data, loadedScripts: loadedScripts.data }
+  }
+  else {
+    if (loadedActors.success === false) {
+      console.error(loadedActors.data)
+      return {loadedScripts: loadedScripts.data}
+    }
+    else {
+      console.error(loadedScripts.data)
+      return {loadedActors: loadedActors.data}
+    }
+  }
 }
 
 

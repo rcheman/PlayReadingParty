@@ -10,8 +10,17 @@ export async function loader({ params }) {
   const currentScript = params.scriptId
   const [loadedActors, loadedScript] = await Promise.all(
     [getActors(), getScript(currentScript)])
-
-  return { loadedActors, loadedScript, currentScript }
+  if (loadedActors.success && loadedScript.success){
+    return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScript}
+  }
+  else if (loadedActors.success === false){
+    console.error(loadedActors.data)
+    return {loadedScript: loadedScript.data, currentScript}
+  }
+  else {
+    console.error(loadedScript.data)
+    return {loadedActors: loadedActors.data, currentScript}
+  }
 }
 const Script = () => {
   const { loadedActors, loadedScript, currentScript } = useLoaderData()

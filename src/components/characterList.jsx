@@ -6,16 +6,18 @@ const CharacterList = ({ currentScript }) => {
   const [characters, setCharacters] = useState([]);
 
   // get the character data on the initial load and when the script option changes
-  useEffect(() => { (async () => { // useEffect cannot take an async function. Must wrap async in regular function
-    if (currentScript === null) {
-      return;
-    }
-    // fetch request to get the character data
-    const result = await getCharacters(currentScript)
-    if (result.success) {
-      setCharacters(result.data)
-    }
-  })();}, [currentScript]);
+  useEffect(() => {
+    (async () => { // useEffect cannot take an async function. Must wrap async in regular function
+      if (currentScript === null) {
+        return;
+      }
+      // fetch request to get the character data
+      const result = await getCharacters(currentScript);
+      if (result.success) {
+        setCharacters(result.data);
+      }
+    })();
+  }, [currentScript]);
 
   // make an array of character information
   const charactersElements = [];

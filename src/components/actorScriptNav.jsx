@@ -1,12 +1,7 @@
 import React from 'react';
 import ActorScriptButton from './actorScriptButton';
 
-const ActorScriptNav = ({
-  actors,
-  setCurrentActor,
-  setCurrentCharacters,
-  currentScript,
-}) => {
+const ActorScriptNav = ({ actors, setCurrentActor, setCurrentCharacters, currentScript }) => {
   const buttons = [];
   for (let actor of actors) {
     buttons.push(

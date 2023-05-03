@@ -16,7 +16,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
   const refDots = useRef({});
   refDots.current = dots;
 
-  const actorNameMap = { };
+  const actorNameMap = {};
   for (const actor of actors) {
     actorNameMap[actor.id] = actor.name;
   }
@@ -24,7 +24,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
   useEffect(() => {
     // get initial dots positions
     const source = new EventSource(`/api/positions/${currentScript}`);
-    const positionReceiver = function (message) {
+    const positionReceiver = function(message) {
       let m = JSON.parse(message.data);
 
       const newDots = Object.assign({}, refDots.current);
@@ -52,8 +52,8 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
         let position = (window.scrollY - readingDotsHeightOffset) / (document.body.scrollHeight - readingDotsHeightOffset);
         position = position.toPrecision(4);
 
-          // fetch request to update position
-          await postPosition(currentActor.id, currentScript, position)
+        // fetch request to update position
+        await postPosition(currentActor.id, currentScript, position);
       }, 50);
     };
 
@@ -83,14 +83,14 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
     const color = `hsl(${hue}, 80%, 80%)`;
 
     dotElements.push(
-      <span className="readingDot" key={`dot ${id}`} style={{ top: `${position * 100}%`, backgroundColor: color }}>
+      <span className='readingDot' key={`dot ${id}`} style={{ top: `${position * 100}%`, backgroundColor: color }}>
         {actorNameMap[id]}
       </span>
     );
   }
 
   return (
-    <div id="readingDots" className="readingDots">
+    <div id='readingDots' className='readingDots'>
       {dotElements}
     </div>
   );

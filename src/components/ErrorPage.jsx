@@ -1,10 +1,10 @@
 import React from 'react';
-import { useRouteError} from 'react-router-dom';
+import { useRouteError } from 'react-router-dom';
 
 
 const ErrorPage = () => {
-  const error = useRouteError()
-  console.error(error)
+  const error = useRouteError();
+  console.error(error);
   return (
     <div className='errorPage'>
       <h1>Page Not Found</h1>
@@ -14,7 +14,7 @@ const ErrorPage = () => {
       </p>
     </div>
 
-  )
-}
+  );
+};
 
-export default ErrorPage
+export default ErrorPage;

@@ -51,9 +51,12 @@ const scriptController = {
     const { scriptId } = req.params;
 
     // TODO: Allow a script to be deleted from the database even if we can't find the file locally (preset database script values can't be deleted currently)
+    // TODO: UPDATE: May not be worth pursuing, when you refresh the page the script is gone since it's deleted from the database. This will not be a production issue.
     try {
       // delete the script from the db
-      const filename = await scriptRepo.deleteScript(scriptId);
+      const deletedScript = await scriptRepo.deleteScript(scriptId);
+      const filename = deletedScript.rows[0].filename;
+      res.locals.deletedScript = deletedScript;
       // remove the local copy of the script
       await fs.unlinkAsync(process.env.UPLOADPATH + '/' + filename);
       return next();
@@ -65,7 +68,7 @@ const scriptController = {
     }
 
   },
-  
+
   saveScript: (req, res, next) => {
     const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; //50MB. If updating, change constant in Upload.jsx too.
 
@@ -109,7 +112,7 @@ const scriptController = {
       }
     });
   },
-  
+
   importScript: async (req, res, next) => {
     const path = process.env.UPLOADPATH + req.file.filename;
 

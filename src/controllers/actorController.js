@@ -30,7 +30,7 @@ const actorController = {
     const { actorId } = req.params;
 
     try {
-      await actorRepo.deleteActor(actorId);
+      res.locals.deletedActor = await actorRepo.deleteActor(actorId);
       return next();
     } catch (error) {
       return next({

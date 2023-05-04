@@ -36,9 +36,7 @@ async function getScript(scriptDir, id) {
 }
 
 async function deleteScript(id) {
-  const result = await db.query('DELETE FROM scripts WHERE id = $1 RETURNING filename;', [id]);
-
-  return result.rows[0].filename;
+  return await db.query('DELETE FROM scripts WHERE id = $1 RETURNING *;', [id]);
 }
 
 async function importScript(filepath) {

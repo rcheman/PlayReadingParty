@@ -44,7 +44,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
       // this helps reduce many small changes into one larger change request
       clearTimeout(scrollTimeout);
 
-      scrollTimeout = setTimeout(async () => {
+      scrollTimeout = setTimeout( () => {
         let readingDotsHeightOffset =
           document.getElementsByTagName('body')[0].getBoundingClientRect().height -
           document.getElementById('readingDots').getBoundingClientRect().height;
@@ -53,7 +53,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
         position = position.toPrecision(4);
 
         // fetch request to update position
-        await postPosition(currentActor.id, currentScript, position);
+        postPosition(currentActor.id, currentScript, position);
       }, 50);
     };
 

@@ -13,7 +13,7 @@ async function getActors() {
 }
 
 async function deleteActor(id) {
-  return await db.query(`DELETE FROM actors WHERE id = $1`, [id]);
+  return await db.query(`DELETE FROM actors WHERE id = $1 RETURNING *`, [id]);
 }
 
 module.exports = { newActor, getActors, deleteActor };

@@ -72,29 +72,18 @@ async function apiCall(method, uri, body = null, headers = {}) {
     });
     // Set data for successful fetch
     if (response.ok) {
-      if (method === 'DELETE') {
-        return {
-          success: true,
-          data: 'Deleted'
-        };
-      } else {
         return {
           success: true,
           data: await response.json()
-        };
-      }
-    }
-    // Set errors from an unsuccessful fetch request
-    else {
+      };
+    } else { // Set errors from an unsuccessful fetch request
       return {
         success: false,
         data: 'Error: ' + await response.json(),
         status: response.status
       };
     }
-  }
-    // Set errors from not being able to connect to the server
-  catch (error) {
+  } catch (error) { // Set errors from not being able to connect to the server
     return {
       success: false,
       data: 'Network error: ' + error.message

@@ -43,7 +43,7 @@ app.get('/api/script/:scriptId/characters', scriptController.getCharacters, (req
 });
 
 app.delete('/api/script/:scriptId', scriptController.deleteScript, (req, res) => {
-  return res.sendStatus(200)
+  return res.status(200).json(res.locals.deletedScript);
 })
 
 // get a list of all the actors
@@ -58,7 +58,7 @@ app.post('/api/actors', actorController.newActor, (req, res) => {
 
 // delete an actor from the database based on their id
 app.delete('/api/actors/:actorId', actorController.deleteActor, (req, res) => {
-  return res.sendStatus(200);
+  return res.status(200).json(res.locals.deletedActor);
 });
 
 // Server sent events route for subscribing to read position updates for a script. Request is deliberately kept open.

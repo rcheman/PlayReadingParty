@@ -37,17 +37,7 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
       setFile(null);
       e.target.reset();
     } else {
-      console.error(result.data);
-      if (result.status === 409) {
-        setUploadMessage({ message: 'Script title already exists', error: true });
-      } else if (result.status === 452) {
-        setUploadMessage({ message: 'Could not find a title, potentially invalid file type', error: true });
-      } else {
-        setUploadMessage({
-          message: 'File was not uploaded. Make sure the file name doesn\'t start with an underscore and only uses numbers, letters, and these symbols: \' . _ - ',
-          error: true
-        });
-      }
+      setUploadMessage({ message: result.data, error: true })
     }
   };
 

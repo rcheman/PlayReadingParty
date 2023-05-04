@@ -32,7 +32,29 @@ async function deleteScript(deleteId) {
 }
 
 async function uploadScript(formData) {
-  return await apiCall('POST', 'script', formData);
+  const response = await fetch('/api/script', { method: 'POST', body: formData })
+  if (response.ok){
+    return {
+      success: true,
+      data: await response.json()
+    }
+  } else if (response.status === 409){
+    return {
+      success: false,
+      data: 'Script title already exists'
+    }
+  } else if (response.status === 452){
+    return {
+      success: false,
+      data: 'Could not find a title, potentially invalid file type'
+    }
+  } else {
+    return {
+      success: false,
+      data: 'File was not uploaded. Make sure the file name doesn\'t start with an underscore and only uses numbers, letters, and these symbols: \' . _ - '
+    }
+  }
+
 }
 
 async function postPosition(actorId, scriptId, position) {

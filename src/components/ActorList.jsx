@@ -13,7 +13,6 @@ const ActorList = ({ actors, setActors }) => {
       setActors(actors.filter((actor) => actor.id.toString() !== id));
     } else {
       setDeleteError(result.data);
-      console.error(result.data);
     }
   };
 

@@ -24,12 +24,11 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     if (!file) {
       return;
     }
-
     // set the file as Form Data and send it to the server
     const formData = new FormData();
     formData.append('scriptFormField', file);
 
-    // Upload the script and handle any errors
+    // Upload the script and display any error messages
     const result = await uploadScript(formData);
     if (result.success) {
       setCurrentScript(result.data.id);

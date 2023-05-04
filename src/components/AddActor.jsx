@@ -10,7 +10,7 @@ const AddActor = ({ actors, setActors }) => {
     // Add the new actor values to the database
     const result = await newActor(name);
     if (result.success) {
-      // add the actor to the actor list and reset values
+      // add the actor to the actor list and reset input and error message values
       setActors([...actors, result.data]);
       setAddActorError('');
       e.target.reset();

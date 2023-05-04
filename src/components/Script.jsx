@@ -12,12 +12,10 @@ export async function loader({ params }) {
     [getActors(), getScript(currentScript)]);
   if (loadedActors.success && loadedScript.success) {
     return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScript };
-  } else if (loadedActors.success === false) {
-    console.error(loadedActors.data);
-    return { loadedScript: loadedScript.data, currentScript };
   } else {
-    console.error(loadedScript.data);
-    return { loadedActors: loadedActors.data, currentScript };
+    console.error(loadedActors.data, loadedScript.data);
+    // We return empty objects when there is an error because it makes it easier to trace back the error
+    return { loadedScript: {}, loadedActors: {}, currentScript };
   }
 }
 

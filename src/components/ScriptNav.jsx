@@ -5,13 +5,13 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
   const [scriptError, setScriptError] = useState('');
 
   async function deleteScriptHandler(event) {
-    const deleteId = event.target.value;
+    const scriptId = event.target.value;
     // Delete the script from the database and remove it from the script list
-    const result = await deleteScript(deleteId);
+    const result = await deleteScript(scriptId);
     if (result.success) {
       setScriptError('');
-      setScripts(scripts.filter((t) => t.id.toString() !== deleteId));
-      if (deleteId === currentScript) {
+      setScripts(scripts.filter((t) => t.id.toString() !== scriptId));
+      if (scriptId === currentScript) {
         setCurrentScript(null);
       }
     } else {

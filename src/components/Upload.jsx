@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { uploadScript } from './api';
 
-const Upload = ({ setCurrentScript, scripts, setScripts }) => {
+const Upload = ({ setCurrentScriptId, scripts, setScripts }) => {
   const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
   const [file, setFile] = useState();
   const [uploadMessage, setUploadMessage] = useState({ message: '', error: false });
@@ -31,13 +31,13 @@ const Upload = ({ setCurrentScript, scripts, setScripts }) => {
     // Upload the script and display any error messages
     const result = await uploadScript(formData);
     if (result.success) {
-      setCurrentScript(result.data.id);
+      setCurrentScriptId(result.data.id);
       setScripts([...scripts, result.data]);
       setUploadMessage({ message: 'Uploaded Successfully', error: false });
       setFile(null);
       e.target.reset();
     } else {
-      setUploadMessage({ message: result.data, error: true })
+      setUploadMessage({ message: result.data, error: true });
     }
   };
 

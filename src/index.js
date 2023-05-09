@@ -1,20 +1,28 @@
 import React from 'react';
-import ReactDom from "react-dom/client";
+import ReactDom from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import Home, { loader as homeLoader } from './Home';
-import Script, {loader as scriptLoader} from './components/Script';
+import Script, { loader as scriptLoader } from './components/Script';
 import ErrorPage from './components/ErrorPage';
 
 const router = createBrowserRouter([
   {
-    path:'/',
+    path: '/',
     element: <Home />,
     loader: homeLoader,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: ':scriptId',
+        element: <Home />,
+        loader: homeLoader,
+        errorElement: <ErrorPage />
+      }
+    ]
   },
   {
-    path:'script/:scriptId',
+    path: 'script/:scriptId',
     element: <Script />,
     loader: scriptLoader,
     errorElement: <ErrorPage />
@@ -22,7 +30,6 @@ const router = createBrowserRouter([
 ]);
 
 
-
-ReactDom.createRoot(document.getElementById("app")).render(
-    <RouterProvider router={router} />
+ReactDom.createRoot(document.getElementById('app')).render(
+  <RouterProvider router={router} />
 );

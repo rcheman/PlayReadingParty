@@ -11,7 +11,7 @@ function getActorHue(actor) {
   return input % 360;
 }
 
-const ReadingDots = ({ actors, currentActor, currentScript }) => {
+const ReadingDots = ({ actors, currentActor, currentScriptId }) => {
   const [dots, setDots] = useState({});
   const refDots = useRef({});
   refDots.current = dots;
@@ -23,7 +23,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
 
   useEffect(() => {
     // get initial dots positions
-    const source = new EventSource(`/api/positions/${currentScript}`);
+    const source = new EventSource(`/api/positions/${currentScriptId}`);
     const positionReceiver = function(message) {
       let m = JSON.parse(message.data);
 
@@ -44,7 +44,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
       // this helps reduce many small changes into one larger change request
       clearTimeout(scrollTimeout);
 
-      scrollTimeout = setTimeout( () => {
+      scrollTimeout = setTimeout(() => {
         let readingDotsHeightOffset =
           document.getElementsByTagName('body')[0].getBoundingClientRect().height -
           document.getElementById('readingDots').getBoundingClientRect().height;
@@ -53,7 +53,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
         position = position.toPrecision(4);
 
         // fetch request to update position
-        postPosition(currentActor.id, currentScript, position);
+        postPosition(currentActor.id, currentScriptId, position);
       }, 50);
     };
 
@@ -68,7 +68,7 @@ const ReadingDots = ({ actors, currentActor, currentScript }) => {
       clearTimeout(scrollTimeout);
     };
 
-  }, [currentScript, currentActor]);
+  }, [currentScriptId, currentActor]);
 
   const dotElements = [];
   for (const [id, position] of Object.entries(dots)) {

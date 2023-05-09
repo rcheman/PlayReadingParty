@@ -1,7 +1,7 @@
 import React from 'react';
 import ActorScriptButton from './actorScriptButton';
 
-const ActorScriptNav = ({ actors, setCurrentActor, setCurrentCharacters, currentScript }) => {
+const ActorScriptNav = ({ actors, setCurrentActor, setCurrentCharacters, currentScriptId }) => {
   const buttons = [];
   for (let actor of actors) {
     buttons.push(
@@ -9,7 +9,7 @@ const ActorScriptNav = ({ actors, setCurrentActor, setCurrentCharacters, current
         actor={actor}
         setCurrentActor={setCurrentActor}
         setCurrentCharacters={setCurrentCharacters}
-        currentScript={currentScript}
+        currentScriptId={currentScriptId}
         key={actor.id}
       />
     );

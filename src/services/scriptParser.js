@@ -1,4 +1,5 @@
 const ServerError = require('./utils');
+
 /*
 TODO: Add handling for other script formats 
 
@@ -55,17 +56,19 @@ function parseCharacters(scriptText) {
 function isUppercase(str) {
   return str === str.toUpperCase();
 }
+
 // checks if a name is a valid name
 function isName(name) {
   return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
 }
+
 // character object constructor
-function Character(name, lineCount, speakCount, id= '0', actorId = '0') {
+function Character(name, lineCount, speakCount, id = null, actorId = null) {
   this.name = name;
   this.lineCount = lineCount;
   this.speakCount = speakCount;
   this.id = id;
-  this.actorId = actorId
+  this.actorId = actorId;
 
 }
 

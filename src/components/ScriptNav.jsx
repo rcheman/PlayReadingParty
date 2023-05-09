@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { deleteScript } from './api';
+import { Link } from 'react-router-dom';
 
-const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => {
+const ScriptNav = ({ currentScriptId, setCurrentScriptId, scripts, setScripts }) => {
   const [scriptError, setScriptError] = useState('');
 
   async function deleteScriptHandler(event) {
@@ -11,8 +12,8 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
     if (result.success) {
       setScriptError('');
       setScripts(scripts.filter((t) => t.id.toString() !== scriptId));
-      if (scriptId === currentScript) {
-        setCurrentScript(null);
+      if (scriptId === currentScriptId) {
+        setCurrentScriptId(null);
       }
     } else {
       setScriptError(result.data);
@@ -25,24 +26,27 @@ const ScriptNav = ({ currentScript, setCurrentScript, scripts, setScripts }) => 
     buttons.push(
       <li key={'scriptButton' + s.id}>
         <button className='delete' onClick={deleteScriptHandler} value={s.id}>-</button>
-        <button
-          onClick={() => {
-            setCurrentScript(s.id);
-          }}
-          className='button-small'
+        <Link to={`/${s.id}`}
+              onClick={() => {
+                setCurrentScriptId(s.id);
+              }}
+              className='button'
         >
           {s.title}
-        </button>
+        </Link>
       </li>
     );
   }
 
   return (
     <div>
-      <h3>Scripts</h3>
+      <div id='scriptNav'>
+        <h3>Scripts</h3>
+        {currentScriptId && (<Link to={`script/${currentScriptId}`} className='button button-small'>Open Script</Link>)}
+      </div>
       <ul className='scriptList'>
-      <div className='error'>{scriptError}</div>
-      {buttons}</ul>
+        <div className='error'>{scriptError}</div>
+        {buttons}</ul>
     </div>
   );
 };

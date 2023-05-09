@@ -5,22 +5,22 @@ import ReadingDots from './ReadingDots';
 import Header from './Header';
 import { getActors, getScript } from './api';
 
-// Load the actor names and script titles on page load. Returns currentScript id to pass on.
+// Load the actor names and script titles on page load. Returns currentScriptId id to pass on.
 export async function loader({ params }) {
-  const currentScript = params.scriptId;
+  const currentScriptId = params.scriptId;
   const [loadedActors, loadedScript] = await Promise.all(
-    [getActors(), getScript(currentScript)]);
+    [getActors(), getScript(currentScriptId)]);
   if (loadedActors.success && loadedScript.success) {
-    return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScript };
+    return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScriptId };
   } else {
     console.error(loadedActors.data, loadedScript.data);
     // We return empty objects when there is an error because it makes it easier to trace back the error
-    return { loadedScript: {}, loadedActors: {}, currentScript };
+    return { loadedScript: {}, loadedActors: {}, currentScriptId };
   }
 }
 
 const Script = () => {
-  const { loadedActors, loadedScript, currentScript } = useLoaderData();
+  const { loadedActors, loadedScript, currentScriptId } = useLoaderData();
   const [currentActor, setCurrentActor] = useState({});
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
@@ -41,28 +41,29 @@ const Script = () => {
   }
 
   return (
-    <div id='scriptPage' key='scriptWrapper'>
-      <Header />
-      <ActorScriptNav
-        actors={loadedActors}
-        setCurrentActor={setCurrentActor}
-        setCurrentCharacters={setCurrentCharacters}
-        currentScript={currentScript}
-        key='ActorScriptNav'
-      />
-      <h2>Script</h2>
-      <h5>Current Actor: {currentActor.name}</h5>
-      <div style={{ display: 'flex', width: '100%' }}
-      >
-        <div id='scriptDiv'>
-          <div>
-            {lineChunks}
+    <React.StrictMode>
+      <div id='scriptPage' className='column' key='scriptWrapper'>
+        <Header currentScriptId={currentScriptId} />
+        <ActorScriptNav
+          actors={loadedActors}
+          setCurrentActor={setCurrentActor}
+          setCurrentCharacters={setCurrentCharacters}
+          currentScriptId={currentScriptId}
+          key='ActorScriptNav'
+        />
+        <h2>Script</h2>
+        <h5>Current Actor: {currentActor.name}</h5>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <div id='scriptDiv'>
+            <div>
+              {lineChunks}
+            </div>
           </div>
+          <ReadingDots actors={loadedActors} currentActor={currentActor} currentScriptId={currentScriptId}
+                       key='ReadingDots' />
         </div>
-        <ReadingDots actors={loadedActors} currentActor={currentActor} currentScript={currentScript}
-                     key='ReadingDots' />
       </div>
-    </div>
+    </React.StrictMode>
   );
 };
 

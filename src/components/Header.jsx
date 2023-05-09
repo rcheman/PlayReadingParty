@@ -1,18 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header = ({ currentScript }) => {
+const Header = ({ currentScriptId }) => {
 
 
   return (
     <div>
       <header>
-        <h1>Play Reading Party</h1>
-        <nav>
-          <Link to={'/'} className='button'>Home</Link>
-          {currentScript && (<Link to={`script/${currentScript}`} className='button'>Open Script</Link>)}
-
-        </nav>
+        <h1><Link to={`/${currentScriptId}`} id='titleLink'>Play Reading Party</Link></h1>
       </header>
     </div>
   );

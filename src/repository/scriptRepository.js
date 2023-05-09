@@ -22,11 +22,12 @@ async function getCharacters(scriptId, actorId = -1) {
 
 }
 
-async function addCharacter(scriptId, characterId, actorId) {
+async function assignCharacter(scriptId, characterId, actorId) {
   return await db.query(`
     UPDATE characters
     SET actor_id = $1
-    WHERE script_id = $2 AND id = $3`,
+    WHERE script_id = $2 AND id = $3
+    RETURNING *`,
     [actorId, scriptId, characterId]
   )
 }
@@ -87,4 +88,4 @@ async function importScript(filepath) {
   return {id: scriptId, title}; // The id/title of the newly added script
 }
 
-module.exports = { getCharacters, addCharacter, getTitles, getScript, importScript, deleteScript };
+module.exports = { getCharacters, assignCharacter, getTitles, getScript, importScript, deleteScript };

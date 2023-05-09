@@ -29,6 +29,13 @@ button:focus {
   border-color: #4a4e69;
 }
 
+.button-small {
+  font-size: .8rem;
+  height: 2.8rem;
+  line-height: 2.8rem;
+  padding: 0 1.5rem;
+}
+
 header {
   display: flex;
   flex-direction: column;
@@ -61,6 +68,12 @@ nav {
   background-color: #c9ada7;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
+}
+
+#scriptNav{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 
 .row {
@@ -99,6 +112,18 @@ nav {
   text-align: center;
 }
 
+#titleLink {
+  color: #22223b;
+  padding: 10px;
+}
+
+#titleLink:hover {
+  border: 1px solid #22223b;
+  border-radius: 10px;
+  background-color: #fffaf073;
+}
+
+
 #home {
   display: flex;
   margin: 50px;
@@ -106,9 +131,8 @@ nav {
 }
 
 #scriptPage {
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  margin: 50px;
 }
 
 #actorNav {
@@ -120,16 +144,16 @@ nav {
 #actorList {
   list-style: none;
   max-height:30vh;
-  overflow: scroll;
   width: 10vw;
 }
 
 
-.columnContainer {
+.dropContainer {
   margin: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
-  width: 220px;
+  min-width: 220px;
+  width: fit-content;
   display: flex;
   flex-direction: column;
 }
@@ -139,15 +163,8 @@ nav {
   flex-wrap: wrap;
   max-width: 70%;
   max-height: 30vh;
-  overflow: scroll;
 }
 
-#unassignedColumnContainer {
-  border: 1px solid lightgrey;
-  max-height: 35vh;
-  overflow: scroll;
-  width: 220px;
-}
 
 #characterAssignmentTitle {
   text-align: center;
@@ -161,6 +178,7 @@ nav {
 .columnTitle {
   padding: 8px;
   background-color: #d1d1d1;
+  overflow: scroll;
 }
 
 .assignedCharacter {

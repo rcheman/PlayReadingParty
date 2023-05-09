@@ -23,7 +23,7 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 
 // uploads a new script
 app.post('/api/script', scriptController.saveScript, scriptController.importScript, (req, res) => {
-  return res.status(200).json({id: res.locals.id, title: res.locals.title});
+  return res.status(200).json({ id: res.locals.id, title: res.locals.title });
 });
 
 // returns a list of all the script titles
@@ -43,13 +43,13 @@ app.get('/api/script/:scriptId/characters', scriptController.getCharacters, (req
 });
 
 // assigns a character to an actor
-app.post('/api/script/:scriptId/characters', scriptController.addCharacter, (req, res) => {
-  return res.sendStatus(200);
-})
+app.post('/api/script/:scriptId/assignCharacter', scriptController.assignCharacter, (req, res) => {
+  return res.status(200).json(res.locals.assignedCharacter);
+});
 
 app.delete('/api/script/:scriptId', scriptController.deleteScript, (req, res) => {
   return res.status(200).json(res.locals.deletedScript);
-})
+});
 
 // get a list of all the actors
 app.get('/api/actors', actorController.getActors, (req, res) => {
@@ -77,7 +77,7 @@ app.post('/api/positions', dotController.reportPosition, (req, res) => {
 // Entire application uses client side routing origination in index.html, so all unhandled routes are handled through React Router
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
-})
+});
 
 // unknown route handler
 app.use((req, res) => res.sendStatus(404));
@@ -87,7 +87,7 @@ app.use((err, req, res, next) => {
   const defaultErr = {
     log: { err: `An error occurred. ${err.log ? err.log : err.message}` },
     status: 500,
-    message: 'Express error handler caught unknown middleware error',
+    message: 'Express error handler caught unknown middleware error'
   };
   const errorObj = err instanceof ServerError ? err : defaultErr;
   console.log(errorObj.log);

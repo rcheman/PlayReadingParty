@@ -10,10 +10,10 @@ const scriptController = {
     try {
       res.locals.scriptTitles = await scriptRepo.getTitles();
       return next();
-    } catch(error) {
+    } catch (error) {
       return next({
         log: `error: ${error} occurred when getting script titles`,
-        message: 'error in getScriptTitles in scriptController',
+        message: 'error in getScriptTitles in scriptController'
       });
     }
   },
@@ -28,23 +28,22 @@ const scriptController = {
     } catch (error) {
       return next({
         log: `error: ${error} occurred when getting actor's characters from the db.`,
-        message: 'error in getActorCharacters in actorController.',
+        message: 'error in getActorCharacters in actorController.'
       });
     }
   },
 
-  addCharacter: async (req, res, next) => {
+  assignCharacter: async (req, res, next) => {
     const { scriptId } = req.params;
-    const { characterId, actorId } = req.body;
-    console.log(scriptId, characterId, actorId)
+    const { actorId, characterId } = req.body
     try {
-      await scriptRepo.addCharacter(scriptId, characterId, actorId)
+      res.locals.assignedCharacter = await scriptRepo.assignCharacter(scriptId, characterId, actorId);
       return next();
     } catch (error) {
       return next({
         log: `error: ${error} occurred when assigning a character to an actor.`,
         message: `error in addCharacter in actorController.`
-      })
+      });
     }
 
   },
@@ -58,7 +57,7 @@ const scriptController = {
     } catch (error) {
       return next({
         log: `error: ${error} occurred when getting the script`,
-        message: 'error when getting the script',
+        message: 'error when getting the script'
       });
     }
   },
@@ -79,7 +78,7 @@ const scriptController = {
     } catch (error) {
       return next({
         log: `error: ${error} occurred when getting the script`,
-        message: 'error when deleting the script',
+        message: 'error when deleting the script'
       });
     }
 
@@ -90,12 +89,12 @@ const scriptController = {
 
     // configure multer storage to upload files to the path from the .env file
     const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
+      destination: function(req, file, cb) {
         cb(null, process.env.UPLOADPATH);
       },
-      filename: function (req, file, cb) {
+      filename: function(req, file, cb) {
         cb(null, Date.now() + file.originalname);
-      },
+      }
     });
 
     function fileFilter(req, file, cb) {
@@ -121,7 +120,7 @@ const scriptController = {
       if (error)
         return next({
           log: `error: ${error} occurred when uploading the script`,
-          message: 'error when uploading the script',
+          message: 'error when uploading the script'
         });
       else {
         return next();
@@ -146,11 +145,11 @@ const scriptController = {
       } else {
         return next({
           log: `error: ${error} occurred when adding script to the database`,
-          message: 'error when adding the script to the database',
+          message: 'error when adding the script to the database'
         });
       }
     }
-  },
+  }
 };
 
 module.exports = scriptController;

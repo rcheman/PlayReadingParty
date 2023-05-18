@@ -12,11 +12,11 @@ async function newActor(name) {
 }
 
 async function getCurrentActorCharacters(actor, currentScriptId) {
-  return await apiCall('GET', `script/${currentScriptId}/characters?actorId=${actor.id}`);
+  return await apiCall('GET', `characters/${currentScriptId}/?actorId=${actor.id}`);
 }
 
 async function getCharacters(scriptId) {
-  return await apiCall('GET', `script/${scriptId}/characters`);
+  return await apiCall('GET', `characters/${scriptId}`);
 }
 
 async function assignCharacter(characterId, actorId, scriptId){
@@ -24,7 +24,7 @@ async function assignCharacter(characterId, actorId, scriptId){
     actorId = null;
   }
   const body = JSON.stringify({ actorId, characterId })
-  return await apiCall('POST', `script/${scriptId}/assignCharacter`, body, { 'Content-Type': 'application/json'})
+  return await apiCall('POST', `characters/${scriptId}/assignCharacter`, body, { 'Content-Type': 'application/json'})
 }
 
 async function getScript(scriptId) {

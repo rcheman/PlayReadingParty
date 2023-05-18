@@ -4,33 +4,8 @@ const fs = Promise.promisifyAll(require('node:fs'));
 
 const ServerError = require('../services/utils');
 const db = require('./database.js');
-const { Character, parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
+const { parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
-async function getCharacters(scriptId, actorId = -1) {
-  const result = await db.query(
-    `
-      SELECT id, name, line_count, speaks_count, actor_id
-      FROM characters
-      WHERE ($1 = -1 or actor_id = $1)
-        AND script_id = $2`,
-    [actorId, scriptId]
-  );
-
-  const characters = {};
-  result.rows.forEach((c) => characters[c.id.toString()] = new Character(c.name, c.line_count, c.speaks_count, c.id.toString(), c.actor_id))
-  return characters;
-
-}
-
-async function assignCharacter(scriptId, characterId, actorId) {
-  return await db.query(`
-    UPDATE characters
-    SET actor_id = $1
-    WHERE script_id = $2 AND id = $3
-    RETURNING *`,
-    [actorId, scriptId, characterId]
-  )
-}
 
 async function getTitles() {
   const result = await db.query('select id, title from scripts');
@@ -88,4 +63,4 @@ async function importScript(filepath) {
   return {id: scriptId, title}; // The id/title of the newly added script
 }
 
-module.exports = { getCharacters, assignCharacter, getTitles, getScript, importScript, deleteScript };
+module.exports = { getTitles, getScript, importScript, deleteScript };

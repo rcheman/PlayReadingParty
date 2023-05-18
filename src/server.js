@@ -5,6 +5,7 @@ const cors = require('cors');
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
 const dotController = require('./controllers/dotController.js');
+const characterController = require('./controllers/characterController.js')
 const ServerError = require('./services/utils.js');
 
 require('./services/startupChecks').assert();
@@ -36,19 +37,20 @@ app.get('/api/script/:scriptId', scriptController.getScript, (req, res) => {
   return res.status(200).json(res.locals.scriptText);
 });
 
+// deletes a script
+app.delete('/api/script/:scriptId', scriptController.deleteScript, (req, res) => {
+  return res.status(200).json(res.locals.deletedScript);
+});
+
 // return the character data
 // can also be used with an actor=id query to get just the characters assigned to that actor
-app.get('/api/script/:scriptId/characters', scriptController.getCharacters, (req, res) => {
+app.get('/api/characters/:scriptId', characterController.getCharacters, (req, res) => {
   return res.status(200).json(res.locals.characters);
 });
 
 // assigns a character to an actor
-app.post('/api/script/:scriptId/assignCharacter', scriptController.assignCharacter, (req, res) => {
+app.post('/api/characters/:scriptId/assignCharacter', characterController.assignCharacter, (req, res) => {
   return res.status(200).json(res.locals.assignedCharacter);
-});
-
-app.delete('/api/script/:scriptId', scriptController.deleteScript, (req, res) => {
-  return res.status(200).json(res.locals.deletedScript);
 });
 
 // get a list of all the actors

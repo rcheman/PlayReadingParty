@@ -18,36 +18,6 @@ const scriptController = {
     }
   },
 
-  getCharacters: async (req, res, next) => {
-    const { actorId } = req.query;
-    const { scriptId } = req.params;
-
-    try {
-      res.locals.characters = await scriptRepo.getCharacters(scriptId, actorId);
-      return next();
-    } catch (error) {
-      return next({
-        log: `error: ${error} occurred when getting actor's characters from the db.`,
-        message: 'error in getActorCharacters in actorController.'
-      });
-    }
-  },
-
-  assignCharacter: async (req, res, next) => {
-    const { scriptId } = req.params;
-    const { actorId, characterId } = req.body
-    try {
-      res.locals.assignedCharacter = await scriptRepo.assignCharacter(scriptId, characterId, actorId);
-      return next();
-    } catch (error) {
-      return next({
-        log: `error: ${error} occurred when assigning a character to an actor.`,
-        message: `error in addCharacter in actorController.`
-      });
-    }
-
-  },
-
   getScript: async (req, res, next) => {
     const { scriptId } = req.params;
 

@@ -42,7 +42,7 @@ const ScriptNav = ({ currentScriptId, setCurrentScriptId, scripts, setScripts })
     <div>
       <div id='scriptNav'>
         <h3>Scripts</h3>
-        {currentScriptId && (<Link to={`script/${currentScriptId}`} className='button button-small'>Open Script</Link>)}
+        {currentScriptId && (<Link to={`script/${currentScriptId}`} className='button'>Open Script</Link>)}
       </div>
       <ul className='scriptList'>
         <div className='error'>{scriptError}</div>

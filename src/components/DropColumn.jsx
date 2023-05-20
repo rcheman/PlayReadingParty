@@ -6,7 +6,7 @@ import { Droppable } from 'react-beautiful-dnd';
 const DropColumn = ({ column, characterList }) => {
   return (
     <div className='dropContainer' style={{ height: 'fit-content' }}>
-      <h3 className='columnTitle'>{column.title}: {column.lineCount}</h3>
+      <h3 className='columnTitle'>{column.title}: {column.getLineCount()}</h3>
       <Droppable droppableId={column.id} key={column.id}>
         {(provided) => (
           <div className='characterList' ref={provided.innerRef} {...provided.droppableProps}>

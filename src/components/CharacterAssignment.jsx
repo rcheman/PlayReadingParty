@@ -5,7 +5,7 @@ import DropColumn from './DropColumn';
 
 // Entire Drag and Drop context for assigning characters to actors
 const CharacterAssignment = ({ actors, currentScriptId }) => {
-  const [characters, setCharacters] = useState({})
+  const [characters, setCharacters] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
   const [columns, setColumns] = useState({
     'unassignedCharacters': {
@@ -19,9 +19,9 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   // When the current script changes create a column for each actor and populate it with the assigned characters
   useEffect(() => {
     (async () => {
-      await setupColumns(currentScriptId, actors)
+      await setupColumns(currentScriptId, actors);
     })();
-    }, [currentScriptId]);
+  }, [currentScriptId]);
 
 
   // Edit columns when actors are added or removed
@@ -36,17 +36,17 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param {array} actors Array of actor objects
    */
   const setupColumns = async (currentScriptId, actors) => {
-    const { newColumns, actorIds } = createInitialActorColumns(actors)
-      const characters = await getCharacters(currentScriptId)
-      if (characters.success) {
-        const assignedColumns = assignInitialCharacters(characters.data, newColumns)
-        setColumns(assignedColumns)
-        setColumnOrder(actorIds)
-        setCharacters(characters.data)
-      } else {
-        console.error(characters.data)
-      }
-  }
+    const { newColumns, actorIds } = createInitialActorColumns(actors);
+    const characters = await getCharacters(currentScriptId);
+    if (characters.success) {
+      const assignedColumns = assignInitialCharacters(characters.data, newColumns);
+      setColumns(assignedColumns);
+      setColumnOrder(actorIds);
+      setCharacters(characters.data);
+    } else {
+      console.error(characters.data);
+    }
+  };
 
   /**
    * Put the characters in the appropriate actor columns
@@ -92,28 +92,28 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
       };
       actorIds.push(actor.id.toString());
     });
-    return {newColumns, actorIds}
+    return { newColumns, actorIds };
   };
   /**
    * Update the actor columns when the number of actors changes and set the new column values and order
    * @param actors Array of objects with properties of name and id
    */
   const updateActorColumns = (actors) => {
-      const oldColumns = { ...columns };
-      const oldColumnOrder = [...columnOrder];
-      // If there are more actors than columns, add a column
-      if (actors.length > oldColumnOrder.length) {
-        const { newColumns, newColumnOrder} = addActorColumn(actors, oldColumns, oldColumnOrder);
-        setColumns(newColumns)
-        setColumnOrder(newColumnOrder)
-      } else {
-        // Remove an actor, there are more columns than actors
-        const { newColumns, newColumnOrder } = removeActorColumn(actors, oldColumns, oldColumnOrder);
-        setColumns(newColumns)
-        setColumnOrder(newColumnOrder)
-      }
+    const oldColumns = { ...columns };
+    const oldColumnOrder = [...columnOrder];
+    // If there are more actors than columns, add a column
+    if (actors.length > oldColumnOrder.length) {
+      const { newColumns, newColumnOrder } = addActorColumn(actors, oldColumns, oldColumnOrder);
+      setColumns(newColumns);
+      setColumnOrder(newColumnOrder);
+    } else {
+      // Remove an actor, there are more columns than actors
+      const { newColumns, newColumnOrder } = removeActorColumn(actors, oldColumns, oldColumnOrder);
+      setColumns(newColumns);
+      setColumnOrder(newColumnOrder);
+    }
 
-    };
+  };
 
   /**
    * Add a new actor column by checking that each actor in our list has a column,
@@ -134,7 +134,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
         newColumnOrder.push(actor.id);
       }
     });
-    return {newColumns, newColumnOrder}
+    return { newColumns, newColumnOrder };
   };
 
   /**
@@ -158,7 +158,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
         delete newColumns[key];
       }
     }
-    return {newColumns, newColumnOrder}
+    return { newColumns, newColumnOrder };
   };
 
 
@@ -204,9 +204,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   };
 
 
-
   // No script is selected, don't bother rendering the component
-  if (!currentScriptId){
+  if (!currentScriptId) {
     return;
   }
   return (

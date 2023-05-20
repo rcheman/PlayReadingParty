@@ -99,16 +99,14 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param actors Array of objects with properties of name and id
    */
   const updateActorColumns = (actors) => {
-    const oldColumns = { ...columns };
-    const oldColumnOrder = [...columnOrder];
     // If there are more actors than columns, add a column
-    if (actors.length > oldColumnOrder.length) {
-      const { newColumns, newColumnOrder } = addActorColumn(actors, oldColumns, oldColumnOrder);
+    if (actors.length > columnOrder.length) {
+      const { newColumns, newColumnOrder } = addActorColumn(actors, {...columns}, [...columnOrder]);
       setColumns(newColumns);
       setColumnOrder(newColumnOrder);
     } else {
       // Remove an actor, there are more columns than actors
-      const { newColumns, newColumnOrder } = removeActorColumn(actors, oldColumns, oldColumnOrder);
+      const { newColumns, newColumnOrder } = removeActorColumn(actors, {...columns}, [...columnOrder]);
       setColumns(newColumns);
       setColumnOrder(newColumnOrder);
     }
@@ -119,46 +117,46 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * Add a new actor column by checking that each actor in our list has a column,
    *  and creating one when a column isn't found with that actor's id
    * @param actors Array of objects with properties of name and id
-   * @param newColumns Object containing column objects with properties of id, title, characterIds, and lineCount
-   * @param newColumnOrder Array of column ids
+   * @param columns Object containing column objects with properties of id, title, characterIds, and lineCount
+   * @param columnOrder Array of column ids
    */
-  const addActorColumn = (actors, newColumns, newColumnOrder) => {
+  const addActorColumn = (actors, columns, columnOrder) => {
     actors.forEach((actor) => {
-      if (!newColumns[actor.id]) {
-        newColumns[actor.id] = {
+      if (!columns[actor.id]) {
+        columns[actor.id] = {
           id: actor.id.toString(),
           title: actor.name,
           characterIds: [],
           lineCount: 0
         };
-        newColumnOrder.push(actor.id);
+        columnOrder.push(actor.id);
       }
     });
-    return { newColumns, newColumnOrder };
+    return { newColumns: columns, newColumnOrder: columnOrder };
   };
 
   /**
    * Remove an actor column by going through the columns and checking if each column matches up with an actor,
    *  if it doesn't, and it isn't the unassigned column, remove the column.
    * @param actors Array of objects with properties of name and id
-   * @param newColumns Object containing column objects with properties of id, title, characterIds, and lineCount
-   * @param newColumnOrder Array of column ids
+   * @param columns Object containing column objects with properties of id, title, characterIds, and lineCount
+   * @param columnOrder Array of column ids
    */
-  const removeActorColumn = (actors, newColumns, newColumnOrder) => {
-    for (let key in newColumns) {
+  const removeActorColumn = (actors, columns, columnOrder) => {
+    for (let key in columns) {
       // Check if the column is for an actor that has been deleted, therefore it's characters should be unassigned
       if (!actors.some((actor) => actor.id == key) && key != 'unassignedCharacters') {
         // Reassign characterIds to the unassigned column
-        const reassignedIds = newColumns[key].characterIds;
-        const reassignedCounts = newColumns[key].lineCount;
-        newColumns.unassignedCharacters.characterIds = [...newColumns.unassignedCharacters.characterIds, ...reassignedIds];
-        newColumns.unassignedCharacters.lineCount += reassignedCounts;
-        const index = newColumnOrder.findIndex(id => id == key);
-        newColumnOrder.splice(index, 1);
-        delete newColumns[key];
+        const reassignedIds = columns[key].characterIds;
+        const reassignedCounts = columns[key].lineCount;
+        columns.unassignedCharacters.characterIds = [...columns.unassignedCharacters.characterIds, ...reassignedIds];
+        columns.unassignedCharacters.lineCount += reassignedCounts;
+        const index = columnOrder.findIndex(id => id == key);
+        columnOrder.splice(index, 1);
+        delete columns[key];
       }
     }
-    return { newColumns, newColumnOrder };
+    return { newColumns: columns, newColumnOrder: columnOrder };
   };
 
 

@@ -215,10 +215,12 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
         Assignment</h2>
       {/*Uses map and sort to be able to have the unassigned column separate  from the actor columns but characters are still sorted by line count*/}
       <div className='row dragDropContext'>
-        <DropColumn key={columns['unassignedCharacters'].id} column={columns['unassignedCharacters']}
-                    characterList={columns['unassignedCharacters'].characterIds
-                      .map(characterId => characters[characterId])
-                      .sort((a, b) => b.lineCount - a.lineCount)} />
+        <div id='unassigned'>
+          <DropColumn key={columns['unassignedCharacters'].id} column={columns['unassignedCharacters']}
+                      characterList={columns['unassignedCharacters'].characterIds
+                        .map(characterId => characters[characterId])
+                        .sort((a, b) => b.lineCount - a.lineCount)} />
+        </div>
         {/*Creates all the actor columns*/}
         <div id='actorColumnsContainer'>
           {columnOrder.map((columnId) => {

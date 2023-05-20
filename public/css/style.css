@@ -85,7 +85,6 @@ nav {
   margin-right: 20px;
   list-style: none;
   max-height:30vh;
-  overflow: scroll;
 }
 
 .scriptButton {
@@ -176,7 +175,6 @@ nav {
 .columnTitle {
   padding: 8px;
   background-color: #d1d1d1;
-  overflow: scroll;
 }
 
 .assignedCharacter {

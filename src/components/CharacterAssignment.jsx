@@ -18,9 +18,13 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
 
   // When the current script changes create a column for each actor and populate it with the assigned characters
   useEffect(() => {
-    (async () => {
-      await setupColumns(currentScriptId, actors);
-    })();
+    // Checking if we have a script prevents it from doing all the work to get the data and create the columns when
+    // the component won't be rendered anyway
+    if (currentScriptId) {
+      (async () => {
+        await setupColumns(currentScriptId, actors);
+      })();
+    }
   }, [currentScriptId]);
 
 

@@ -151,6 +151,11 @@ nav {
   flex-direction: column;
 }
 
+#unassigned {
+  overflow: visible;
+  width: 220px;
+}
+
 #actorColumnsContainer {
   display: flex;
   flex-wrap: wrap;

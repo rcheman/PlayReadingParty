@@ -8,12 +8,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   const [characters, setCharacters] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
   const [columns, setColumns] = useState({
-    'unassignedCharacters': {
-      id: 'unassignedCharacters',
-      title: 'Unassigned Characters',
-      characterIds: [],
-      lineCount: 0
-    }
+    'unassignedCharacters': new Column('unassignedCharacters', 'UnassignedCharacters', characters)
   });
 
   // When the current script changes create a column for each actor and populate it with the assigned characters
@@ -34,16 +29,33 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   }, [actors]);
 
   /**
+   * Column constructor
+   * @param {string} id id used for drag and drop reference
+   * @param {string} title Column title that will be displayed
+   * @param {object} characters keys of characterIds, values of Character
+   * @constructor
+   */
+  function Column(id, title, characters) {
+    this.id = id;
+    this.title = title;
+    this.characterIds = [];
+    this.getLineCount = function() {
+      if (characters === null) return;
+      return this.characterIds.reduce((acc, curr) => acc + characters[curr].lineCount, 0);
+    };
+  }
+
+  /**
    * Create the actor columns and populate them with the assigned characters.
    * Update state with the new columns, columnOrder, and characters
-   * @param {string} currentScriptId Stringified numerical script Id
+   * @param {string} currentScriptId Stringified numerical script ID
    * @param {array} actors Array of actor objects
    */
   const setupColumns = async (currentScriptId, actors) => {
-    const { newColumns, actorIds } = createInitialActorColumns(actors);
     const characters = await getCharacters(currentScriptId);
     if (characters.success) {
-      const assignedColumns = assignInitialCharacters(characters.data, newColumns);
+      const { newColumns, actorIds } = createInitialActorColumns(actors, characters.data);
+      const assignedColumns = assignInitialCharacters(newColumns, characters.data);
       setColumns(assignedColumns);
       setColumnOrder(actorIds);
       setCharacters(characters.data);
@@ -58,15 +70,13 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param  {object} newColumns Object of actor column objects, no assigned characters
    * @returns {object} newColumns: Object of actor column objects, now updated with assigned characters
    */
-  const assignInitialCharacters = (characters, newColumns) => {
+  const assignInitialCharacters = (newColumns, characters) => {
     for (let key in characters) {
       let assignedActor = characters[key].actorId;
       if (assignedActor) {
         newColumns[assignedActor].characterIds.push(characters[key].id);
-        newColumns[assignedActor].lineCount += characters[key].lineCount;
       } else {
         newColumns.unassignedCharacters.characterIds.push(characters[key].id);
-        newColumns.unassignedCharacters.lineCount += characters[key].lineCount;
       }
     }
     return newColumns;
@@ -75,25 +85,16 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   /**
    * Create the actor columns, all empty at this stage
    * @param {array} actors Array of objects with properties of name and id
+   * @param {object} characters keys of characterIds, values of Character
    * @returns {object} newColumns: Object of actor column objects, actorIds: array of actor ids, represents column order
    */
-  const createInitialActorColumns = (actors) => {
+  const createInitialActorColumns = (actors, characters) => {
     const newColumns = {
-      'unassignedCharacters': {
-        id: 'unassignedCharacters',
-        title: 'Unassigned Characters',
-        characterIds: [],
-        lineCount: 0
-      }
+      unassignedCharacters: new Column('unassignedCharacters', 'Unassigned Characters', characters)
     };
     const actorIds = [];
     actors.forEach((actor) => {
-      newColumns[actor.id] = {
-        id: actor.id.toString(),
-        title: actor.name,
-        characterIds: [],
-        lineCount: 0
-      };
+      newColumns[actor.id] = new Column(actor.id.toString(), actor.name, characters);
       actorIds.push(actor.id.toString());
     });
     return { newColumns, actorIds };
@@ -105,12 +106,12 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   const updateActorColumns = (actors) => {
     // If there are more actors than columns, add a column
     if (actors.length > columnOrder.length) {
-      const { newColumns, newColumnOrder } = addActorColumn(actors, {...columns}, [...columnOrder]);
+      const { newColumns, newColumnOrder } = addActorColumn(actors, { ...columns }, [...columnOrder]);
       setColumns(newColumns);
       setColumnOrder(newColumnOrder);
     } else {
       // Remove an actor, there are more columns than actors
-      const { newColumns, newColumnOrder } = removeActorColumn(actors, {...columns}, [...columnOrder]);
+      const { newColumns, newColumnOrder } = removeActorColumn(actors, { ...columns }, [...columnOrder]);
       setColumns(newColumns);
       setColumnOrder(newColumnOrder);
     }
@@ -127,12 +128,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   const addActorColumn = (actors, columns, columnOrder) => {
     actors.forEach((actor) => {
       if (!columns[actor.id]) {
-        columns[actor.id] = {
-          id: actor.id.toString(),
-          title: actor.name,
-          characterIds: [],
-          lineCount: 0
-        };
+        columns[actor.id] = new Column(actor.id.toString(), actor.name, characters);
         columnOrder.push(actor.id);
       }
     });
@@ -152,9 +148,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
       if (!actors.some((actor) => actor.id == key) && key != 'unassignedCharacters') {
         // Reassign characterIds to the unassigned column
         const reassignedIds = columns[key].characterIds;
-        const reassignedCounts = columns[key].lineCount;
         columns.unassignedCharacters.characterIds = [...columns.unassignedCharacters.characterIds, ...reassignedIds];
-        columns.unassignedCharacters.lineCount += reassignedCounts;
         const index = columnOrder.findIndex(id => id == key);
         columnOrder.splice(index, 1);
         delete columns[key];
@@ -186,15 +180,9 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     // Remove the character from the column it was picked up from and update the column values
     const index = start.characterIds.indexOf(draggableId);
     start.characterIds.splice(index, 1);
-    start.lineCount = start.characterIds.reduce((acc, curr) => {
-      return acc + characters[curr].lineCount;
-    }, 0);
 
     // Add the character to the column it was dropped on
     finish.characterIds.push(draggableId);
-    finish.lineCount = finish.characterIds.reduce((acc, curr) => {
-      return acc + characters[curr].lineCount;
-    }, 0);
 
     // Update the assigned character in the database and if it works, reset the column values to represent the assignment
     const response = await assignCharacter(draggableId, destination.droppableId, currentScriptId);

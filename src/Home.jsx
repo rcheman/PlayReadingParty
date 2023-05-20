@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
 import ScriptNav from './components/ScriptNav';
@@ -29,14 +29,7 @@ const Home = () => {
   const { loadedActors, loadedScripts, scriptId } = useLoaderData();
   const [actors, setActors] = useState(loadedActors);
   const [scripts, setScripts] = useState(loadedScripts);
-  const [currentScriptId, setCurrentScriptId] = useState(null);
-
-  // On initial render, this checks if there was already a script selected previously so the page can return to that state.
-  useEffect(() => {
-    if (scriptId) {
-      setCurrentScriptId(scriptId);
-    }
-  }, []);
+  const [currentScriptId, setCurrentScriptId] = useState(scriptId);
 
   return (
     <div id='home' className='column'>

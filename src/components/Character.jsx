@@ -8,14 +8,18 @@ const Character = ({ character, index }) => {
     if (!snapshot.isDropAnimating) {
       return style;
     }
+    // The default value has a long delay for updating, we reduced the transitionDuration to remove this delay.
     // transitionDuration cannot be set to zero, react-beautiful-dnd docs explain that there needs to be a transition duration
     // for the onTransitionEnd event to fire, which is how it knows the drop animation is finished.
+    // https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/guides/drop-animation.md#skipping-the-drop-animation
     return {
       ...style,
       transitionDuration: '0.001s'
     };
   }
 
+  // draggableId {DraggableId(string)} and index {number} are both required by react-dnd-beautiful
+  // Draggable docs: https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/api/draggable.md
   return (
     <Draggable draggableId={character.id} index={index} key={character.id}>
       {(provided, snapshot) => (

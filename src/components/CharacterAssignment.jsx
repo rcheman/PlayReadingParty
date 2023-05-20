@@ -30,8 +30,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   }, [actors]);
 
   /**
-   * Creates the actor columns and populates them with the assigned characters.
-   * Updates state with the new columns, columnOrder, and characters
+   * Create the actor columns and populate them with the assigned characters.
+   * Update state with the new columns, columnOrder, and characters
    * @param {string} currentScriptId Stringified numerical script Id
    * @param {array} actors Array of actor objects
    */
@@ -49,7 +49,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   }
 
   /**
-   * Puts the characters in the appropriate actor columns
+   * Put the characters in the appropriate actor columns
    * @param {object} characters keys of characterIds, values of Character
    * @param  {object} newColumns Object of actor column objects, no assigned characters
    * @returns {object} newColumns: Object of actor column objects, now updated with assigned characters
@@ -69,7 +69,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   };
 
   /**
-   * Creates the actor columns, all empty at this stage
+   * Create the actor columns, all empty at this stage
    * @param {array} actors Array of objects with properties of name and id
    * @returns {object} newColumns: Object of actor column objects, actorIds: array of actor ids, represents column order
    */
@@ -95,7 +95,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     return {newColumns, actorIds}
   };
   /**
-   * Update the actor columns when the number of actors changes and sets the new column values and order
+   * Update the actor columns when the number of actors changes and set the new column values and order
    * @param actors Array of objects with properties of name and id
    */
   const updateActorColumns = (actors) => {
@@ -116,7 +116,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     };
 
   /**
-   * Adds a new actor column by checking that each actor in our list has a column,
+   * Add a new actor column by checking that each actor in our list has a column,
    *  and creating one when a column isn't found with that actor's id
    * @param actors Array of objects with properties of name and id
    * @param newColumns Object containing column objects with properties of id, title, characterIds, and lineCount
@@ -138,8 +138,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   };
 
   /**
-   * Removes an actor column by going through the columns and checking if each column matches up with an actor,
-   *  if it doesn't, and it isn't the unassigned column, we remove the column.
+   * Remove an actor column by going through the columns and checking if each column matches up with an actor,
+   *  if it doesn't, and it isn't the unassigned column, remove the column.
    * @param actors Array of objects with properties of name and id
    * @param newColumns Object containing column objects with properties of id, title, characterIds, and lineCount
    * @param newColumnOrder Array of column ids
@@ -163,8 +163,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
 
 
   /**
-   * Removes a character from its source column and adds it to its destination column,
-   *  updates the database with the assignment info, and sets state to reflect the changes.
+   * Remove a character from its source column and adds it to its destination column,
+   *  update the database with the assignment info, and set state to reflect the changes.
    * @param result React-beautiful-dnd set parameter
    */
   const onDragEnd = async (result) => {

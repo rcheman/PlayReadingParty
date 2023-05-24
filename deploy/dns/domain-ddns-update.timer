@@ -1,0 +1,9 @@
+[Unit]
+Description=Run ddns update for playreadingparty.com
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

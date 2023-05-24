@@ -1,0 +1,5 @@
+[Unit]
+Description="Update ddns of playreadingparty.com"
+
+[Service]
+ExecStart=/bin/domain-ddns-update.sh

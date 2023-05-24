@@ -1,0 +1,59 @@
+---
+# Install the application
+- name: Install application packages
+  package:
+    name:
+      # For application
+      - nodejs
+    state: latest
+
+- name: Create application directory
+  file:
+    path: /var/www/playreading
+    state: directory
+    mode: '0755'
+
+
+
+- name: Add upload path to .env
+  ansible.builtin.lineinfile:
+    path: /var/www/playreading/.env
+    regexp: '^UPLOADPATH='
+    line: UPLOADPATH=/var/lib/playreading/scriptUploads/
+    create: yes
+
+- name: Copy application code
+  synchronize:
+    src: "{{ item }}"
+    dest: /var/www/playreading
+    delete: yes
+    rsync_opts:
+      - "--chmod=Dg+x,u+w,Fog-wx,+r"
+      - "--chown=root:root"
+  loop:
+    - ../public
+    - ../src
+    - ../node_modules
+  notify:
+      - fix selinux permissions
+      - restart application
+
+- name: Copy application service file
+  copy:
+    src: playreading.service
+    dest: /usr/lib/systemd/system/
+  notify: restart application
+
+- name: Webserver running (to ensure state directory created)
+  systemd:
+    name: playreading.service
+    state: started
+
+# Must be run after playreading.service is started since it creates the /var/lib/playreading/ directory
+- name: Create script upload directory
+  file:
+    path: /var/lib/playreading/scriptUploads
+    state: directory
+    mode: '0770'
+    owner: root
+    group: playreading

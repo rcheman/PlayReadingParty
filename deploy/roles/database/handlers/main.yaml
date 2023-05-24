@@ -1,0 +1,6 @@
+---
+
+- name: restart webserver
+  systemd:
+    name: playreading.service
+    state: restarted

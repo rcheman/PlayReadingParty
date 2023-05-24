@@ -1,0 +1,14 @@
+---
+
+- name: reload sshd
+  systemd:
+    name: sshd.service
+    state: reloaded
+    enabled: yes
+
+- name: reload nginx
+  systemd:
+    name: nginx.service
+    daemon_reload: yes
+    state: reloaded
+    enabled: yes

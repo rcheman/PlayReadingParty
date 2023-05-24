@@ -1,0 +1,40 @@
+---
+# Add and configure nginx webserver
+
+# Todo nginx merged their quic repo into mainline and tagged as 1.25.0. Migrate to normal nginx once fedora is updated with new version (assuming quic support is compiled in).
+- name: Add nginx-quic repo
+  yum_repository:
+    name: nginx-quic
+    description: nginx-quic repo
+    baseurl: https://packages.nginx.org/nginx-quic/rhel/9/$basearch/
+    gpgkey: https://nginx.org/keys/nginx_signing.key
+    enabled: yes
+    gpgcheck: yes
+
+- name: Install nginx packages
+  package:
+    name:
+      - nginx-quic
+      # for https cert
+      - certbot
+      - python3-certbot-nginx
+    state: latest
+  notify: enable quic in selinux
+
+- name: Open holes in firewall for http
+  firewalld:
+    zone: public
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+  notify: reload firewalld
+  loop:
+    - http
+    - https
+    - http3
+
+- name: Copy nginx config
+  copy:
+    src: playreading.conf
+    dest: /etc/nginx/conf.d/
+  notify: reload nginx

@@ -1,0 +1,49 @@
+---
+# Set up a secure os base
+- name: Install OS packages
+  package:
+    name:
+      # For system maintenance
+      - policycoreutils-python-utils # for configuring selinux
+      - nano        # text editor
+      - htop
+      - rsync
+      # for automatic updates
+      - dnf-automatic
+      - podman
+    state: latest
+
+# todo make sure this actually reboots the system
+- name: Dnf autoupdates reboot system
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/automatic.conf
+    regexp: '^reboot = '
+    line: reboot = when-needed
+
+- name: Dnf autoupdates enabled
+  systemd:
+    name: dnf-automatic-install.timer
+    state: started
+    enabled: true
+
+- name: Set secure sshd_config
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: u+rw,g-rwx,o-rwx
+  notify: reload sshd
+
+- name: Remove default nginx site
+  file:
+    path: /etc/nginx/conf.d/default.conf
+    state: absent
+
+- name: Setup /etc/hosts file without ipv6 entries
+  copy:
+    src: hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: u+rw,g-wx,o-wx

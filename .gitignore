@@ -6,3 +6,5 @@ node_modules
 public/main.js
 public/main.js.LICENSE.txt
 scriptUploads
+secret-vars.yml
+notes

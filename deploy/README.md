@@ -1,5 +1,6 @@
 ## Prerequisites
 * Install `ansible` from your distro's package manager
+* Ensure your ssh key has been added to the .ssh/authorized_keys file on the host you want to deploy to
 * Copy `deploy/secret-vars.example.yaml` to `deploy/secret-vars.yaml` and fill in the fields
 * CD to the `deploy/` directory
 

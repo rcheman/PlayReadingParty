@@ -1,0 +1,68 @@
+---
+# Deploy containerized database
+
+- name: Install database packages
+  package:
+    name:
+      - podman
+    state: latest
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0700'
+  loop:
+    - /var/lib/playreading/database
+    - /var/lib/playreading/build
+
+- name: Add db uri to .env
+  ansible.builtin.lineinfile:
+    path: /var/www/playreading/.env
+    regexp: '^DATABASE_URI='
+    line: "DATABASE_URI=postgresql://playreading:{{ db_password }}@localhost/playreadingparty"
+    create: yes
+
+- name: Copy db setup scripts
+  copy:
+    src: "{{ item }}"
+    dest: /var/lib/playreading/build
+  loop:
+    - ../db-setup.sql
+    - ../Dockerfile
+
+# todo database is wiped clean when changing db password, due to container rebuild?
+- name: Build postgres database container
+  podman_image:
+    name: postgres-db
+    path: /var/lib/playreading/build
+    build:
+      format: docker
+
+- name: A postgres container must exist, stopped
+  containers.podman.podman_container:
+    name: postgres-db
+    image: postgres-db
+    state: present
+    ports:
+      - 127.0.0.1:5432:5432
+    volumes: play_volume:/var/lib/playreading/database
+
+    env:
+      POSTGRES_USER: playreading
+      POSTGRES_PASSWORD: "{{ db_password }}"
+      POSTGRES_DB: playreadingparty
+    generate_systemd:
+      path: /usr/lib/systemd/system/
+      restart_policy: always
+      time: 30
+      container_prefix: playreading
+  notify: restart webserver
+  # todo find a way to consolidate handlers or otherwise reorganize
+
+- name: Postgres systemd service started
+  systemd:
+    name: playreading-postgres-db.service
+    daemon_reload: yes
+    state: started
+    enabled: yes

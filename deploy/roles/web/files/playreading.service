@@ -1,0 +1,17 @@
+[Unit]
+Description="Run the playreading backend server"
+
+[Service]
+Environment=NODE_ENV=production
+# Create a user on demand that is heavily restricted from accessing most of the system.
+DynamicUser=yes
+# Create a persistent directory at /var/lib/playreading that will contain any non postgres state for the application
+StateDirectory=playreading
+WorkingDirectory=/var/www/playreading
+ExecStart=/usr/bin/node /var/www/playreading/src/server.js
+# Ensure that the application always restarts on failure
+Restart=on-failure
+
+[Install]
+# Ensure that this service starts when the server boots up
+WantedBy=multi-user.target

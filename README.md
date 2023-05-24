@@ -31,3 +31,6 @@ To get a local copy up and running, follow these steps
      ```
 4. Run `npm start` to start Play Reading Party.
 5. Navigate to http://localhost:3000 in your browser
+
+### Deployment
+See [fedora deployment documentation](deploy/README.md)

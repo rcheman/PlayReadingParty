@@ -23,8 +23,10 @@ function parseTitle(scriptText) {
 }
 
 function parseLines(scriptText) {
-  // Different character's lines are separated by double \n
-  return scriptText.split('\n\n');
+
+  return scriptText
+    .replaceAll('\r\n', '\n') // Convert any windows style newlines (CRLF) to unix style (LF)
+    .split('\n\n'); // Different character's lines are separated by double \n
 }
 
 function parseCharacters(scriptText) {

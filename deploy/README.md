@@ -7,29 +7,29 @@
 
 ## Full deploy from scratch
 ```
-ansible-playbook -e @secret-vars.yml -i production deploy.yml
+ansible-playbook -e @secret-vars.yaml -i production deploy.yaml
 ```
 
 ### Partial deployments (for quicker iteration during testing)
 
 #### Deploy just the web changes (when only application code has changed)
 ```
-ansible-playbook -e @secret-vars.yml -i production deploy.yml --tags web
+ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags web
 ```
 
 #### Deploy just the nginx changes (when only nginx config has changed)
 ```
-ansible-playbook -e @secret-vars.yml -i production deploy.yml --tags nginx
+ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags nginx
 ```
 
 #### Deploy just the db changes (when only database/container config has changed)
 ```
-ansible-playbook -e @secret-vars.yml -i production deploy.yml --tags db
+ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags db
 ```
 
 #### Deploy just the os changes (when only operating system config outside the application has changed)
 ```
-ansible-playbook -e @secret-vars.yml -i production deploy.yml --tags db
+ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags db
 ```
 
 

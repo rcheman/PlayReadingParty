@@ -174,6 +174,10 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
       return;
     }
     // Get the column ids of the source and destination columns
+    // todo Fix columns not being fully cloned before modifying and calling setColumns() with the new data.
+    // todo Columns is a nested object and { ...columns } only clones the first level properties.
+    // todo Also, start and finish below directly reference the values in columns.
+    // todo Changing them changes columns directly (and violates the "don't change state directly" rule of react).
     const start = columns[source.droppableId];
     const finish = columns[destination.droppableId];
 
@@ -187,6 +191,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     // Update the assigned character in the database and if it works, reset the column values to represent the assignment
     const response = await assignCharacter(draggableId, destination.droppableId, currentScriptId);
     if (response.success) {
+      // todo set columns BEFORE awaiting database change to avoid visual jitter on page due to delay
+      // todo revert columns to original state if assignCharacter() fails
       setColumns({ ...columns, [start.id]: start, [finish.id]: finish });
     } else {
       console.error(response.data);

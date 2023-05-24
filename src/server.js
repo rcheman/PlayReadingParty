@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
 
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
@@ -11,10 +10,9 @@ const ServerError = require('./services/utils.js');
 require('./services/startupChecks').assert();
 
 const app = express();
+app.disable('x-powered-by');
 
 const PORT = 3000;
-
-app.use(cors()); // Required for dev mode. Todo disable in production
 
 // parse the request body
 app.use(express.json());

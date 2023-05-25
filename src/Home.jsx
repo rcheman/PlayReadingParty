@@ -9,7 +9,12 @@ import Header from './components/Header';
 import { getActors, getScriptTitles } from './components/api';
 import CharacterAssignment from './components/CharacterAssignment';
 
-
+/**
+ * React Router loader for the Home page, load the actor names and script titles
+ * @param {URLSearchParams} params The URL parameter from React Router
+ * @param {string} params.scriptId The current script ID
+ * @return {Promise<loaderActorsScriptsScriptId>}
+ */
 // Load the actor names and script titles on page load
 export async function loader({ params }) {
   const scriptId = params.scriptId;
@@ -23,7 +28,11 @@ export async function loader({ params }) {
   }
 }
 
-
+/**
+ * Component containing the entire home page, linked to from the Header button
+ * @return {JSX.Element} React Component Home
+ * @constructor
+ */
 const Home = () => {
   // With the loaded data, set the initial state for the actors and script list
   const { loadedActors, loadedScripts, scriptId } = useLoaderData();

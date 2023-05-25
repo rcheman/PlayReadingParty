@@ -1,4 +1,5 @@
 const ServerError = require('./utils');
+/** @module scriptParser */
 
 /*
 TODO: Add handling for other script formats 
@@ -13,6 +14,12 @@ ex:'BOB. My name is Bob and these are my lines.'
 This format without the new line between character name and line means that the current algorithm can't identify character names or line counts.
 */
 
+/**
+ * Identify the title within the script
+ * @param {string} scriptText The entire play script
+ * @return {string} The script title
+ * @throws {ServerError} Throws an error if it can't find a title
+ */
 function parseTitle(scriptText) {
   const matches = scriptText.match(/^Title: (.+)$/m);
   if (matches !== null && matches.length === 2) {
@@ -22,6 +29,11 @@ function parseTitle(scriptText) {
   throw new ServerError(452, 'Could not identify a title in the script');
 }
 
+/**
+ * Split up the play script based on a double new line
+ * @param {string} scriptText The entire play script
+ * @return {Array.<string>} Script chunked into sections
+ */
 function parseLines(scriptText) {
 
   return scriptText
@@ -29,6 +41,11 @@ function parseLines(scriptText) {
     .split('\n\n'); // Different character's lines are separated by double \n
 }
 
+/**
+ * Identify the characters in the script and count their lines
+ * @param {string} scriptText The entire play script
+ * @return {Object.<Character>} characters Object containing Character objects for each character in the play
+ */
 function parseCharacters(scriptText) {
   const lineChunks = parseLines(scriptText);
   const characters = {};
@@ -55,16 +72,34 @@ function parseCharacters(scriptText) {
   return characters;
 }
 
-function isUppercase(str) {
-  return str === str.toUpperCase();
+/**
+ * Check if a potential name is all uppercase
+ * @param {string} name a string that may be a character name
+ * @return {boolean}
+ */
+function isUppercase(name) {
+  return name === name.toUpperCase();
 }
 
-// checks if a name is a valid name
+/**
+ * Check if a name is valid
+ * @param {string} name the string that comes before the first dot '.' in a section and may be a character name
+ * @return {boolean}
+ */
+// TODO also exclude 'SCENE'
 function isName(name) {
   return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
 }
 
-// character object constructor
+/**
+ * Character Constructor
+ * @param {string} name  character's name
+ * @param {number} lineCount character's total lines
+ * @param {number} speakCount total for how many times the character starts talking
+ * @param {number | null} id id from the database
+ * @param {number | null} actorId the id of the actor who is assigned to this character
+ * @constructor
+ */
 function Character(name, lineCount, speakCount, id = null, actorId = null) {
   this.name = name;
   this.lineCount = lineCount;

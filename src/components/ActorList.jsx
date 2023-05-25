@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { deleteActor } from './api';
 
+/**
+ * Actor list component that displays and allows for deletion of actors
+ * @param {Array.<Actor>} actors Actors from state
+ * @param {function} setActors Setter for actors state
+ * @return {JSX.Element} React Component ActorList
+ * @constructor
+ */
 const ActorList = ({ actors, setActors }) => {
   const [deleteError, setDeleteError] = useState('');
 

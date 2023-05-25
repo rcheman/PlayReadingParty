@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { uploadScript } from './api';
 
+/**
+ * Upload script component that takes a file input and displays pertinent errors
+ * @param {function} setCurrentScriptId Setter for currentScriptId state
+ * @param {Array.<Script>} scripts Script data objects
+ * @param {function} setScripts Setter for scripts
+ * @return {JSX.Element} React Component Upload
+ * @constructor
+ */
 const Upload = ({ setCurrentScriptId, scripts, setScripts }) => {
   const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
   const [file, setFile] = useState();
@@ -27,6 +35,7 @@ const Upload = ({ setCurrentScriptId, scripts, setScripts }) => {
     // set the file as Form Data and send it to the server
     const formData = new FormData();
     formData.append('scriptFormField', file);
+    console.log(formData)
 
     // Upload the script and display any error messages
     const result = await uploadScript(formData);

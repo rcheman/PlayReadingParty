@@ -5,7 +5,19 @@ import ReadingDots from './ReadingDots';
 import Header from './Header';
 import { getActors, getScript } from './api';
 
-// Load the actor names and script titles on page load. Returns currentScriptId id to pass on.
+/**
+ * @typedef loaderActorsScriptsScriptId
+ * @property {Array.<Actor> | {}} loadedActors All the actor data retrieved from the database
+ * @property {Array.string | {}} loadedScript The full script
+ * @property {string} currentScriptId The ID for the current script
+ */
+
+/**
+ * React Router loader for the Script page, load the actor names and script titles
+ * @param {URLSearchParams} params The URL parameter from React Router
+ * @param {string} params.scriptId The current script ID selected on the Home page
+ * @return {Promise<loaderActorsScriptsScriptId>}
+ */
 export async function loader({ params }) {
   const currentScriptId = params.scriptId;
   const [loadedActors, loadedScript] = await Promise.all(
@@ -19,6 +31,11 @@ export async function loader({ params }) {
   }
 }
 
+/**
+ * Component containing the entire script page, linked to from the ScriptNav component 'Open Script' button
+ * @return {JSX.Element} React Component Script
+ * @constructor
+ */
 const Script = () => {
   const { loadedActors, loadedScript, currentScriptId } = useLoaderData();
   const [currentActor, setCurrentActor] = useState({});
@@ -28,6 +45,7 @@ const Script = () => {
   const lineChunks = [];
   const characterSet = new Set(currentCharacters);
 
+  // NOTE: Currently using Object.entries for performance purposes, potentially look into benchmarking other iterative approaches
   for (let [i, lineChunk] of Object.entries(loadedScript)) {
     // checks if the character name for this chunk is the name of a character assigned to the current actor
     // remove the dot because some scripts have a dot after the name of the character, ie VIOLA.
@@ -35,8 +53,7 @@ const Script = () => {
     if (characterSet.has(name)) {
       lineChunks.push(<pre className='currentActor' key={`chk-${i}`}>{lineChunk}</pre>);
     } else {
-      lineChunks.push(<pre key={`chk-${i}`}>{lineChunk}</pre>
-      );
+      lineChunks.push(<pre key={`chk-${i}`}>{lineChunk}</pre>);
     }
   }
 

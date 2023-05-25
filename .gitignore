@@ -3,6 +3,7 @@
 .env
 
 node_modules
+docs
 public/main.js
 public/main.js.LICENSE.txt
 scriptUploads

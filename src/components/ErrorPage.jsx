@@ -1,7 +1,11 @@
 import React from 'react';
 import { useRouteError } from 'react-router-dom';
 
-
+/**
+ * Component for the default error page for React Router
+ * @return {JSX.Element} React Component ErrorPage
+ * @constructor
+ */
 const ErrorPage = () => {
   const error = useRouteError();
   console.error(error);

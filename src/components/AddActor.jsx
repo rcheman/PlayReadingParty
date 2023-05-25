@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { newActor } from './api';
 
+/**
+ * Input to add a new actor
+ * @param {Array.<Actor>} actors Actors from state
+ * @param {function} setActors Setter for actors state
+ * @return {JSX.Element} React Component AddActor
+ * @constructor
+ */
 const AddActor = ({ actors, setActors }) => {
   const [addActorError, setAddActorError] = useState('');
 
   const newActorHandler = async (e) => {
     e.preventDefault();
+
     const name = e.target.elements.actorName.value;
     // Add the new actor values to the database
     const result = await newActor(name);

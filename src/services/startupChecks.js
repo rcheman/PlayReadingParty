@@ -5,6 +5,10 @@ const red = "\x1b[31m";
 const bold = "\x1b[1m";
 const reset = "\x1b[0m";
 
+/**
+ * Check that the required environment variables are present when the server is starting.
+ * If an environment variable is missing, log what variable is missing and stop the server
+ */
 function assertEnvVarsPresent() {
   let variables = [
     'DATABASE_URI',

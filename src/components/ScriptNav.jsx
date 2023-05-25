@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { deleteScript } from './api';
 import { Link } from 'react-router-dom';
 
+/**
+ * Script selection component with buttons for each script title and ability to delete scripts
+ * @param {string} currentScriptId Current Script ID in state
+ * @param {function} setCurrentScriptId Setter for currentScriptId
+ * @param {Array.<Script>} scripts Script data in state
+ * @param {function} setScripts Setter for scripts
+ * @return {JSX.Element} React Component ScriptNav
+ * @constructor
+ */
 const ScriptNav = ({ currentScriptId, setCurrentScriptId, scripts, setScripts }) => {
   const [scriptError, setScriptError] = useState('');
 

@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { postPosition } from './api';
 
-// Generate a unique and stable hue based on the actor name
-function getActorHue(actor) {
-  let input = 0;
-  for (const char of actor) {
-    input += char.charCodeAt(0);
-  }
-
-  return input % 360;
-}
-
+/**
+ * Component containing all the progress tracking reading dots on the script page
+ * @param {Array.<Actor>} actors Actors from state
+ * @param {Actor} currentActor Current selected actor from state
+ * @param {string} currentScriptId The Id for the current script from state
+ * @return {JSX.Element} React Component ReadingDots
+ * @constructor
+ */
 const ReadingDots = ({ actors, currentActor, currentScriptId }) => {
   const [dots, setDots] = useState({});
   const refDots = useRef({});
@@ -119,5 +117,19 @@ const ReadingDots = ({ actors, currentActor, currentScriptId }) => {
     </div>
   );
 };
+
+/**
+ * Generate a unique and stable hue based on the actor name
+ * @param {string} actor The actor's name
+ * @return {number} Total value of the character's in the actor's name, capped at 360 with wrap around.
+ */
+function getActorHue(actor) {
+  let input = 0;
+  for (const char of actor) {
+    input += char.charCodeAt(0);
+  }
+
+  return input % 360;
+}
 
 export default ReadingDots;

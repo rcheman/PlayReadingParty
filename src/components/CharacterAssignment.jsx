@@ -3,13 +3,21 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { getCharacters, assignCharacter } from './api';
 import DropColumn from './DropColumn';
 
-// Entire Drag and Drop context for assigning characters to actors
+/**
+ * Drag and Drop context for assigning characters to actors
+ * @param {Array.<Actor>} actors Actors from state
+ * @param {string} currentScriptId The ID for the current script
+ * @return {JSX.Element | undefined} DragDropContext React Component CharacterAssignment.
+ * We allow undefined return for when there is no current script, so we don't return the component.
+ * @constructor
+ */
 const CharacterAssignment = ({ actors, currentScriptId }) => {
   const [characters, setCharacters] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
   const [columns, setColumns] = useState({
     'unassignedCharacters': new Column('unassignedCharacters', 'Unassigned Characters', characters)
   });
+  /** @module CharacterAssignment */
 
   // When the current script changes create a column for each actor and populate it with the assigned characters
   useEffect(() => {
@@ -45,9 +53,9 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     };
   }
 
-  /**
-   * Create the actor columns and populate them with the assigned characters.
-   * Update state with the new columns, columnOrder, and characters
+  /** @function setupColumns
+   * @description Create the actor columns and populate them with the assigned characters.
+   *  Update state with the new columns, columnOrder, and characters
    * @param {string} currentScriptId Stringified numerical script ID
    * @param {array} actors Array of actor objects
    */
@@ -64,8 +72,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     }
   };
 
-  /**
-   * Put the characters in the appropriate actor columns
+  /** @function assignInitialCharacters
+   * @description Put the characters in the appropriate actor columns
    * @param  {object} columns Object of actor column objects, no assigned characters
    * @param {object} characters  Contains Character objects indexed by their id
    * @returns {object} Object of actor column objects, now updated with assigned characters
@@ -82,8 +90,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     return columns;
   };
 
-  /**
-   * Create the actor columns, all empty at this stage
+  /** @function createInitialActorColumns
+   * @description Create the actor columns, all empty at this stage
    * @param {array} actors Array of objects with properties of name and id
    * @param {object} characters  Contains Character objects indexed by their id
    * @returns {object} Object of actor column objects and array of actor IDs
@@ -99,8 +107,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     });
     return { newColumns: columns, newColumnOrder: actorIds };
   };
-  /**
-   * Update the actor columns when the number of actors changes and set the new column values and order
+  /** @function updateActorColumns
+   * @description Update the actor columns when the number of actors changes and set the new column values and order
    * @param actors Array of objects with properties of name and id
    */
   const updateActorColumns = (actors) => {
@@ -118,8 +126,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
 
   };
 
-  /**
-   * Add a new actor column by checking that each actor in our list has a column,
+  /** @function addActorColumn
+   * @description Add a new actor column by checking that each actor in our list has a column,
    *  and creating one when a column isn't found with that actor's id
    * @param actors Array of objects with properties of name and id
    * @param columns Object containing column objects with properties of id, title, characterIds, and lineCount
@@ -135,8 +143,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     return { newColumns: columns, newColumnOrder: columnOrder };
   };
 
-  /**
-   * Remove an actor column by going through the columns and checking if each column matches up with an actor,
+  /** @function removeActorColumn
+   * @description Remove an actor column by going through the columns and checking if each column matches up with an actor,
    *  if it doesn't, and it isn't the unassigned column, remove the column.
    * @param actors Array of objects with properties of name and id
    * @param columns Object containing column objects with properties of id, title, characterIds, and lineCount
@@ -158,8 +166,8 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   };
 
 
-  /**
-   * Remove a character from its source column and adds it to its destination column,
+  /** @function onDragEnd
+   * @description Remove a character from its source column and adds it to its destination column,
    *  update the database with the assignment info, and set state to reflect the changes.
    * @param result React-beautiful-dnd set parameter
    */

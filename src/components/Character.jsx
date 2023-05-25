@@ -1,7 +1,14 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
-// Individual draggable character card with character data.
+/**
+ * Individual draggable character card with character data.
+ * @param {Character} character The character's data
+ * @param {number} index Number for react-dnd-beautiful to use to track drag and drop location
+ * @return {JSX.Element} Draggable React Component Character
+ * @constructor
+ */
+
 const Character = ({ character, index }) => {
   // Removes the drop animation so there isn't a delay between the character being dropped and the line count updating
   function getStyle(style, snapshot) {

@@ -6,13 +6,30 @@ const ServerError = require('../services/utils');
 const db = require('./database.js');
 const { parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
+/**
+ * @typedef Script
+ * @property {number} id Database generated script id
+ * @property {string} title Script title
+ */
 
+/** @module scriptRepo */
+
+/**
+ * get all the script titles
+ * @return {Promise<Array.<Script>>}
+ */
 async function getTitles() {
   const result = await db.query('select id, title from scripts');
 
   return result.rows.map((s) => ({ id: s.id, title: s.title }));
 }
 
+/**
+ * get the specified script
+ * @param {string} scriptDir The path for the script directory
+ * @param {string} id The script ID
+ * @return {Promise<Array<string>>}
+ */
 async function getScript(scriptDir, id) {
   const result = await db.query(
     'select filename from scripts where id = $1 limit 1',
@@ -23,10 +40,20 @@ async function getScript(scriptDir, id) {
   return parseLines(file);
 }
 
+/**
+ * delete the specified script
+ * @param {string} id The script ID
+ * @return {Promise<*>} raw database result, unused
+ */
 async function deleteScript(id) {
   return await db.query('DELETE FROM scripts WHERE id = $1 RETURNING *;', [id]);
 }
 
+/**
+ * import the given script, parse it, and store it and it's data in the database
+ * @param {string} filepath The filepath where the new script is located
+ * @return {Promise<{id: {number}, title: {string}}>}
+ */
 async function importScript(filepath) {
   // Add script and characters if it doesn't already exist
   const file = await fs.readFileAsync(filepath, 'utf8');

@@ -1,5 +1,4 @@
 const ServerError = require('./utils');
-/** @module scriptParser */
 
 /*
 TODO: Add handling for other script formats 
@@ -44,7 +43,7 @@ function parseLines(scriptText) {
 /**
  * Identify the characters in the script and count their lines
  * @param {string} scriptText The entire play script
- * @return {Object.<Character>} characters Object containing Character objects for each character in the play
+ * @return {Object.<Character>} characters Object containing Character objects for each character in the play. Indexed by the character's name
  */
 function parseCharacters(scriptText) {
   const lineChunks = parseLines(scriptText);
@@ -91,22 +90,23 @@ function isName(name) {
   return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
 }
 
-/**
- * Character Constructor
- * @param {string} name  character's name
- * @param {number} lineCount character's total lines
- * @param {number} speakCount total for how many times the character starts talking
- * @param {number | null} id id from the database
- * @param {number | null} actorId the id of the actor who is assigned to this character
- * @constructor
- */
-function Character(name, lineCount, speakCount, id = null, actorId = null) {
-  this.name = name;
-  this.lineCount = lineCount;
-  this.speakCount = speakCount;
-  this.id = id;
-  this.actorId = actorId;
-
+/** Character Class */
+class Character {
+  /**
+   * Construct a Character object
+   * @param {string} name  character's name
+   * @param {number} lineCount character's total lines
+   * @param {number} speakCount total for how many times the character starts talking
+   * @param {number | null} id id from the database
+   * @param {number | null} actorId the id of the actor who is assigned to this character
+   */
+  constructor(name, lineCount, speakCount, id = null, actorId = null) {
+    this.name = name;
+    this.lineCount = lineCount;
+    this.speakCount = speakCount;
+    this.id = id;
+    this.actorId = actorId;
+  }
 }
 
 module.exports = { Character, parseTitle, parseLines, parseCharacters };

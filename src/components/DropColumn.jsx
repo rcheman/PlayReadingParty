@@ -4,7 +4,7 @@ import { Droppable } from 'react-beautiful-dnd';
 
 /**
  * Actor or unassigned column Droppable component.
- * @param {Column} column Individual actor|unassigned column
+ * @param {Column} column Individual actor | unassigned column
  * @param {Array.<Character>} characterList All the characters assigned to this column
  * @return {JSX.Element} Droppable React Component DropColumn
  * @constructor

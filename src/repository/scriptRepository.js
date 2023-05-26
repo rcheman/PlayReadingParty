@@ -6,13 +6,7 @@ const ServerError = require('../services/utils');
 const db = require('./database.js');
 const { parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
-/**
- * @typedef Script
- * @property {number} id Database generated script id
- * @property {string} title Script title
- */
 
-/** @module scriptRepo */
 
 /**
  * get all the script titles
@@ -21,14 +15,14 @@ const { parseTitle, parseLines, parseCharacters } = require('../services/scriptP
 async function getTitles() {
   const result = await db.query('select id, title from scripts');
 
-  return result.rows.map((s) => ({ id: s.id, title: s.title }));
+  return result.rows.map((s) => (new Script(s.id, s.title)));
 }
 
 /**
  * get the specified script
  * @param {string} scriptDir The path for the script directory
  * @param {string} id The script ID
- * @return {Promise<Array<string>>}
+ * @return {Promise<Array<string>>} Script text chunked into sections
  */
 async function getScript(scriptDir, id) {
   const result = await db.query(
@@ -43,16 +37,17 @@ async function getScript(scriptDir, id) {
 /**
  * delete the specified script
  * @param {string} id The script ID
- * @return {Promise<*>} raw database result, unused
+ * @return {Promise<boolean>} Whether or not the query was successful
  */
 async function deleteScript(id) {
-  return await db.query('DELETE FROM scripts WHERE id = $1 RETURNING *;', [id]);
+  const result = await db.query('DELETE FROM scripts WHERE id = $1 RETURNING *;', [id]);
+  return !!result;
 }
 
 /**
  * import the given script, parse it, and store it and it's data in the database
  * @param {string} filepath The filepath where the new script is located
- * @return {Promise<{id: {number}, title: {string}}>}
+ * @return {Promise<Script>}
  */
 async function importScript(filepath) {
   // Add script and characters if it doesn't already exist
@@ -87,7 +82,19 @@ async function importScript(filepath) {
 
   await db.query(text, [scriptId, names, counts, speakNums]);
 
-  return {id: scriptId, title}; // The id/title of the newly added script
+  return new Script(scriptId, title);
+}
+
+/** Script Class */
+class Script {
+  /**
+   * @param {number} id Database generated script id
+   * @param {string} title Script title
+   */
+  constructor(id, title) {
+    this.id = id;
+    this.title = title;
+  }
 }
 
 module.exports = { getTitles, getScript, importScript, deleteScript };

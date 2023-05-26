@@ -5,8 +5,6 @@
  * @property {number} status The status for a failed call
  */
 
-/** @module apiCalls */
-
 /**
  * gets all actors
  * @return {Promise<ApiResponse>}

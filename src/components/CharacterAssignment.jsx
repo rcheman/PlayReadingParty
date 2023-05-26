@@ -17,7 +17,6 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   const [columns, setColumns] = useState({
     'unassignedCharacters': new Column('unassignedCharacters', 'Unassigned Characters', characters)
   });
-  /** @module CharacterAssignment */
 
   // When the current script changes create a column for each actor and populate it with the assigned characters
   useEffect(() => {
@@ -36,22 +35,6 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     updateActorColumns(actors);
   }, [actors]);
 
-  /**
-   * Column constructor
-   * @param {string} id id used for drag and drop reference
-   * @param {string} title Column title that will be displayed
-   * @param {object} characters Contains Character objects indexed by their id
-   * @constructor
-   */
-  function Column(id, title, characters) {
-    this.id = id;
-    this.title = title;
-    this.characterIds = [];
-    this.getLineCount = function() {
-      if (characters === null) return;
-      return this.characterIds.reduce((acc, curr) => acc + characters[curr].lineCount, 0);
-    };
-  }
 
   /** @function setupColumns
    * @description Create the actor columns and populate them with the assigned characters.
@@ -207,7 +190,6 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     }
   };
 
-
   // No script is selected, don't bother rendering the component
   if (!currentScriptId) {
     return;
@@ -238,5 +220,23 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   );
 
 };
+
+/** Column Class */
+class Column {
+  /**
+   * @param {string} id id used for drag and drop reference
+   * @param {string} title Column title that will be displayed
+   * @param {object} characters Contains Character objects indexed by their id
+   */
+  constructor(id, title, characters) {
+    this.id = id;
+    this.title = title;
+    this.characterIds = [];
+    this.getLineCount = function() {
+      if (characters === null) return;
+      return this.characterIds.reduce((acc, curr) => acc + characters[curr].lineCount, 0);
+    };
+  }
+}
 
 export default CharacterAssignment;

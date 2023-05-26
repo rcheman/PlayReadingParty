@@ -9,7 +9,7 @@
     "build": "NODE_ENV=production webpack . && podman image build -t play-reading .",
     "front": "NODE_ENV=development webpack-dev-server --open",
     "back": "nodemon src/server.js",
-    "jsdoc": "jsdoc -a all -c jsdoc.json -R README.md -r ./src/ -d docs/jsdoc"
+    "jsdoc": "jsdoc -a all -c jsdoc.json -R README.md -r ./src/ -d build/docs/jsdoc"
   },
   "nodemonConfig": {
     "ignore": [

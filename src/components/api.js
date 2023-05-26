@@ -21,7 +21,6 @@ async function getActors() {
  * @return {Promise<ApiResponse>}
  */
 async function deleteActor(id) {
-  console.log(typeof id)
   return await apiCall('DELETE', `actors/${id}`);
 };
 
@@ -101,7 +100,6 @@ async function deleteScript(deleteId) {
  * @return {Promise<{success: boolean, data: any}>}
  */
 async function uploadScript(formData) {
-  console.log(typeof formData)
   const response = await fetch('/api/script', { method: 'POST', body: formData })
   if (response.ok){
     return {

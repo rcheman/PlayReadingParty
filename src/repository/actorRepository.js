@@ -1,8 +1,8 @@
 const db = require('./database.js');
 
 /**
- * Add a new actor to the database
- * @param {string} name User entered actor name
+ * Add a new actor
+ * @param {string} name The new actor's name
  * @return {Promise<Actor>} The new actor object
  */
 async function newActor(name) {
@@ -12,7 +12,7 @@ async function newActor(name) {
 }
 
 /**
- * Get all the actors from the database
+ * Get all the actors
  * @return {Promise<Array.<Actor>>} Array of all the actor's
  */
 async function getActors() {
@@ -22,7 +22,7 @@ async function getActors() {
 }
 
 /**
- * Delete a single actor from the database
+ * Delete a single actor
  * @param {number} id ID of the actor to delete
  * @return {Promise<boolean>} Whether the query went through
  */
@@ -31,7 +31,6 @@ async function deleteActor(id) {
   return !!result;
 }
 
-/** Actor Class */
 class Actor {
   /**
    * @param {number} id Unique actor ID

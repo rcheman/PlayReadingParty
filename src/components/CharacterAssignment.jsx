@@ -221,7 +221,6 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
 
 };
 
-/** Column Class */
 class Column {
   /**
    * @param {string} id id used for drag and drop reference

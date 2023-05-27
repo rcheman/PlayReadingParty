@@ -45,9 +45,9 @@ async function deleteScript(id) {
 }
 
 /**
- * import the given script, parse it, and store it and it's data in the database
+ * import the given script, parse it, and store it
  * @param {string} filepath The filepath where the new script is located
- * @return {Promise<Script>}
+ * @return {Promise<Script>} Object containing the script's id and title
  */
 async function importScript(filepath) {
   // Add script and characters if it doesn't already exist
@@ -85,10 +85,9 @@ async function importScript(filepath) {
   return new Script(scriptId, title);
 }
 
-/** Script Class */
 class Script {
   /**
-   * @param {number} id Database generated script id
+   * @param {number} id Unique script id
    * @param {string} title Script title
    */
   constructor(id, title) {

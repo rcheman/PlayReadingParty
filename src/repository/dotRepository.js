@@ -2,9 +2,9 @@ const db = require('./database.js');
 
 /**
  * Get ID for a progress dot, creates one if it does not already exist
- * @param {string} scriptId ID of the selected script
- * @param {number} actorId ID of the selected actor
- * @return {Promise<number>} ID of the newly created progress dot
+ * @param {string} scriptId ID of the script that the dot belongs to
+ * @param {number} actorId ID of the actor that the dot belongs to
+ * @return {Promise<number>} ID of the progress dot
  */
 async function getId(scriptId, actorId) {
   const result = await db.query(
@@ -21,7 +21,7 @@ async function getId(scriptId, actorId) {
 
 /**
  * Update the position of the progress dot
- * @param {number} dotId ID of the current progress dot
+ * @param {number} dotId ID of the progress dot
  * @param {string} position New position of the progress dot
  */
 async function set(dotId, position) {
@@ -29,9 +29,9 @@ async function set(dotId, position) {
 }
 
 /**
- * Get all the progress dots for the selected script
- * @param {string} scriptId ID of the selected script
- * @return {Promise<Array.<Dot>>}
+ * Get all the progress dots for the specified script
+ * @param {string} scriptId ID of the script
+ * @return {Promise<Array.<Dot>>} Array of all progress dots for the specified script
  */
 async function getAll(scriptId) {
   const result = await db.query('SELECT id, actor_id, position FROM read_position WHERE script_id = $1', [scriptId]);
@@ -39,7 +39,6 @@ async function getAll(scriptId) {
   return result.rows.map((dot) => (new Dot(dot.id, dot.actor_id, scriptId, dot.position)));
 }
 
-/** Dot Class */
 class Dot {
   /**
    * @param {number} id ID of the progress dot

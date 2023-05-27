@@ -90,7 +90,6 @@ function isName(name) {
   return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
 }
 
-/** Character Class */
 class Character {
   /**
    * Construct a Character object

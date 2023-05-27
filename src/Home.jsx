@@ -12,19 +12,21 @@ import CharacterAssignment from './components/CharacterAssignment';
 /**
  * React Router loader for the Home page, load the actor names and script titles
  * @param {URLSearchParams} params The URL parameter from React Router
- * @param {string} params.scriptId The current script ID
- * @return {Promise<loaderActorsScriptsScriptId>}
+ * @param {string} params.scriptId The script ID
+ * @returns {Promise<Object>} Either returns the loaded data or empty objects and the Script ID.
+ * @returns {Array.<Actor>|{}} Object.loadedActors
+ * @returns {Array.<Script>|{}} Object.loadedScripts Array of Script objects that have an id and title
+ * @returns {scriptId: String} Object.scriptId
  */
 // Load the actor names and script titles on page load
 export async function loader({ params }) {
   const scriptId = params.scriptId;
   const [loadedActors, loadedScripts] = await Promise.all([getActors(), getScriptTitles()]);
   if (loadedActors.success && loadedScripts.success) {
-    return { loadedActors: loadedActors.data, loadedScripts: loadedScripts.data, scriptId };
+    return {loadedActors: loadedActors.data, loadedScripts: loadedScripts.data, scriptId};
   } else {
-    console.error(loadedActors.data, loadedScripts.data);
-    // We return empty objects when there is an error because it makes it easier to trace back the error
-    return { loadedScripts: {}, loadedActors: {}, scriptId };
+    console.error(loadedActors.data, loadedScripts.data, scriptId);
+    return {loadedActors: {}, loadedScripts: {}, scriptId};
   }
 }
 

@@ -6,7 +6,8 @@ const ServerError = require('../services/utils');
 const db = require('./database.js');
 const { parseTitle, parseLines, parseCharacters } = require('../services/scriptParser.js');
 
-
+//TODO: Rethink naming to clarify between the Script object that has just title and name, and the script array of strings.
+// This affects naming confusion in the server and on the frontend as well.
 
 /**
  * get all the script titles

@@ -6,28 +6,22 @@ import Header from './Header';
 import { getActors, getScript } from './api';
 
 /**
- * @typedef loaderActorsScriptsScriptId
- * @property {Array.<Actor> | {}} loadedActors All the actor data retrieved from the database
- * @property {Array.string | {}} loadedScript The full script
- * @property {string} currentScriptId The ID for the current script
- */
-
-/**
  * React Router loader for the Script page, load the actor names and script titles
  * @param {URLSearchParams} params The URL parameter from React Router
- * @param {string} params.scriptId The current script ID selected on the Home page
- * @return {Promise<loaderActorsScriptsScriptId>}
+ * @param {string} params.scriptId The script ID
+ * @returns {Promise<Object>} Either returns the loaded data or empty objects and the Script ID.
+ * @returns {Array.<Actor>|{}} Object.loadedActors
+ * @returns {Array.<string>|{}} Object.loadedScript The entire script text chunked into sections
+ * @returns {scriptId: String} Object.scriptId
  */
 export async function loader({ params }) {
-  const currentScriptId = params.scriptId;
-  const [loadedActors, loadedScript] = await Promise.all(
-    [getActors(), getScript(currentScriptId)]);
+  const scriptId = params.scriptId;
+  const [loadedActors, loadedScript] = await Promise.all([getActors(), getScript(scriptId)]);
   if (loadedActors.success && loadedScript.success) {
-    return { loadedActors: loadedActors.data, loadedScript: loadedScript.data, currentScriptId };
+    return {loadedActors: loadedActors.data, loadedScript: loadedScript.data, scriptId};
   } else {
-    console.error(loadedActors.data, loadedScript.data);
-    // We return empty objects when there is an error because it makes it easier to trace back the error
-    return { loadedScript: {}, loadedActors: {}, currentScriptId };
+    console.error(loadedActors.data, loadedScript.data, scriptId);
+    return {loadedActors: {}, loadedScript: {}, scriptId};
   }
 }
 

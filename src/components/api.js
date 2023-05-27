@@ -1,11 +1,4 @@
 /**
- * @typedef ApiResponse
- * @property {boolean} success Whether or not the api call went through
- * @property {any} data The data from the successful call, or an error message for a failed call
- * @property {number} status The status for a failed call
- */
-
-/**
  * gets all actors
  * @return {Promise<ApiResponse>}
  */
@@ -152,22 +145,25 @@ async function apiCall(method, uri, body = null, headers = {}) {
     });
     // Set data for successful fetch
     if (response.ok) {
-        return {
-          success: true,
-          data: await response.json()
-      };
+        return new ApiResponse(true, await response.json())
     } else { // Set errors from an unsuccessful fetch request
-      return {
-        success: false,
-        data: 'Error: ' + await response.json(),
-        status: response.status
-      };
+      return new ApiResponse(false, 'Error: ' + await response.json(), response.status)
     }
   } catch (error) { // Set errors from not being able to connect to the server
-    return {
-      success: false,
-      data: 'Network error: ' + error.message
-    };
+    return new ApiResponse(false, 'Network error: ' + error.message)
+  }
+}
+
+class ApiResponse{
+  /**
+   * @param {boolean} success Whether or not the api call went through
+   * @param {any} data The data from the successful call, or an error message for a failed call
+   * @param {number} [status] The status for a failed call
+   */
+  constructor(success, data, status) {
+    this.success = success;
+    this.data = data;
+    this.status = status;
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { deleteScript } from './api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Script selection component with buttons for each script title and ability to delete scripts
@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
  */
 const ScriptNav = ({ currentScriptId, setCurrentScriptId, scripts, setScripts }) => {
   const [scriptError, setScriptError] = useState('');
+  const navigate = useNavigate()
 
   async function deleteScriptHandler(event) {
     const scriptId = event.target.value;
@@ -21,8 +22,9 @@ const ScriptNav = ({ currentScriptId, setCurrentScriptId, scripts, setScripts })
     if (result.success) {
       setScriptError('');
       setScripts(scripts.filter((t) => t.id.toString() !== scriptId));
-      if (scriptId === currentScriptId) {
-        setCurrentScriptId(null);
+      if (scriptId == currentScriptId) {
+        setCurrentScriptId(false);
+        navigate('/')
       }
     } else {
       setScriptError(result.data);

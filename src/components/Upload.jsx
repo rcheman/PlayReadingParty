@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { uploadScript } from './api';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Upload script component that takes a file input and displays pertinent errors
@@ -13,6 +14,7 @@ const Upload = ({ setCurrentScriptId, scripts, setScripts }) => {
   const MAX_FILESIZE_BYTES = 50 * 1024 * 1024; // 50MB If updating, change constant in scriptController.js too
   const [file, setFile] = useState();
   const [uploadMessage, setUploadMessage] = useState({ message: '', error: false });
+  const navigate = useNavigate()
 
   const handleFileChange = (e) => {
     // check that the file size is less than 50 before allowing the upload
@@ -45,6 +47,7 @@ const Upload = ({ setCurrentScriptId, scripts, setScripts }) => {
       setUploadMessage({ message: 'Uploaded Successfully', error: false });
       setFile(null);
       e.target.reset();
+      navigate("/" + result.data.id)
     } else {
       setUploadMessage({ message: result.data, error: true });
     }

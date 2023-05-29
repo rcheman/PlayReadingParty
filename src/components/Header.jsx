@@ -12,7 +12,8 @@ const Header = ({ currentScriptId }) => {
   return (
     <div>
       <header>
-        <h1><Link to={`/${currentScriptId}`} id='titleLink'>Play Reading Party</Link></h1>
+        {/*Links back to the currentScript page if there is a current script*/}
+        <h1><Link to={currentScriptId ? `/${currentScriptId}` : '#'} id='titleLink'>Play Reading Party</Link></h1>
       </header>
     </div>
   );

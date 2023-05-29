@@ -1,0 +1,16 @@
+[package]
+name = "play_reading_party"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4.3.1"
+
+sqlx = { version = "0.6.3", features = ["runtime-tokio-rustls", "any", "postgres", "offline"]}
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+dotenvy = "0.15.7"

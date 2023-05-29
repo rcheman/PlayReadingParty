@@ -37,7 +37,6 @@ const Upload = ({ setCurrentScriptId, scripts, setScripts }) => {
     // set the file as Form Data and send it to the server
     const formData = new FormData();
     formData.append('scriptFormField', file);
-    console.log(formData)
 
     // Upload the script and display any error messages
     const result = await uploadScript(formData);

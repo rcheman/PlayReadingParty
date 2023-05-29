@@ -31,7 +31,7 @@ export async function loader({ params }) {
  * @constructor
  */
 const Script = () => {
-  const { loadedActors, loadedScript, currentScriptId } = useLoaderData();
+  const { loadedActors, loadedScript, scriptId } = useLoaderData();
   const [currentActor, setCurrentActor] = useState({});
   const [currentCharacters, setCurrentCharacters] = useState([]);
 
@@ -54,12 +54,12 @@ const Script = () => {
   return (
     <React.StrictMode>
       <div id='scriptPage' className='column' key='scriptWrapper'>
-        <Header currentScriptId={currentScriptId} />
+        <Header currentScriptId={scriptId} />
         <ActorScriptNav
           actors={loadedActors}
           setCurrentActor={setCurrentActor}
           setCurrentCharacters={setCurrentCharacters}
-          currentScriptId={currentScriptId}
+          currentScriptId={scriptId}
           key='ActorScriptNav'
         />
         <h2>Script</h2>
@@ -70,7 +70,7 @@ const Script = () => {
               {lineChunks}
             </div>
           </div>
-          <ReadingDots actors={loadedActors} currentActor={currentActor} currentScriptId={currentScriptId}
+          <ReadingDots actors={loadedActors} currentActor={currentActor} currentScriptId={scriptId}
                        key='ReadingDots' />
         </div>
       </div>

@@ -40,8 +40,8 @@ const scriptController = {
     try {
       // delete the script from the db
       const deletedScript = await scriptRepo.deleteScript(scriptId);
-      const filename = deletedScript.rows[0].filename;
-      res.locals.deletedScript = deletedScript;
+      const filename = deletedScript.filename;
+      res.locals.deletedScript = true;
       // remove the local copy of the script
       await fs.unlinkAsync(process.env.UPLOADPATH + '/' + filename);
       return next();

@@ -10,3 +10,8 @@ public/main.css
 scriptUploads
 secret-vars.yaml
 notes
+
+
+# Added by cargo
+
+/target

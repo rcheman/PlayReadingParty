@@ -45,7 +45,7 @@ paths:
                   example: "Mary Poppins"
                   description: name of the new actor to be added
       responses:
-        200:
+        201:
           description: Successful response
           content:
             application/json:
@@ -213,7 +213,7 @@ paths:
                   type: string
                   format: binary
       responses:
-        200:
+        201:
           description: Successful response
           content:
             application/json:

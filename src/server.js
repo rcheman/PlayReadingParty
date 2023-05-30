@@ -23,7 +23,7 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 
 // uploads a new script
 app.post('/api/script', scriptController.saveScript, scriptController.importScript, (req, res) => {
-  return res.status(200).json({ id: res.locals.id, title: res.locals.title });
+  return res.status(201).json({ id: res.locals.id, title: res.locals.title });
 });
 
 // returns a list of all the script titles
@@ -59,7 +59,7 @@ app.get('/api/actors', actorController.getActors, (req, res) => {
 
 // add a new actor to the db, return the actor object
 app.post('/api/actors', actorController.newActor, (req, res) => {
-  return res.status(200).json(res.locals.actor);
+  return res.status(201).json(res.locals.actor);
 });
 
 // delete an actor from the database based on their id

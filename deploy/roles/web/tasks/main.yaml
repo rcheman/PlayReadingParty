@@ -30,13 +30,16 @@
     rsync_opts:
       - "--chmod=Dg+x,u+w,Fog-wx,+r"
       - "--chown=root:root"
+      # excludes generated gzip files from being deleted and getting detected as a change
+      - "--filter='P *.gz'"
   loop:
     - ../public
     - ../src
     - ../node_modules
   notify:
-      - fix selinux permissions
-      - restart application
+    - gzip files
+    - fix selinux permissions
+    - restart application
 
 - name: Copy application service file
   copy:

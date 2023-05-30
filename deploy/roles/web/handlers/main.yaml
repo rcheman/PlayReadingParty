@@ -1,11 +1,18 @@
 ---
 
+# gzip files for nginx's gzip_static
+- name: gzip files
+  command: "{{ item }}"
+  loop:
+    - "find /var/www/playreading/public -name '*.gz' -exec rm {} ;"
+    - "find /var/www/playreading/public -type f ( -name '*.css' -o -name '*.js' -o -name '*.html' ) -exec gzip --best --keep {} ;"
+
+- name: fix selinux permissions
+  command: restorecon -R /var/www/playreading
+
 - name: restart application
   systemd:
     name: playreading.service
     daemon_reload: yes
     state: restarted
     enabled: yes
-
-- name: fix selinux permissions
-  command: restorecon -R /var/www/playreading

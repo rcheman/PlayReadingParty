@@ -5,6 +5,7 @@ const dotIds = {};
 
 async function subscribe(req, res) {
   let { scriptId } = req.params;
+  scriptId = Number(scriptId)
 
   res.writeHead(200, {
     'Cache-Control': 'no-cache',

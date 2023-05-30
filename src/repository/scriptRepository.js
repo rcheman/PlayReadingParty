@@ -38,7 +38,10 @@ async function getScript(scriptDir, id) {
 /**
  * delete the specified script
  * @param {string} id The script ID
- * @return {Promise<boolean>} Whether or not the query was successful
+ * @return {Promise<object>} Script data
+ * @return {number} object.id The script's unique ID
+ * @return {string} object.title The script's title
+ * @return {string} object.filename The script's filename
  */
 async function deleteScript(id) {
   const result = await db.query('DELETE FROM scripts WHERE id = $1 RETURNING *;', [id]);

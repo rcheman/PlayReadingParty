@@ -9,6 +9,7 @@ const ServerError = require('./services/utils.js');
 
 require('./services/startupChecks').assert();
 
+
 const app = express();
 app.disable('x-powered-by');
 
@@ -58,7 +59,7 @@ app.get('/api/actors', actorController.getActors, (req, res) => {
 
 // add a new actor to the db, return the actor object
 app.post('/api/actors', actorController.newActor, (req, res) => {
-  return res.status(201).json(res.locals.actor);
+  return res.status(200).json(res.locals.actor);
 });
 
 // delete an actor from the database based on their id

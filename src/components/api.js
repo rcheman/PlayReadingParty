@@ -47,15 +47,13 @@ async function getCharacters(scriptId) {
 /**
  * assign the selected character to the selected actor
  * @param {string} characterId
- * @param {string|null} actorId
+ * @param {string|null|number} actorId
  * @param {string} scriptId
  * @return {Promise<ApiResponse>}
  */
 async function assignCharacter(characterId, actorId, scriptId){
-  if(actorId === 'unassignedCharacters'){
-    actorId = null;
-  }
-  const body = JSON.stringify({ actorId, characterId })
+  actorId === 'unassignedCharacters' ? actorId = null : actorId = Number(actorId)
+  const body = JSON.stringify({ actorId: actorId, characterId: Number(characterId) })
   return await apiCall('POST', `characters/${scriptId}/assignCharacter`, body, { 'Content-Type': 'application/json'})
 }
 
@@ -123,7 +121,11 @@ async function uploadScript(formData) {
  * @return {Promise<ApiResponse>}
  */
 async function postPosition(actorId, scriptId, position) {
-  const body = JSON.stringify({ actorId, scriptId, position });
+  const body = JSON.stringify({
+    actorId: Number(actorId),
+    scriptId: Number(scriptId),
+    position: Number(position)
+  });
   return await apiCall('POST', 'positions', body, { 'Content-Type': 'application/json' });
 }
 

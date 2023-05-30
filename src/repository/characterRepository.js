@@ -5,7 +5,7 @@ const { Character } = require('../services/scriptParser');
  * Get all the characters for the current script.
  * Also can get the characters for a specified actor
  * @param {string} scriptId ID of the selected script
- * @param {string | number} actorId optional: ID of the selected actor. Default value of -1 to allow SQL query even when no ID is given
+ * @param {number} actorId optional: ID of the selected actor. Default value of -1 to allow SQL query even when no ID is given
  * @return {Promise<{Character}>} Character objects indexed by their id
  */
 async function getCharacters(scriptId, actorId = -1) {
@@ -26,8 +26,8 @@ async function getCharacters(scriptId, actorId = -1) {
 /**
  * Assign a character to a specified actor.
  * @param {string} scriptId ID of the selected script
- * @param {string} characterId ID of the selected character that will be assigned
- * @param {string} actorId ID of the actor that the character will be assigned to
+ * @param {number} characterId ID of the selected character that will be assigned
+ * @param {number} actorId ID of the actor that the character will be assigned to
  * @return {Promise<boolean>} Whether on to the query went through
  */
 async function assignCharacter(scriptId, characterId, actorId) {

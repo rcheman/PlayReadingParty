@@ -2,7 +2,7 @@ const db = require('./database.js');
 
 /**
  * Get ID for a progress dot, creates one if it does not already exist
- * @param {string} scriptId ID of the script that the dot belongs to
+ * @param {number} scriptId ID of the script that the dot belongs to
  * @param {number} actorId ID of the actor that the dot belongs to
  * @return {Promise<number>} ID of the progress dot
  */
@@ -22,7 +22,7 @@ async function getId(scriptId, actorId) {
 /**
  * Update the position of the progress dot
  * @param {number} dotId ID of the progress dot
- * @param {string} position New position of the progress dot
+ * @param {number} position New position of the progress dot
  */
 async function set(dotId, position) {
   await db.query(`UPDATE read_position SET position = $2 WHERE id = $1`, [dotId, position]);
@@ -30,7 +30,7 @@ async function set(dotId, position) {
 
 /**
  * Get all the progress dots for the specified script
- * @param {string} scriptId ID of the script
+ * @param {number} scriptId ID of the script
  * @return {Promise<Array.<Dot>>} Array of all progress dots for the specified script
  */
 async function getAll(scriptId) {
@@ -43,8 +43,8 @@ class Dot {
   /**
    * @param {number} id ID of the progress dot
    * @param {number} actorId ID of the actor associated with the dot
-   * @param {string} scriptId ID of the selected script
-   * @param {string} position Current position of the dot
+   * @param {number} scriptId ID of the selected script
+   * @param {number} position Current position of the dot
    */
   constructor(id, actorId, scriptId, position) {
     this.id = id;

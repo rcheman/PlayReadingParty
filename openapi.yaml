@@ -1,0 +1,399 @@
+openapi: "3.0.2"
+info:
+  title: PlayReadingParty
+  description: "Read plays with your friends"
+  version: "1.0"
+  contact:
+    name: "Play Reading Party"
+    url: "https://playreadingparty.com/"
+paths:
+  /actors:
+    get:
+      tags:
+        - Actor Data
+      summary: "Get all the actor data."
+      operationId: getActors
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                title: Successful response
+                type: array
+                items:
+                  $ref: '#/components/schemas/Actor'
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+    post:
+      tags:
+        - Actor Data
+      summary: "Add a new actor."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Mary Poppins"
+                  description: name of the new actor to be added
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+
+  /actors/{actorId}:
+    delete:
+      tags:
+        - Actor Data
+      summary: "Delete an actor"
+      operationId: deleteActor
+      parameters:
+        - $ref: '#/components/parameters/actorId'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successfulQueryResponse'
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+  /characters/{scriptId}:
+    get:
+      tags:
+        - Character Data
+      summary: "Get the characters for the specified script. Can filter for a specific actor"
+      operationId: getCharacters
+      parameters:
+        - in: query
+          name: actorId
+          schema:
+            type: integer
+          description: The ID for the actor whose assigned characters should be retrieved
+        - $ref: '#/components/parameters/scriptId'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Object keys are the unique IDs of the characters.
+                properties:
+                  characterID:
+                    $ref: '#/components/schemas/Character'
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+  /characters/{scriptId}/assignCharacter:
+    post:
+      tags:
+        - Character Data
+      summary: "Assign a character to an actor"
+      operationId: assignCharacter
+      parameters:
+        - $ref: '#/components/parameters/scriptId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                actorId:
+                  $ref: '#/components/schemas/actorId'
+                characterId:
+                  $ref: '#/components/schemas/characterId'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successfulQueryResponse'
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+  /positions:
+    post:
+      tags:
+        - Position Data
+      summary: Report the read position of an actor in a script
+      operationId: reportPosition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                actorId:
+                  $ref: '#/components/schemas/actorId'
+                scriptId:
+                  $ref: '#/components/schemas/scriptId'
+                position:
+                  type: integer
+                  description: the percentage between 0.0 and 1.0 that the user has scrolled through the script
+                  example: 0.7
+      responses:
+        200:
+          description: Successful response
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+  /positions/{scriptId}:
+    get:
+      tags:
+        - Position Data
+      summary: Subscribe to server sent event to get updated positions of other actors
+      operationId: subscribePositions
+      parameters:
+        - $ref: '#/components/parameters/scriptId'
+      responses:
+        200:
+          description: SERVER SENT EVENT
+          content:
+            text/event-stream:
+              schema:
+                type: object
+                properties:
+                  actorId:
+                    $ref: '#/components/schemas/actorId'
+                  scriptId:
+                    $ref: '#/components/schemas/scriptId'
+                  position:
+                    type: integer
+                    description: the percentage between 0.0 and 1.0 that the user has scrolled through the script
+                    example: 0.7
+
+  /script:
+    post:
+      tags:
+        - Script Data
+      summary: Upload a new script file
+      operationId: uploadScript
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                scriptFormField:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 12
+                    description: Unique Script Id
+                  title:
+                    type: string
+                    example: "The Importance of Being Earnest"
+                    description: Script title
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+  /scripts/title:
+    get:
+      tags:
+        - Script Data
+      summary: Get all the script titles
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 10
+                      description: Unique Script Id
+                    title:
+                      type: string
+                      example: "The Ideal Husband"
+                      description: Script title
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+  /script/{scriptId}:
+    get:
+      tags:
+        - Script Data
+      summary: Get the contents of the entire play script
+      parameters:
+        - $ref: '#/components/parameters/scriptId'
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "LORD DARLINGTON.  My dear Lady Windermere!"
+                  description: chunk of text for a single line
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+    delete:
+      tags:
+        - Script Data
+      summary: Delete the specified script
+      parameters:
+        - $ref: '#/components/parameters/scriptId'
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successfulQueryResponse'
+        500:
+          description: Error Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/500'
+
+
+
+
+
+
+
+
+components:
+
+  parameters:
+    scriptId:
+      name: scriptId
+      in: path
+      description: "Script ID number"
+      schema:
+        type: integer
+      required: true
+    actorId:
+      name: actorId
+      in: path
+      description: "Actor ID number"
+      schema:
+        type: integer
+      required: true
+  schemas:
+    500:
+      title: Server error
+      type: string
+      description: Error from express error handler
+      example: "Express error handler caught unknown middleware error"
+    Actor:
+      title: Actor
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique actor ID
+          example: 7
+        name:
+          type: string
+          description: the actor's name
+          example: 'Rachel'
+    successfulQueryResponse:
+      title: Successful Query Response
+      type: boolean
+      description: Whether or not the query was successful
+      example: true
+    Character:
+      title: Character
+      type: object
+      properties:
+        name:
+          type: string
+          description: character's name
+          example: "Viola"
+        lineCount:
+          type: integer
+          description: character's total line count
+          example: 120
+        speakCount:
+          type: integer
+          description: character's total count of how many times they start speaking
+          example: 20
+        id:
+          type: string
+          description: Unique character ID
+          example: 8
+        actorId:
+          $ref: '#/components/schemas/actorId'
+    actorId:
+      title: actorId
+      type: integer
+      example: 10
+      description: Unique Actor ID
+    scriptId:
+      title: scriptId
+      type: integer
+      example: 23
+      description: Unique Script ID
+    characterId:
+      title: characterId
+      type: integer
+      example: 23
+      description: Unique character ID
+
+servers:
+  - url: https://playreadingparty.com/api
+    description: Production server
+  - url: http:localhost:3000/api
+    description: Development server

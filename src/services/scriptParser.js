@@ -51,7 +51,12 @@ function parseCharacters(scriptText) {
   // loop through the script and create character objects
   for (let lineChunk of lineChunks) {
     // A line chunk always starts with the character name followed by a period
-    const name = lineChunk.split('.')[0];
+    let name = lineChunk.split('.')[0];
+
+    // Check for MR. and MRS.
+    if (name.match(/MR|MRS/)){
+      name += lineChunk.split('.')[1]
+    }
 
     // check that the name is actually a name and not a different part of the play ex: ACT I
     if (!isName(name)) {
@@ -63,13 +68,28 @@ function parseCharacters(scriptText) {
       characters[name] = new Character(name, 0, 0);
     }
 
-    // minus one to account for the first line of the chunk that is just the name
-    characters[name].lineCount += lineChunk.split('\n').length - 1;
+    // Check for "CHARACTERNAME. Start of lines" or "CHARACTERNAME. \n Start of lines."
+    // This determines if the first line should be counted or not.
+    const firstLine = lineChunk.split('\n')[0]
+    if (firstLine.length > name.length){
+      characters[name].lineCount += lineChunk.split('\n').length
+    } else {
+      // minus one to account for the first line of the chunk that is just the name
+      characters[name].lineCount += lineChunk.split('\n').length - 1;
+    }
     characters[name].speakCount++;
   }
 
-  return characters;
+  // Remove any characters who have a lineCount of 0, they were wrongly identified
+  for (let key in characters) {
+    if (characters[key].lineCount < 1) {
+      delete characters[key]
+    }
+  }
+
+  return characters
 }
+
 
 /**
  * Check if a potential name is all uppercase
@@ -85,9 +105,8 @@ function isUppercase(name) {
  * @param {string} name the string that comes before the first dot '.' in a section and may be a character name
  * @return {boolean}
  */
-// TODO also exclude 'SCENE'
 function isName(name) {
-  return isUppercase(name) && name.length > 1 && name.length < 20 && !name.match(/(ACT)/);
+  return isUppercase(name) && name.length > 1 && name.length < 30 && !name.match(/(ACT|SCENE|START|THE PERSONS OF THE PLAY|EPILOGUE|THEATRE)/);
 }
 
 class Character {

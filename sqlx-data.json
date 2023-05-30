@@ -1,5 +1,51 @@
 {
   "db": "PostgreSQL",
+  "8f8a30bbe8369c2b160c8bc0674f35a13612998653447ba98c280161ba4aa649": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Varchar"
+        ]
+      }
+    },
+    "query": "INSERT INTO actors (name) VALUES ($1) RETURNING ID"
+  },
+  "938274f5cad796631a301a32f97d07c77bd366ace0fef3b9ca798aeef4cf2bd8": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      }
+    },
+    "query": "DELETE FROM actors WHERE id = $1 RETURNING *"
+  },
   "e9b96c056f0a4c4915501b25fbf9ba238a34e6704114250a6134b774d72ce09d": {
     "describe": {
       "columns": [

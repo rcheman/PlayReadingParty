@@ -11,7 +11,7 @@ const reset = "\x1b[0m";
  */
 function assertEnvVarsPresent() {
   let variables = [
-    'DATABASE_URI',
+    'DATABASE_URL',
     'UPLOADPATH'
   ];
 

@@ -27,7 +27,7 @@ To get a local copy up and running, follow these steps
      ```
    - Add a database uri for your postgres database
      ```
-     DATABASE_URI='postgresql://playreading:pass@localhost/playreadingparty'
+     DATABASE_URL='postgresql://playreading:pass@localhost/playreadingparty'
      ```
 4. Run `npm start` to start Play Reading Party.
 5. Navigate to http://localhost:3000 in your browser

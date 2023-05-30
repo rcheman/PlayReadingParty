@@ -1,5 +1,6 @@
-use actix_web::{HttpResponse, Responder, web, get};
+use actix_web::{HttpResponse, Responder, web, get, post, delete};
 use serde::Serialize;
+use serde_json::json;
 use crate::AppState;
 
 #[derive(Debug, Serialize)]
@@ -17,24 +18,49 @@ pub async fn get_actors(data: web::Data<AppState>) -> impl Responder {
     if let Ok(result) = result {
         HttpResponse::Ok().json(result
             .iter()
-            .map(|record| {
-                // let mut name = ;
-                // name.push_str("rusty-rachel");
-
-                Actor { id: record.id, name: String::from(&record.name) }
+            .map(|record| Actor {
+                id: record.id,
+                name: String::from(&record.name)
             })
-            .collect::<Vec<_>>()
+            .collect::<Vec<Actor>>()
         )
     } else {
         HttpResponse::BadRequest().json("no")
     }
-
 }
 
-// async fn new_actor() -> impl Responder {
-//     todo!()
-// }
-//
-// async fn delete_actor(database: web::Data<PgPool>) -> impl Responder {
-//     todo!()
-// }
+#[post("/actors")]
+pub async fn new_actor(data: web::Data<AppState>, name: web::Json<String>) -> impl Responder {
+    let name = name.into_inner();
+    let result = sqlx::query!(
+            "INSERT INTO actors (name) VALUES ($1) RETURNING ID",
+            name
+        )
+        .fetch_one(&data.db)
+        .await;
+
+    if let Ok(result) = result {
+        HttpResponse::Created().json(json!({
+            "id": result.id,
+            "name": name
+        }))
+    } else {
+        HttpResponse::BadRequest().json("no")
+    }
+}
+
+#[delete("/actors/{id}")]
+pub async fn delete_actor(data: web::Data<AppState>, id: web::Path<i32>) -> impl Responder {
+    let result = sqlx::query!(
+            "DELETE FROM actors WHERE id = $1 RETURNING *",
+            id.into_inner()
+        )
+        .fetch_one(&data.db)
+        .await;
+
+    if result.is_ok() {
+        HttpResponse::Ok().json(true)
+    } else {
+        HttpResponse::BadRequest().json("no")
+    }
+}

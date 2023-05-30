@@ -19,8 +19,8 @@
 - name: Add db uri to .env
   ansible.builtin.lineinfile:
     path: /var/www/playreading/.env
-    regexp: '^DATABASE_URI='
-    line: "DATABASE_URI=postgresql://playreading:{{ db_password }}@localhost/playreadingparty"
+    regexp: '^DATABASE_URL='
+    line: "DATABASE_URL=postgresql://playreading:{{ db_password }}@localhost/playreadingparty"
     create: yes
 
 - name: Copy db setup scripts

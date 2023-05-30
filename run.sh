@@ -31,5 +31,7 @@ if [ "$1" = "dev" ]; then
     "npm run css -- --watch --format beautify"
 else
   # start production server
-  node src/server.js
+  concurrently \
+    "node src/server.js" \
+    "cargo run --release"
 fi

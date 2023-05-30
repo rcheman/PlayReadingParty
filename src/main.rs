@@ -2,7 +2,7 @@ use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
 use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
-use crate::actors::get_actors;
+use crate::actors::{delete_actor, get_actors, new_actor};
 
 mod actors;
 
@@ -15,7 +15,7 @@ async fn main() -> std::io::Result<()> {
 
     dotenv().ok();
 
-    let database_uri = std::env::var("DATABASE_URI").expect("DATABASE_URI must be set");
+    let database_uri = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let pool = match PgPoolOptions::new()
         .max_connections(128)
         .connect(&database_uri)
@@ -37,6 +37,8 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/api")
                     .service(get_actors)
+                    .service(new_actor)
+                    .service(delete_actor)
             )
     })
         .bind(("127.0.0.1", 8000))?

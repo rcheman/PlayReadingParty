@@ -7,7 +7,7 @@
     "start": "npm run build && npm run prod",
     "prod": "./run.sh",
     "dev": "./run.sh dev",
-    "build": "NODE_ENV=production webpack . && npm run css",
+    "build": "NODE_ENV=production webpack . && npm run css && cargo build --release",
     "css": "cleancss -o public/main.css public/css/{normalize.css,milligram.css,style.css}",
     "jsdoc": "jsdoc -a all -c jsdoc.json -R README.md -r ./src/ -d build/docs/jsdoc",
     "deploy": "cd deploy && ansible-playbook -e @secret-vars.yaml -i production.yaml deploy.yaml"

@@ -6,6 +6,7 @@ node_modules
 build
 public/main.js
 public/main.js.LICENSE.txt
+public/main.css
 scriptUploads
 secret-vars.yaml
 notes

@@ -27,7 +27,8 @@ if [ "$1" = "dev" ]; then
   NODE_ENV=development \
   concurrently \
     "webpack-dev-server --color" \
-    "nodemon --inspect ./src/server.js"
+    "nodemon --inspect ./src/server.js" \
+    "npm run css -- --watch --format beautify"
 else
   # start production server
   node src/server.js

@@ -32,6 +32,7 @@
       - "--chown=root:root"
       # excludes generated gzip files from being deleted and getting detected as a change
       - "--filter='P *.gz'"
+      - "--exclude=public/css"  # exclude css directory since the files there are combined into main.css
   loop:
     - ../public
     - ../src

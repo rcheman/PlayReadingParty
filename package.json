@@ -4,12 +4,11 @@
   "private": true,
   "main": "src/index.js",
   "scripts": {
-    "start": "./run.sh",
+    "start": "npm run build && npm run prod",
+    "prod": "./run.sh",
     "dev": "./run.sh dev",
-    "css": "cleancss -o public/main.css public/css/{normalize.css,milligram.css,style.css}",
     "build": "NODE_ENV=production webpack . && npm run css",
-    "front": "NODE_ENV=development webpack-dev-server --open",
-    "back": "nodemon src/server.js",
+    "css": "cleancss -o public/main.css public/css/{normalize.css,milligram.css,style.css}",
     "jsdoc": "jsdoc -a all -c jsdoc.json -R README.md -r ./src/ -d build/docs/jsdoc",
     "deploy": "cd deploy && ansible-playbook -e @secret-vars.yaml -i production.yaml deploy.yaml"
   },

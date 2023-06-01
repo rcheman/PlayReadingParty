@@ -2,16 +2,16 @@
 * Install `ansible` from your distro's package manager
 * Ensure your ssh key has been added to the .ssh/authorized_keys file on the host you want to deploy to
 * Copy `deploy/secret-vars.example.yaml` to `deploy/secret-vars.yaml` and fill in the fields
-* CD to the `deploy/` directory
+* Ensure you've run `npm run build` to generate the files needed to run the checked out version of the application
 
 
 ## Full deploy from scratch
 ```
-ansible-playbook -e @secret-vars.yaml -i production deploy.yaml
+npm run deploy
 ```
 
 ### Partial deployments (for quicker iteration during testing)
-
+* Ensure you are in the `deploy/` directory
 #### Deploy just the web changes (when only application code has changed)
 ```
 ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags web

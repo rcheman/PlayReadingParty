@@ -18,7 +18,7 @@ To get a local copy up and running, follow these steps
 ### Installation
 
 1. Clone the repo
-2. Install NPM packages and build: `npm install && npm run build`
+2. Install NPM packages: `npm install`
 3. Set up environment variables
    - Create a .env file in the root directory of the project
    - Add the path for where you want script files to be stored after they have been uploaded by the user

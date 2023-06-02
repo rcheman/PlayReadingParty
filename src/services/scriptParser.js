@@ -53,8 +53,8 @@ function parseCharacters(scriptText) {
     // A line chunk always starts with the character name followed by a period
     let name = lineChunk.split('.')[0];
 
-    // Check for MR. and MRS.
-    if (name.match(/MR|MRS/)){
+    // Check for various honorific abbreviations
+    if (name.match(/MR|MRS|MS|MISS|DR|JR|SR|PROF|REV|ST|COL|GEN|GOV|PRES|LT/)){
       name += lineChunk.split('.')[1]
     }
 

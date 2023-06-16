@@ -1,6 +1,6 @@
 use crate::AppState;
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 
 #[derive(Debug, Serialize)]
@@ -30,9 +30,17 @@ pub async fn get_actors(data: web::Data<AppState>) -> impl Responder {
     }
 }
 
+#[derive(Debug, Deserialize)]
+pub struct NewActor {
+    name: String,
+}
+
 #[post("/actors")]
-pub async fn new_actor(data: web::Data<AppState>, name: web::Json<String>) -> impl Responder {
-    let name = name.into_inner();
+pub async fn new_actor(
+    data: web::Data<AppState>,
+    new_actor: web::Json<NewActor>,
+) -> impl Responder {
+    let name = new_actor.into_inner().name;
     let result = sqlx::query!("INSERT INTO actors (name) VALUES ($1) RETURNING ID", name)
         .fetch_one(&data.db)
         .await;

@@ -12,7 +12,7 @@ import { Droppable } from 'react-beautiful-dnd';
 const DropColumn = ({ column, characterList }) => {
   return (
     <div className='dropContainer' style={{ height: 'fit-content' }}>
-      <h3 className='columnTitle'>{column.title}: {column.getLineCount()}</h3>
+      <h3 className='columnTitle'>{column.title}: {getLineCount(characterList)}</h3>
       <Droppable droppableId={column.id} key={column.id}>
         {(provided) => (
           <div className='characterList' ref={provided.innerRef} {...provided.droppableProps}>
@@ -27,5 +27,14 @@ const DropColumn = ({ column, characterList }) => {
     </div>
   );
 };
+
+/**
+ * Calculate the total lines for the column
+ * @param {Array.<Character>} characterList All the characters assigned to this column
+ * @returns {Number} The total line count for the column
+ */
+function getLineCount(characterList){
+  return characterList.reduce((acc, curr) => acc + curr.lineCount, 0)
+}
 
 export default DropColumn;

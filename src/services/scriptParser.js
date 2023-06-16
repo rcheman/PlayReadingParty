@@ -1,18 +1,5 @@
 const ServerError = require('./utils');
 
-/*
-TODO: Add handling for other script formats 
-
-Currently we split line chunks on two new lines '\n\n' 
-and identify character names based on a period after some all caps letters and then a new line 
-ex: 'STEVE. \n My name is Steve and these are my lines.'
-
-However, some plays are formatted where the do NOT have a new line after the character name 
-ex:'BOB. My name is Bob and these are my lines.'
-
-This format without the new line between character name and line means that the current algorithm can't identify character names or line counts.
-*/
-
 /**
  * Identify the title within the script
  * @param {string} scriptText The entire play script

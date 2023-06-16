@@ -28,7 +28,8 @@ if [ "$1" = "dev" ]; then
   concurrently \
     "webpack-dev-server --color" \
     "nodemon --inspect ./src/server.js" \
-    "npm run css -- --watch --format beautify"
+    "npm run css -- --watch --format beautify" \
+    "cargo watch -x check -x test -x run"
 else
   # start production server
   concurrently \

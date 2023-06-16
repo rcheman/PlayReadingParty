@@ -1,18 +1,17 @@
+use crate::actors::{delete_actor, get_actors, new_actor};
 use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
-use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
-use crate::actors::{delete_actor, get_actors, new_actor};
+use sqlx::PgPool;
 
 mod actors;
 
 pub struct AppState {
-    db: PgPool
+    db: PgPool,
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-
     dotenv().ok();
 
     let database_uri = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
@@ -33,15 +32,15 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(AppState{db: pool.clone()}))
+            .app_data(web::Data::new(AppState { db: pool.clone() }))
             .service(
                 web::scope("/api")
                     .service(get_actors)
                     .service(new_actor)
-                    .service(delete_actor)
+                    .service(delete_actor),
             )
     })
-        .bind(("127.0.0.1", 8000))?
-        .run()
-        .await
+    .bind(("127.0.0.1", 8000))?
+    .run()
+    .await
 }

@@ -21,7 +21,7 @@ const Character = ({ character, index }) => {
     // https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/guides/drop-animation.md#skipping-the-drop-animation
     return {
       ...style,
-      transitionDuration: '0.001s'
+      transitionDuration: '0.001s',
     };
   }
 
@@ -30,11 +30,13 @@ const Character = ({ character, index }) => {
   return (
     <Draggable draggableId={character.id} index={index} key={character.id}>
       {(provided, snapshot) => (
-        <div className='assignedCharacter'
-             {...provided.draggableProps}
-             {...provided.dragHandleProps}
-             ref={provided.innerRef}
-             style={getStyle(provided.draggableProps.style, snapshot)}>
+        <div
+          className="assignedCharacter"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          style={getStyle(provided.draggableProps.style, snapshot)}
+        >
           <p>{character.name}</p>
           <p>{`Lines: ${character.line_count}`}</p>
         </div>

@@ -43,7 +43,7 @@ pub async fn get_characters(
         let characters_by_id: HashMap<String, Character> = result
             .iter()
             .map(|record| {
-                return (
+                (
                     record.id.to_string(),
                     Character {
                         name: String::from(&record.name),
@@ -52,7 +52,7 @@ pub async fn get_characters(
                         id: record.id as u32,
                         actor_id: record.actor_id,
                     },
-                );
+                )
             })
             .collect();
         HttpResponse::Ok().json(characters_by_id)

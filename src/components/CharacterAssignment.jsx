@@ -15,7 +15,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   const [characters, setCharacters] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
   const [columns, setColumns] = useState({
-    'unassignedCharacters': new Column('unassignedCharacters', 'Unassigned Characters')
+    unassignedCharacters: new Column('unassignedCharacters', 'Unassigned Characters'),
   });
 
   // When the current script changes create a column for each actor and populate it with the assigned characters
@@ -29,12 +29,10 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     }
   }, [currentScriptId]);
 
-
   // Edit columns when actors are added or removed
   useEffect(() => {
     updateActorColumns(actors);
   }, [actors]);
-
 
   /**
    * Create the actor columns and populate them with the assigned characters.
@@ -42,7 +40,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param {String} currentScriptId Unique script ID
    * @param {Array.<Actor>} actors Array of actor objects
    */
-  async function setupColumns (currentScriptId, actors) {
+  async function setupColumns(currentScriptId, actors) {
     const characters = await getCharacters(currentScriptId);
     if (characters.success) {
       const { newColumns, newColumnOrder } = createInitialActorColumns(actors);
@@ -61,7 +59,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param {Array.<Character>} characters  Contains Character objects indexed by their id
    * @returns {Object.<Column>} Object of actor column objects, now updated with assigned characters
    */
-  function assignInitialCharacters (columns, characters)  {
+  function assignInitialCharacters(columns, characters) {
     for (let key in characters) {
       let assignedActor = characters[key].actorId;
       if (assignedActor) {
@@ -78,9 +76,9 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param {Array.<Actor>} actors Array of actor objects
    * @returns {Object} Object of actor column objects and array of actor IDs
    */
-  function createInitialActorColumns (actors) {
+  function createInitialActorColumns(actors) {
     const columns = {
-      unassignedCharacters: new Column('unassignedCharacters', 'Unassigned Characters')
+      unassignedCharacters: new Column('unassignedCharacters', 'Unassigned Characters'),
     };
     const actorIds = [];
     actors.forEach((actor) => {
@@ -93,7 +91,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * Update the actor columns when the number of actors changes and set the new column values and order
    * @param {Array.<Actor>} actors Array of Actor objects
    */
-  function updateActorColumns (actors) {
+  function updateActorColumns(actors) {
     // If there are more actors than columns, add a column
     if (actors.length > columnOrder.length) {
       const { newColumns, newColumnOrder } = addActorColumn(actors, { ...columns }, [...columnOrder]);
@@ -105,7 +103,6 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
       setColumns(newColumns);
       setColumnOrder(newColumnOrder);
     }
-
   }
 
   /**
@@ -115,7 +112,7 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param {Object.<Column>} columns Object containing column objects
    * @param {Array.<Number>} columnOrder Array of column ids
    */
-  function addActorColumn (actors, columns, columnOrder) {
+  function addActorColumn(actors, columns, columnOrder) {
     actors.forEach((actor) => {
       if (!columns[actor.id]) {
         columns[actor.id] = new Column(actor.id.toString(), actor.name);
@@ -132,14 +129,14 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
    * @param {Object.<Column>} columns Object containing column objects
    * @param {Array.<Number>} columnOrder Array of column ids
    */
-  function removeActorColumn (actors, columns, columnOrder) {
+  function removeActorColumn(actors, columns, columnOrder) {
     for (let key in columns) {
       // Check if the column is for an actor that has been deleted, therefore it's characters should be unassigned
       if (!actors.some((actor) => actor.id.toString() === key) && key !== 'unassignedCharacters') {
         // Reassign characterIds to the unassigned column
         const reassignedIds = columns[key].characterIds;
         columns.unassignedCharacters.characterIds = [...columns.unassignedCharacters.characterIds, ...reassignedIds];
-        const index = columnOrder.findIndex(id => id.toString() === key);
+        const index = columnOrder.findIndex((id) => id.toString() === key);
         columnOrder.splice(index, 1);
         delete columns[key];
       }
@@ -147,13 +144,12 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     return { newColumns: columns, newColumnOrder: columnOrder };
   }
 
-
   /**
    * Remove a character from its source column and adds it to its destination column,
    *  update the database with the assignment info, and set state to reflect the changes.
    * @param {Object} result React-beautiful-dnd set parameter
    */
-  async function onDragEnd (result) {
+  async function onDragEnd(result) {
     const { destination, source, draggableId } = result;
     // No destination, change nothing
     if (!destination) {
@@ -178,10 +174,10 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     setColumns({ ...columns, [start.id]: start, [finish.id]: finish });
     const response = await assignCharacter(draggableId, destination.droppableId, currentScriptId);
     if (!response.success) {
-      setColumns(columns)
+      setColumns(columns);
       console.error(response.data);
     }
-  };
+  }
 
   // No script is selected, don't bother rendering the component
   if (!currentScriptId) {
@@ -189,21 +185,23 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
   }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <h2 id='characterAssignmentTitle'>Character
-        Assignment</h2>
+      <h2 id="characterAssignmentTitle">Character Assignment</h2>
       {/*Uses map and sort to be able to have the unassigned column separate  from the actor columns but characters are still sorted by line count*/}
-      <div className='row dragDropContext'>
-        <div id='unassigned'>
-          <DropColumn key={columns['unassignedCharacters'].id} column={columns['unassignedCharacters']}
-                      characterList={columns['unassignedCharacters'].characterIds
-                        .map(characterId => characters[characterId])
-                        .sort((a, b) => b.lineCount - a.lineCount)} />
+      <div className="row dragDropContext">
+        <div id="unassigned">
+          <DropColumn
+            key={columns['unassignedCharacters'].id}
+            column={columns['unassignedCharacters']}
+            characterList={columns['unassignedCharacters'].characterIds
+              .map((characterId) => characters[characterId])
+              .sort((a, b) => b.lineCount - a.lineCount)}
+          />
         </div>
         {/*Creates all the actor columns*/}
-        <div id='actorColumnsContainer'>
+        <div id="actorColumnsContainer">
           {columnOrder.map((columnId) => {
             const column = columns[columnId];
-            const characterList = column.characterIds.map(characterId => characters[characterId]);
+            const characterList = column.characterIds.map((characterId) => characters[characterId]);
             characterList.sort((a, b) => b.lineCount - a.lineCount);
             return <DropColumn key={column.id} column={column} characterList={characterList} />;
           })}
@@ -211,7 +209,6 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
       </div>
     </DragDropContext>
   );
-
 };
 
 class Column {

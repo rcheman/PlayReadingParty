@@ -13,7 +13,7 @@ async function getActors() {
  */
 async function deleteActor(id) {
   return await apiCall('DELETE', `actors/${id}`);
-};
+}
 
 /**
  * add a new actor to the database
@@ -51,10 +51,10 @@ async function getCharacters(scriptId) {
  * @param {string} scriptId
  * @return {Promise<ApiResponse>}
  */
-async function assignCharacter(characterId, actorId, scriptId){
-  actorId === 'unassignedCharacters' ? actorId = null : actorId = Number(actorId)
-  const body = JSON.stringify({ actorId: actorId, characterId: Number(characterId) })
-  return await apiCall('POST', `characters/${scriptId}/assignCharacter`, body, { 'Content-Type': 'application/json'})
+async function assignCharacter(characterId, actorId, scriptId) {
+  actorId === 'unassignedCharacters' ? (actorId = null) : (actorId = Number(actorId));
+  const body = JSON.stringify({ actorId: actorId, characterId: Number(characterId) });
+  return await apiCall('POST', `characters/${scriptId}/assignCharacter`, body, { 'Content-Type': 'application/json' });
 }
 
 /**
@@ -89,29 +89,28 @@ async function deleteScript(deleteId) {
  * @return {Promise<{success: boolean, data: any}>}
  */
 async function uploadScript(formData) {
-  const response = await fetch('/api/script', { method: 'POST', body: formData })
-  if (response.ok){
+  const response = await fetch('/api/script', { method: 'POST', body: formData });
+  if (response.ok) {
     return {
       success: true,
-      data: await response.json()
-    }
-  } else if (response.status === 409){
+      data: await response.json(),
+    };
+  } else if (response.status === 409) {
     return {
       success: false,
-      data: 'Script title already exists'
-    }
-  } else if (response.status === 452){
+      data: 'Script title already exists',
+    };
+  } else if (response.status === 452) {
     return {
       success: false,
-      data: 'Could not find a title, potentially invalid file type'
-    }
+      data: 'Could not find a title, potentially invalid file type',
+    };
   } else {
     return {
       success: false,
-      data: 'File was not uploaded. Make sure the file name doesn\'t start with an underscore and only uses numbers, letters, and these symbols: \' . _ - '
-    }
+      data: "File was not uploaded. Make sure the file name doesn't start with an underscore and only uses numbers, letters, and these symbols: ' . _ - ",
+    };
   }
-
 }
 /**
  * post the current position of the actor in the script
@@ -124,7 +123,7 @@ async function postPosition(actorId, scriptId, position) {
   const body = JSON.stringify({
     actorId: Number(actorId),
     scriptId: Number(scriptId),
-    position: Number(position)
+    position: Number(position),
   });
   return await apiCall('POST', 'positions', body, { 'Content-Type': 'application/json' });
 }
@@ -138,25 +137,26 @@ async function postPosition(actorId, scriptId, position) {
  * @return {Promise<ApiResponse>}
  */
 async function apiCall(method, uri, body = null, headers = {}) {
-
   try {
     const response = await fetch('/api/' + uri, {
       method: method,
       headers: headers,
-      body: body
+      body: body,
     });
     // Set data for successful fetch
     if (response.ok) {
-        return new ApiResponse(true, await response.json())
-    } else { // Set errors from an unsuccessful fetch request
-      return new ApiResponse(false, 'Error: ' + await response.json(), response.status)
+      return new ApiResponse(true, await response.json());
+    } else {
+      // Set errors from an unsuccessful fetch request
+      return new ApiResponse(false, 'Error: ' + (await response.json()), response.status);
     }
-  } catch (error) { // Set errors from not being able to connect to the server
-    return new ApiResponse(false, 'Network error: ' + error.message)
+  } catch (error) {
+    // Set errors from not being able to connect to the server
+    return new ApiResponse(false, 'Network error: ' + error.message);
   }
 }
 
-class ApiResponse{
+class ApiResponse {
   /**
    * @param {boolean} success Whether or not the api call went through
    * @param {any} data The data from the successful call, or an error message for a failed call
@@ -180,5 +180,5 @@ export {
   getScriptTitles,
   deleteScript,
   uploadScript,
-  postPosition
+  postPosition,
 };

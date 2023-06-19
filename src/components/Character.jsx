@@ -28,7 +28,7 @@ const Character = ({ character, index }) => {
   // draggableId {DraggableId(string)} and index {number} are both required by react-dnd-beautiful
   // Draggable docs: https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/api/draggable.md
   return (
-    <Draggable draggableId={character.id} index={index} key={character.id}>
+    <Draggable draggableId={character.id.toString()} index={index} key={character.id}>
       {(provided, snapshot) => (
         <div
           className="assignedCharacter"
@@ -38,7 +38,7 @@ const Character = ({ character, index }) => {
           style={getStyle(provided.draggableProps.style, snapshot)}
         >
           <p>{character.name}</p>
-          <p>{`Lines: ${character.line_count}`}</p>
+          <p>{`Lines: ${character.lineCount}`}</p>
         </div>
       )}
     </Draggable>

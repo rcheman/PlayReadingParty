@@ -32,7 +32,7 @@ async function newActor(name) {
  * @return {Promise<ApiResponse>}
  */
 async function getCurrentActorCharacters(actor, currentScriptId) {
-  return await apiCall('GET', `characters/${currentScriptId}/?actorId=${actor.id}`);
+  return await apiCall('GET', `characters/${currentScriptId}?actorId=${actor.id}`);
 }
 
 /**

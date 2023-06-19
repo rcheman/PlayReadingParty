@@ -36,10 +36,11 @@ module.exports = {
     // liveReload: true,
     proxy: {
       '/api/actors': 'http://localhost:8000',
+      '/api/characters': 'http://localhost:8000',
       '!/public': 'http://localhost:3000',
     },
     // Compression must be disabled, otherwise server sent events never get sent. Compression waits for ALL the data
     // before returning the response but server sent events keep sending data forever.
-    compress: false
+    compress: false,
   },
 };

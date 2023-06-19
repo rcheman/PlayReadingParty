@@ -34,7 +34,7 @@ const DropColumn = ({ column, characterList }) => {
  * @returns {Number} The total line count for the column
  */
 function getLineCount(characterList){
-  return characterList.reduce((acc, curr) => acc + curr.lineCount, 0)
+  return characterList.reduce((acc, curr) => acc + curr.line_count, 0)
 }
 
 export default DropColumn;

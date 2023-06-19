@@ -36,7 +36,7 @@ const Character = ({ character, index }) => {
              ref={provided.innerRef}
              style={getStyle(provided.draggableProps.style, snapshot)}>
           <p>{character.name}</p>
-          <p>{`Lines: ${character.lineCount}`}</p>
+          <p>{`Lines: ${character.line_count}`}</p>
         </div>
       )}
     </Draggable>

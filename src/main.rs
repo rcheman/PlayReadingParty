@@ -1,10 +1,12 @@
 use crate::actors::{delete_actor, get_actors, new_actor};
+use crate::characters::get_characters;
 use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 
 mod actors;
+mod characters;
 
 pub struct AppState {
     db: PgPool,
@@ -37,7 +39,8 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/api")
                     .service(get_actors)
                     .service(new_actor)
-                    .service(delete_actor),
+                    .service(delete_actor)
+                    .service(get_characters),
             )
     })
     .bind(("127.0.0.1", 8000))?

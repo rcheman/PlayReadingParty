@@ -1,5 +1,5 @@
 use crate::actors::{delete_actor, get_actors, new_actor};
-use crate::characters::get_characters;
+use crate::characters::{assign_character, get_characters};
 use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
@@ -40,7 +40,8 @@ async fn main() -> std::io::Result<()> {
                     .service(get_actors)
                     .service(new_actor)
                     .service(delete_actor)
-                    .service(get_characters),
+                    .service(get_characters)
+                    .service(assign_character),
             )
     })
     .bind(("127.0.0.1", 8000))?

@@ -1,5 +1,5 @@
 use crate::AppState;
-use actix_web::{get, web, HttpResponse, Responder};
+use actix_web::{get, post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -14,6 +14,7 @@ pub struct Character {
 }
 
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Query {
     actor_id: Option<i32>,
 }
@@ -56,6 +57,44 @@ pub async fn get_characters(
             })
             .collect();
         HttpResponse::Ok().json(characters_by_id)
+    } else {
+        HttpResponse::BadRequest().json("no")
+    }
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewAssignment {
+    actor_id: Option<i32>,
+    character_id: i32,
+}
+
+#[post("/characters/{script_id}/assignCharacter")]
+pub async fn assign_character(
+    data: web::Data<AppState>,
+    script_id: web::Path<i32>,
+    new_assignment: web::Json<NewAssignment>,
+) -> impl Responder {
+    // actor_id is an Option because null is passed when a character is being unassigned
+    let NewAssignment {
+        actor_id,
+        character_id,
+    } = new_assignment.into_inner();
+    let script_id = script_id.into_inner();
+    let result = sqlx::query!(
+        "UPDATE characters
+    SET actor_id = $1
+    WHERE script_id = $2 AND id = $3
+    RETURNING *",
+        actor_id,
+        script_id,
+        character_id
+    )
+    .fetch_one(&data.db)
+    .await;
+
+    if result.is_ok() {
+        HttpResponse::Ok().json(true)
     } else {
         HttpResponse::BadRequest().json("no")
     }

@@ -65,9 +65,9 @@ const CharacterAssignment = ({ actors, currentScriptId }) => {
     for (let key in characters) {
       let assignedActor = characters[key].actorId;
       if (assignedActor) {
-        columns[assignedActor].characterIds.push(characters[key].id);
+        columns[assignedActor].characterIds.push(characters[key].id.toString());
       } else {
-        columns.unassignedCharacters.characterIds.push(characters[key].id);
+        columns.unassignedCharacters.characterIds.push(characters[key].id.toString());
       }
     }
     return columns;

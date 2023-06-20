@@ -19,6 +19,7 @@ pub struct Query {
     actor_id: Option<i32>,
 }
 
+// Get all the characters, or optionally, get all the characters assigned to a specific actor
 #[get("/characters/{script_id}")]
 pub async fn get_characters(
     data: web::Data<AppState>,
@@ -58,7 +59,7 @@ pub async fn get_characters(
             .collect();
         HttpResponse::Ok().json(characters_by_id)
     } else {
-        HttpResponse::BadRequest().json("no")
+        HttpResponse::InternalServerError().finish()
     }
 }
 
@@ -69,6 +70,7 @@ pub struct NewAssignment {
     character_id: i32,
 }
 
+// Assign a character to an actor. Return a boolean for whether the query went through
 #[post("/characters/{script_id}/assignCharacter")]
 pub async fn assign_character(
     data: web::Data<AppState>,
@@ -96,6 +98,6 @@ pub async fn assign_character(
     if result.is_ok() {
         HttpResponse::Ok().json(true)
     } else {
-        HttpResponse::BadRequest().json("no")
+        HttpResponse::InternalServerError().finish()
     }
 }

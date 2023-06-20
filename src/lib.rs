@@ -1,10 +1,9 @@
 use crate::actors::{delete_actor, get_actors, new_actor};
-use crate::characters::{get_characters, assign_character};
+use crate::characters::{assign_character, get_characters};
 use actix_web::dev::Server;
 use actix_web::{web, App, HttpServer};
-use dotenvy::dotenv;
-use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
+use std::net::TcpListener;
 
 mod actors;
 mod characters;
@@ -13,28 +12,14 @@ pub struct AppState {
     db: PgPool,
 }
 
-pub async fn run() -> Result<Server, std::io::Error> {
-    dotenv().ok();
-
-    let database_uri = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let pool = match PgPoolOptions::new()
-        .max_connections(128)
-        .connect(&database_uri)
-        .await
-    {
-        Ok(pool) => {
-            println!("✅Connection to the database is successful!");
-            pool
-        }
-        Err(err) => {
-            println!("🔥 Failed to connect to the database: {:?}", err);
-            std::process::exit(1);
-        }
-    };
-
+/// Creates an HTTP server with the given listener and sets the database pool in the app state.
+/// All endpoints from this server start at /api
+pub fn get_server(listener: TcpListener, db_pool: PgPool) -> Result<Server, std::io::Error> {
     let server = HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(AppState { db: pool.clone() }))
+            .app_data(web::Data::new(AppState {
+                db: db_pool.clone(),
+            }))
             .service(
                 web::scope("/api")
                     .service(get_actors)
@@ -44,7 +29,22 @@ pub async fn run() -> Result<Server, std::io::Error> {
                     .service(assign_character),
             )
     })
-    .bind(("127.0.0.1", 8000))?
+    .listen(listener)?
     .run();
     Ok(server)
+}
+
+/// Connects to the database based on the given connection_string and returns out the pool
+pub fn configure_database(connection_string: String) -> PgPool {
+    let pool = match PgPool::connect_lazy(&connection_string) {
+        Ok(pool) => {
+            println!("✅Connection to the database is successful!");
+            pool
+        }
+        Err(err) => {
+            println!("🔥 Failed to connect to the database: {:?}", err);
+            std::process::exit(1);
+        }
+    };
+    pool
 }

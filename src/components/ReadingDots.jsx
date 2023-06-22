@@ -64,7 +64,6 @@ const ReadingDots = ({ actors, currentActor, currentScriptId }) => {
         // | |Their line  |                  |                |
         // |______________|  <---------------| <---------------
         let position = (window.scrollY - readingDotsHeightOffset) / (document.body.scrollHeight - readingDotsHeightOffset);
-        position = position.toPrecision(4);
 
         // fetch request to update position
         postPosition(currentActor.id, currentScriptId, position);

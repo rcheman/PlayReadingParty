@@ -116,14 +116,14 @@ async function uploadScript(formData) {
  * post the current position of the actor in the script
  * @param {number} actorId The id of the current actor
  * @param {string} scriptId The id of the current script
- * @param {string} position The actor's current position in the script
+ * @param {number} position The actor's current position in the script
  * @return {Promise<ApiResponse>}
  */
 async function postPosition(actorId, scriptId, position) {
   const body = JSON.stringify({
     actorId: Number(actorId),
     scriptId: Number(scriptId),
-    position: Number(position),
+    position: position,
   });
   return await apiCall('POST', 'positions', body, { 'Content-Type': 'application/json' });
 }

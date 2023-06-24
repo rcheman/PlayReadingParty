@@ -1,12 +1,13 @@
 use crate::AppState;
 use actix_web::{get, post, web, HttpResponse, Responder};
 use actix_web_lab::__reexports::futures_util::future;
+use actix_web_lab::__reexports::tokio;
 use actix_web_lab::sse::{self, ChannelStream, Sse};
-use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
+use sqlx::PgPool;
 use std::collections::HashMap;
 use std::sync::Arc;
+use tokio::sync::Mutex;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,45 +21,96 @@ pub struct UpdateForm {
 #[serde(rename_all = "camelCase")]
 struct BroadcastMessage {
     actor_id: i32,
-    position: f64
+    position: f64,
 }
 
 // clients is map of scriptId to vector of subscribers of that id
 pub struct Broadcaster {
     clients: Mutex<HashMap<String, Vec<sse::Sender>>>,
-    dot_ids: Mutex<HashMap<i64, i32>>,
 }
 
 impl Broadcaster {
     pub fn new() -> Arc<Self> {
         Arc::new(Broadcaster {
             clients: Mutex::new(HashMap::new()),
-            dot_ids: Mutex::new(HashMap::new()),
         })
     }
 
-    pub async fn new_client(&self, script_id: i32, messages: Vec<String>) -> Sse<ChannelStream> {
+    pub async fn new_client(
+        &self,
+        script_id: i32,
+        current_messages: Vec<String>,
+    ) -> Sse<ChannelStream> {
         let (tx, rx) = sse::channel(10);
 
         // Send existing positions to new client
-        let send_futures = messages.into_iter().map(|m| tx.send(sse::Data::new(m)));
+        let send_futures = current_messages
+            .into_iter()
+            .map(|m| tx.send(sse::Data::new(m)));
         let _ = future::join_all(send_futures).await;
 
         // Save client for later broadcasts
-        {
-            let mut clients = self.clients.lock();
 
-            match clients.get_mut(&script_id.to_string()) {
-                None => {
-                    clients.insert(script_id.to_string(), vec![tx]);
-                }
-                Some(senders) => {
-                    senders.push(tx);
-                }
+        let mut clients = self.clients.lock().await;
+
+        match clients.get_mut(&script_id.to_string()) {
+            None => {
+                clients.insert(script_id.to_string(), vec![tx]);
+                println!("Clients: 1\t ----- Added first Client! ----- ");
+            }
+            Some(senders) => {
+                senders.push(tx);
+                println!("Clients: {}\t ----- Added new Client! ----- ", senders.len());
             }
         }
 
+
         rx
+    }
+
+    pub async fn send_message(&self, script_id: i32, message: String) {
+        let mut clients = self.clients.lock().await;
+
+        if let Some(senders) = clients.get_mut(&script_id.to_string()) {
+            // Send message to all subscribers of this script
+            let send_futures = senders
+                .iter()
+                .map(|s| s.send(sse::Data::new(message.clone())));
+            let results = future::join_all(send_futures).await;
+
+            // Remove subscribers we failed to send the message to, they have probably disconnected
+            let mut result_iter = results.iter();
+            senders.retain(|_| {
+                let result = result_iter.next().unwrap();
+                if result.is_err() {
+                    println!("----- Removed Client! -----");
+                }
+                result.is_ok()
+            });
+        }
+    }
+}
+
+async fn get_current_messages(db: &PgPool, script_id: i32) -> Vec<String> {
+    let dots = sqlx::query!(
+        "SELECT actor_id, position FROM read_position WHERE script_id = $1",
+        script_id
+    )
+    .fetch_all(db)
+    .await;
+
+    if let Ok(dots) = dots {
+        dots.iter()
+            .map(|r| {
+                serde_json::to_string(&BroadcastMessage {
+                    actor_id: r.actor_id,
+                    position: r.position,
+                })
+                .unwrap()
+            })
+            .collect()
+    } else {
+        Vec::new()
     }
 }
 
@@ -68,68 +120,37 @@ pub async fn report_position(
     broadcaster: web::Data<Broadcaster>,
     position: web::Json<UpdateForm>,
 ) -> impl Responder {
-    // todo fetch dotId from cache
-    // todo create subscriber storage with mutex?
-    // todo report position to other subscribers
-
     let position = position.into_inner();
     let position = UpdateForm {
         position: position.position.clamp(0.0, 1.0), // ensure position data is valid
         ..position
     };
 
-    let dot_key = position.actor_id as i64 + ((position.script_id as i64) << 32);
-
-    let dot_id = sqlx::query!(
-        "INSERT INTO read_position (actor_id, script_id, position)
-                 VALUES ($1, $2, 0)
-                 ON CONFLICT ON CONSTRAINT read_position_uq
-                     DO UPDATE SET actor_id = $1 -- need to do some update to allow us to return id
-                 RETURNING ID",
-        position.actor_id,
-        position.script_id
-    )
-    .fetch_one(&data.db)
-    .await;
-
-    let dot_id = match dot_id {
-        Err(_) => return HttpResponse::InternalServerError().body("Could not find dot id"),
-        Ok(dot_id) => dot_id.id,
-    };
-
-    // todo need some way to remove cache entries at some future date so we don't eventually run out of memory
-    broadcaster.dot_ids.lock().insert(dot_key, dot_id);
-
-    // Send position to all subscriber clients
     let message = serde_json::to_string(&BroadcastMessage {
         actor_id: position.actor_id,
         position: position.position,
-    }).expect(""); // todo use ?
+    })
+    .unwrap();
 
-    {
-        let clients = broadcaster.clients.lock();
+    // Send position to all subscriber clients
+    broadcaster.send_message(position.script_id, message).await;
 
-        // todo remove clients on failure? or send ping periodically and remove like actix example?
-        if let Some(senders) = clients.get(&position.script_id.to_string()) {
-            let send_futures = senders
-                .iter()
-                .map(|s| s.send(sse::Data::new(message.clone())));
-
-            let _ = future::join_all(send_futures).await;
-        }
-    }
-
+    // Save position to database
     let result = sqlx::query!(
-        "UPDATE read_position SET position = $2 WHERE id = $1",
-        dot_id,
+        "INSERT INTO read_position (actor_id, script_id, position)
+             VALUES ($1, $2, $3)
+         ON CONFLICT ON CONSTRAINT read_position_uq
+             DO UPDATE SET position = $3",
+        position.actor_id,
+        position.script_id,
         position.position
     )
     .execute(&data.db)
     .await;
 
     match result {
-        Ok(_) => HttpResponse::Ok().json("ok"),
-        Err(_) => HttpResponse::InternalServerError().json("test"),
+        Ok(_) => HttpResponse::Ok(),
+        Err(_) => HttpResponse::InternalServerError(),
     }
 }
 
@@ -141,26 +162,7 @@ pub async fn subscribe(
 ) -> impl Responder {
     let script_id = script_id.into_inner();
 
-    let dots = sqlx::query!(
-        "SELECT actor_id, position FROM read_position WHERE script_id = $1",
-        script_id
-    )
-    .fetch_all(&data.db)
-    .await;
+    let messages = get_current_messages(&data.db, script_id).await;
 
-    if let Ok(dots) = dots {
-        let messages = dots
-            .iter()
-            .map(|r| {
-                serde_json::to_string(&BroadcastMessage {
-                    actor_id: r.actor_id,
-                    position: r.position,
-                }).expect("") // todo
-            })
-            .collect();
-
-        broadcaster.new_client(script_id, messages).await
-    } else {
-        sse::channel(0).1 // return new rx channel which is dropped immediately to match the other return type
-    }
+    broadcaster.new_client(script_id, messages).await
 }

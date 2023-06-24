@@ -1334,7 +1334,6 @@ dependencies = [
  "actix-web",
  "actix-web-lab",
  "dotenvy",
- "parking_lot 0.12.1",
  "reqwest",
  "serde",
  "serde_json",

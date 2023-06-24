@@ -3,7 +3,7 @@ use actix_web::{get, post, web, HttpResponse, Responder};
 use actix_web_lab::__reexports::futures_util::future;
 use actix_web_lab::sse::{self, ChannelStream, Sse};
 use parking_lot::Mutex;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -14,6 +14,13 @@ pub struct UpdateForm {
     actor_id: i32,
     script_id: i32,
     position: f64,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct BroadcastMessage {
+    actor_id: i32,
+    position: f64
 }
 
 // clients is map of scriptId to vector of subscribers of that id
@@ -94,12 +101,10 @@ pub async fn report_position(
     broadcaster.dot_ids.lock().insert(dot_key, dot_id);
 
     // Send position to all subscriber clients
-    // todo create struct for this
-    let message = json!({
-        "actorId": position.actor_id,
-        "position": position.position,
-    })
-    .to_string();
+    let message = serde_json::to_string(&BroadcastMessage {
+        actor_id: position.actor_id,
+        position: position.position,
+    }).expect(""); // todo use ?
 
     {
         let clients = broadcaster.clients.lock();
@@ -108,7 +113,7 @@ pub async fn report_position(
         if let Some(senders) = clients.get(&position.script_id.to_string()) {
             let send_futures = senders
                 .iter()
-                .map(|s| s.send(sse::Data::new(message.to_owned())));
+                .map(|s| s.send(sse::Data::new(message.clone())));
 
             let _ = future::join_all(send_futures).await;
         }
@@ -147,11 +152,10 @@ pub async fn subscribe(
         let messages = dots
             .iter()
             .map(|r| {
-                json!({
-                    "actorId": r.actor_id,
-                    "position": r.position,
-                })
-                .to_string()
+                serde_json::to_string(&BroadcastMessage {
+                    actor_id: r.actor_id,
+                    position: r.position,
+                }).expect("") // todo
             })
             .collect();
 

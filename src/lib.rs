@@ -1,12 +1,15 @@
 use crate::actors::{delete_actor, get_actors, new_actor};
 use crate::characters::{assign_character, get_characters};
+use crate::reading_dots::{report_position, subscribe, Broadcaster};
 use actix_web::dev::Server;
-use actix_web::{web, App, HttpServer};
+use actix_web::{web, App, HttpServer, middleware};
 use sqlx::PgPool;
 use std::net::TcpListener;
+use std::sync::Arc;
 
 mod actors;
 mod characters;
+mod reading_dots;
 
 pub struct AppState {
     db: PgPool,
@@ -15,18 +18,24 @@ pub struct AppState {
 /// Creates an HTTP server with the given listener and sets the database pool in the app state.
 /// All endpoints from this server start at /api
 pub fn get_server(listener: TcpListener, db_pool: PgPool) -> Result<Server, std::io::Error> {
+    let broadcaster = Broadcaster::new();
+
     let server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
                 db: db_pool.clone(),
             }))
+            .app_data(web::Data::from(Arc::clone(&broadcaster)))
+            .wrap(middleware::Compress::default()) // compress responses
             .service(
                 web::scope("/api")
                     .service(get_actors)
                     .service(new_actor)
                     .service(delete_actor)
                     .service(get_characters)
-                    .service(assign_character),
+                    .service(assign_character)
+                    .service(report_position)
+                    .service(subscribe),
             )
     })
     .listen(listener)?

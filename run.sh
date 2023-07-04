@@ -2,9 +2,6 @@
 
 # Pass "dev" as an argument to run the dev server
 
-# rebuild container
-podman image build -t play-reading . ;
-
 # run the container
 podman run -v play_volume:/var/lib/postgresql/data \
 --name postgres-db \
@@ -12,7 +9,7 @@ podman run -v play_volume:/var/lib/postgresql/data \
 -e POSTGRES_USER=playreading \
 -e POSTGRES_DB=playreadingparty \
 -p 5432:5432 \
--d play-reading
+-d postgres
 
 function cleanup {
   echo "Removing postgres-db container"

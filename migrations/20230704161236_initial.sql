@@ -37,3 +37,4 @@ CREATE TABLE read_position
     -- since a actor should not have more than one read position in a script
     constraint read_position_uq unique (actor_id, script_id)
 );
+

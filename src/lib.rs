@@ -48,3 +48,12 @@ pub fn configure_database(connection_string: String) -> PgPool {
     };
     pool
 }
+
+/// Migrates the given database according to the local migrations folder
+pub async fn migrate_database(pool: PgPool) -> PgPool {
+    sqlx::migrate!("./migrations")
+        .run(&pool)
+        .await
+        .expect("Failed to migrate the database");
+    pool
+}

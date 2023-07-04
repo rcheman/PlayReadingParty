@@ -1,5 +1,57 @@
 {
   "db": "PostgreSQL",
+  "16d0de6c50986bd5375ef405d6ade4831e2f23ffc826e5245ff61cd6286589ad": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "script_id",
+          "ordinal": 1,
+          "type_info": "Int4"
+        },
+        {
+          "name": "actor_id",
+          "ordinal": 2,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "line_count",
+          "ordinal": 4,
+          "type_info": "Int4"
+        },
+        {
+          "name": "speaks_count",
+          "ordinal": 5,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Int4",
+          "Int4",
+          "Int4"
+        ]
+      }
+    },
+    "query": "UPDATE characters\n    SET actor_id = $1\n    WHERE script_id = $2 AND id = $3\n    RETURNING *"
+  },
   "8f8a30bbe8369c2b160c8bc0674f35a13612998653447ba98c280161ba4aa649": {
     "describe": {
       "columns": [
@@ -69,5 +121,50 @@
       }
     },
     "query": "SELECT * FROM actors"
+  },
+  "f48b01275b03da0ef8944106553969d55027d8b4ad7ff5efea8309fb5a92ec5c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "line_count",
+          "ordinal": 2,
+          "type_info": "Int4"
+        },
+        {
+          "name": "speaks_count",
+          "ordinal": 3,
+          "type_info": "Int4"
+        },
+        {
+          "name": "actor_id",
+          "ordinal": 4,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        true
+      ],
+      "parameters": {
+        "Left": [
+          "Int4",
+          "Int4"
+        ]
+      }
+    },
+    "query": "SELECT id, name, line_count, speaks_count, actor_id\n        FROM characters\n        WHERE ($1 = -1 or actor_id = $1)\n        AND script_id = $2"
   }
 }

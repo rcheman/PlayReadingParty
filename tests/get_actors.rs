@@ -1,5 +1,5 @@
 use play_reading_party::get_server;
-use sqlx::{PgPool, Pool, Postgres};
+use sqlx::{Pool, Postgres};
 use std::net::TcpListener;
 
 // We use sqlx::test so sqlx will create a database instance for the test,
@@ -8,24 +8,24 @@ use std::net::TcpListener;
 #[sqlx::test]
 async fn get_actors_works(pool: Pool<Postgres>) {
     // Arrange
-    let app = spawn_app(pool.clone()).await;
+    let address = spawn_app(pool.clone()).await;
     let client = reqwest::Client::new();
 
     // Insert a value into the empty db so we have something to get
     sqlx::query!("INSERT INTO actors (name) VALUES ($1)", "TestName")
         .execute(&pool)
         .await
-        .expect("Failed to insert test actor into database");
+        .unwrap();
 
     // Act
     let response = client
-        .get(format!("{}/api/actors", &app.address))
+        .get(format!("{}/api/actors", address))
         .send()
         .await
-        .expect("Failed to execute request.");
+        .unwrap();
 
     let status = response.status();
-    let content = response.text().await.expect("Failed to read content");
+    let content = response.text().await.unwrap();
     let expected = "[{\"id\":1,\"name\":\"TestName\"}]";
 
     // Assert
@@ -35,21 +35,15 @@ async fn get_actors_works(pool: Pool<Postgres>) {
     assert_eq!(content, expected);
 }
 
-pub struct TestApp {
-    pub address: String,
-    pub db_pool: PgPool,
-}
-
 // Create a test application on a random port using the given database pool
-async fn spawn_app(pool: Pool<Postgres>) -> TestApp {
-    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind to random port");
+async fn spawn_app(pool: Pool<Postgres>) -> String {
+    let ip = "127.0.0.1";
+    let listener = TcpListener::bind(format!("{}:0", ip))
+        .expect("A random port should be able to be found to bind to");
     let port = listener.local_addr().unwrap().port();
-    let address = format!("http://127.0.0.1:{}", port);
+    let address = format!("http://{}:{}", ip, port);
 
-    let server = get_server(listener, pool.clone()).expect("Failed to bind address");
+    let server = get_server(listener, pool.clone()).unwrap();
     let _ = tokio::spawn(server);
-    TestApp {
-        address,
-        db_pool: pool,
-    }
+    address
 }

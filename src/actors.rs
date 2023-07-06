@@ -41,6 +41,11 @@ pub async fn new_actor(
     new_actor: web::Json<NewActor>,
 ) -> impl Responder {
     let name = new_actor.into_inner().name;
+    let name_length = name.chars().count();
+    // Early response for if the name is too long
+    if name_length > 30 || name_length == 0 {
+        return HttpResponse::BadRequest().json("Actor name must be between 1 and 30 characters.");
+    }
     let result = sqlx::query!("INSERT INTO actors (name) VALUES ($1) RETURNING ID", name)
         .fetch_one(&data.db)
         .await;

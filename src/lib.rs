@@ -50,10 +50,9 @@ pub fn configure_database(connection_string: String) -> PgPool {
 }
 
 /// Migrates the given database according to the local migrations folder
-pub async fn migrate_database(pool: PgPool) -> PgPool {
+pub async fn migrate_database(pool: &PgPool) {
     sqlx::migrate!("./migrations")
-        .run(&pool)
+        .run(pool)
         .await
-        .expect("Failed to migrate the database");
-    pool
+        .expect("Valid migrations should exist in migrations/");
 }

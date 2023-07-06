@@ -31,7 +31,7 @@ const AddActor = ({ actors, setActors }) => {
   return (
     <form onSubmit={newActorHandler}>
       <h3>Add a new actor</h3>
-      <input name='actorName' placeholder="enter actor's name" />
+      <input name='actorName' maxLength="30" placeholder="enter actor's name" />
       <div className='error'>{addActorError}</div>
       <button type='submit'>Add actor</button>
     </form>

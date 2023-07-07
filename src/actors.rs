@@ -26,7 +26,7 @@ pub async fn get_actors(data: web::Data<AppState>) -> impl Responder {
                 .collect::<Vec<Actor>>(),
         )
     } else {
-        HttpResponse::BadRequest().json("no")
+        HttpResponse::BadRequest().finish()
     }
 }
 
@@ -42,7 +42,7 @@ pub async fn new_actor(
 ) -> impl Responder {
     let name = new_actor.into_inner().name;
     let name_length = name.chars().count();
-    // Early response for if the name is too long
+    // Limit name length to 30 characters so the reading dots aren't huge
     if name_length > 30 || name_length == 0 {
         return HttpResponse::BadRequest().json("Actor name must be between 1 and 30 characters.");
     }
@@ -56,7 +56,7 @@ pub async fn new_actor(
             "name": name
         }))
     } else {
-        HttpResponse::BadRequest().json("no")
+        HttpResponse::BadRequest().finish()
     }
 }
 
@@ -72,6 +72,6 @@ pub async fn delete_actor(data: web::Data<AppState>, id: web::Path<i32>) -> impl
     if result.is_ok() {
         HttpResponse::Ok().json(true)
     } else {
-        HttpResponse::BadRequest().json("no")
+        HttpResponse::BadRequest().finish()
     }
 }

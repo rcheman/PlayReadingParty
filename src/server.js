@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 
 const scriptController = require('./controllers/scriptController.js');
-const actorController = require('./controllers/actorController.js');
 const characterController = require('./controllers/characterController.js')
 const ServerError = require('./services/utils.js');
 
@@ -49,21 +48,6 @@ app.get('/api/characters/:scriptId', characterController.getCharacters, (req, re
 // assigns a character to an actor
 app.post('/api/characters/:scriptId/assignCharacter', characterController.assignCharacter, (req, res) => {
   return res.status(200).json(res.locals.assignedCharacter);
-});
-
-// get a list of all the actors
-app.get('/api/actors', actorController.getActors, (req, res) => {
-  return res.status(200).json(res.locals.actors);
-});
-
-// add a new actor to the db, return the actor object
-app.post('/api/actors', actorController.newActor, (req, res) => {
-  return res.status(201).json(res.locals.actor);
-});
-
-// delete an actor from the database based on their id
-app.delete('/api/actors/:actorId', actorController.deleteActor, (req, res) => {
-  return res.status(200).json(res.locals.deletedActor);
 });
 
 // Entire application uses client side routing origination in index.html, so all unhandled routes are handled through React Router

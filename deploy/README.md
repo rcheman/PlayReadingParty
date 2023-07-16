@@ -14,22 +14,22 @@ npm run deploy
 * Ensure you are in the `deploy/` directory
 #### Deploy just the web changes (when only application code has changed)
 ```
-ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags web
+ansible-playbook -e @secret-vars.yaml -i production.yaml deploy.yaml --tags web
 ```
 
 #### Deploy just the nginx changes (when only nginx config has changed)
 ```
-ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags nginx
+ansible-playbook -e @secret-vars.yaml -i production.yaml deploy.yaml --tags nginx
 ```
 
 #### Deploy just the db changes (when only database/container config has changed)
 ```
-ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags db
+ansible-playbook -e @secret-vars.yaml -i production.yaml deploy.yaml --tags db
 ```
 
 #### Deploy just the os changes (when only operating system config outside the application has changed)
 ```
-ansible-playbook -e @secret-vars.yaml -i production deploy.yaml --tags db
+ansible-playbook -e @secret-vars.yaml -i production.yaml deploy.yaml --tags db
 ```
 
 

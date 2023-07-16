@@ -9,7 +9,11 @@ podman run -v play_volume:/var/lib/postgresql/data \
 -e POSTGRES_USER=playreading \
 -e POSTGRES_DB=playreadingparty \
 -p 5432:5432 \
--d postgres
+-d postgres:15.2
+
+# Database must be migrated before rust can compile due to sqlx's compile time verification.
+# Retry until migration succeeds since the database may still be starting up.
+until sqlx migrate run; do echo "...waiting for db to become ready"; done
 
 function cleanup {
   echo "Removing postgres-db container"

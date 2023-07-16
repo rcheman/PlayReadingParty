@@ -56,14 +56,13 @@ impl Broadcaster {
         match clients.get_mut(&script_id.to_string()) {
             None => {
                 clients.insert(script_id.to_string(), vec![tx]);
-                println!("Clients: 1\t ----- Added first Client! ----- ");
+                println!("Clients: 1\t ----- Added first Client! -----");
             }
             Some(senders) => {
                 senders.push(tx);
-                println!("Clients: {}\t ----- Added new Client! ----- ", senders.len());
+                println!("Clients: {}\t ----- Added new Client! -----", senders.len());
             }
         }
-
 
         rx
     }

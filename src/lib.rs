@@ -2,7 +2,7 @@ use crate::actors::{delete_actor, get_actors, new_actor};
 use crate::characters::{assign_character, get_characters};
 use crate::reading_dots::{report_position, subscribe, Broadcaster};
 use actix_web::dev::Server;
-use actix_web::{web, App, HttpServer, middleware};
+use actix_web::{middleware, web, App, HttpServer};
 use sqlx::PgPool;
 use std::net::TcpListener;
 use std::sync::Arc;

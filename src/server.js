@@ -3,7 +3,6 @@ const path = require('path');
 
 const scriptController = require('./controllers/scriptController.js');
 const actorController = require('./controllers/actorController.js');
-const dotController = require('./controllers/dotController.js');
 const characterController = require('./controllers/characterController.js')
 const ServerError = require('./services/utils.js');
 
@@ -65,14 +64,6 @@ app.post('/api/actors', actorController.newActor, (req, res) => {
 // delete an actor from the database based on their id
 app.delete('/api/actors/:actorId', actorController.deleteActor, (req, res) => {
   return res.status(200).json(res.locals.deletedActor);
-});
-
-// Server sent events route for subscribing to read position updates for a script. Request is deliberately kept open.
-app.get('/api/positions/:scriptId', dotController.subscribe);
-
-// Report the read position of an actor in a script
-app.post('/api/positions', dotController.reportPosition, (req, res) => {
-  return res.sendStatus(200);
 });
 
 // Entire application uses client side routing origination in index.html, so all unhandled routes are handled through React Router

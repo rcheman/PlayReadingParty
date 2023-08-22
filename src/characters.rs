@@ -3,14 +3,14 @@ use actix_web::{get, post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Character {
-    name: String,
-    line_count: u32,
-    speaks_count: u32,
-    id: u32,
-    actor_id: Option<i32>,
+    pub name: String,
+    pub line_count: u32,
+    pub speaks_count: u32,
+    pub id: Option<u32>,
+    pub actor_id: Option<i32>,
 }
 
 #[derive(Deserialize)]
@@ -51,7 +51,7 @@ pub async fn get_characters(
                         name: String::from(&record.name),
                         line_count: record.line_count as u32,
                         speaks_count: record.speaks_count as u32,
-                        id: record.id as u32,
+                        id: Some(record.id as u32),
                         actor_id: record.actor_id,
                     },
                 )

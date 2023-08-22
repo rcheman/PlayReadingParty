@@ -10,6 +10,7 @@ use std::sync::Arc;
 mod actors;
 mod characters;
 mod reading_dots;
+mod script_parser;
 
 pub struct AppState {
     db: PgPool,

@@ -5,6 +5,7 @@
 # run the container
 podman run -v play_volume:/var/lib/postgresql/data \
 --name postgres-db \
+--replace \
 -e POSTGRES_PASSWORD=pass \
 -e POSTGRES_USER=playreading \
 -e POSTGRES_DB=playreadingparty \
